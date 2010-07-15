@@ -9,7 +9,7 @@
     permission="zope.Public" />
 
   <utility 
-    factory=".memberstatusaudit.StatusAuditEventFactory"
+    factory=".audit.StatusAuditEventFactory"
     name="groupserver.GSGroupMemberStatus"
     permission="zope.Public" />
 	

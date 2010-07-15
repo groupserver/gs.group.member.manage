@@ -1,7 +1,11 @@
 # coding=utf-8
 from zope.contentprovider import tales
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
-from zope.app.pagetemplate import ViewPageTemplateFile, metaconfigure
+from zope.app.pagetemplate import ViewPageTemplateFile
+try:
+    from zope.browserpage import metaconfigure
+except ImportError:
+    from zope.app.pagetemplate import metaconfigure
 from zope.component import createObject, provideAdapter, adapts
 from zope.interface import implements, Interface
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
@@ -24,9 +28,8 @@ class GSMemberStatusActionsContentProvider(object):
         try:
             metaconfigure.registerType('provider', 
               tales.TALESProviderExpression)
-        except Exception, e:
-            print '***Registration of "provider" failed: %s***' % e
-            pass
+        except:
+            raise
         self.__updated = True
             
     def render(self):
