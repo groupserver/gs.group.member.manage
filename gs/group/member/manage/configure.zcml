@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+  xmlns:browser="http://namespaces.zope.org/browser"
+  xmlns:five="http://namespaces.zope.org/five"
+  i18n_domain="groupserver">
+
+  <browser:resource name="managemembers-20100715.js"
+    file="browser/javascript/managemembers.js"
+    permission="zope.Public" />
+
+  <utility 
+    factory=".memberstatusaudit.StatusAuditEventFactory"
+    name="groupserver.GSGroupMemberStatus"
+    permission="zope.Public" />
+	
+  <browser:page 
+    for="Products.XWFChat.interfaces.IGSGroupFolder"
+    name="managemembers.html"
+    class=".managemembersform.GSManageGroupMembersForm"
+    permission="zope2.ManageUsers"/>
+
+  <interface 
+    interface=".interfaces.IGSMemberStatusActionsContentProvider"
+    type="zope.contentprovider.interfaces.ITALNamespaceData"/>
+
+</configure>
