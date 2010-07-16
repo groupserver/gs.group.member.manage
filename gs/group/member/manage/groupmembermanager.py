@@ -15,9 +15,6 @@ from gs.group.member.manage.groupmemberactions import GSMemberStatusActions
 from gs.group.member.manage.interfaces import IGSGroupMemberManager
 from gs.group.member.manage.interfaces import IGSMemberActionsSchema, IGSManageMembersForm
 
-import logging
-log = logging.getLogger('GSGroupMemberManager')
-
 class GSGroupMemberManager(object):
     implements(IGSGroupMemberManager)
     

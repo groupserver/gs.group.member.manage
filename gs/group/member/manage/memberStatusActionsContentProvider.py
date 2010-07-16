@@ -26,10 +26,15 @@ class GSMemberStatusActionsContentProvider(object):
         
     def update(self):
         try:
-            metaconfigure.registerType('provider', 
-              tales.TALESProviderExpression)
+           # AM: When the page is first loaded, it needs
+           #  the "provider" expression type registered. 
+           metaconfigure.registerType('provider', 
+             tales.TALESProviderExpression)
         except:
-            raise
+           # But when it reloads upon form submission, it raises
+           # RegistrationError: Multiple registrations for Expression type "provider".
+           # So we just ignore the silly thing.
+           pass
         self.__updated = True
             
     def render(self):
