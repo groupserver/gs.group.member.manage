@@ -30,7 +30,7 @@ class GSStatusFormFields(object):
         self.__groupAdmin = None 
         self.__ptnCoach = self.__postingMember = None
         self.__moderator = self.__moderate = None
-        self.__remove = None
+        self.__remove = self.__withdraw = None
         
         self.__allFields = self.__validFields = None
         self.__form_fields = None
@@ -68,7 +68,8 @@ class GSStatusFormFields(object):
               self.postingMember,
               self.moderator,
               self.moderate,
-              self.remove
+              self.remove,
+              self.withdraw
             ]
         return self.__allFields
     
@@ -224,7 +225,8 @@ class GSStatusFormFields(object):
             #if not self.status.isSiteAdmin and \
             #  not(self.status.isGroupAdmin and \
             #      self.adminUserStatus.isGroupAdmin):
-            if (not self.status.isSiteAdmin) and (not self.status.isGroupAdmin):
+            if (not self.status.isSiteAdmin) and (not self.status.isGroupAdmin) and\
+              (not self.status.isInvited):
                 self.__remove =\
                   Bool(__name__=u'%s-remove' % self.userInfo.id,
                     title=u'Remove %s from the group' %\
@@ -234,3 +236,18 @@ class GSStatusFormFields(object):
                     required=False)
         return self.__remove
 
+    @property
+    def withdraw(self):
+        if self.__withdraw == None:
+            self.__withdraw = False
+            if self.status.isInvited:
+                self.__withdraw =\
+                  Bool(__name__=u'%s-withdraw' % self.userInfo.id,
+                    title=u'Withdraw the invitation sent to %s' %\
+                      self.userInfo.name,
+                    description=u'Withdraw the invitation sent to %s' %\
+                      self.userInfo.name,
+                    required=False)
+        return self.__withdraw
+    
+    

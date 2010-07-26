@@ -7,7 +7,8 @@ from Products.XWFCore.odict import ODict
 from Products.XWFCore.XWFUtils import comma_comma_and, getOption
 from Products.GSGroup.mailinglistinfo import GSMailingListInfo
 from Products.GSGroup.changebasicprivacy import radio_widget
-from gs.group.member.leave.audit import LeaveAuditor, REMOVE
+from gs.group.member.leave.leaver import GroupLeaver
+from gs.group.member.leave.audit import LeaveAuditor, LEAVE
 from Products.GSGroupMember.groupMembersInfo import GSGroupMembersInfo
 from gs.group.member.manage.audit import StatusAuditor, GAIN, LOSE
 from gs.group.member.manage.statusformfields import MAX_POSTING_MEMBERS
@@ -20,11 +21,9 @@ class GSGroupMemberManager(object):
     
     def __init__(self, group):
         self.group = group
-        
         self.siteInfo = createObject('groupserver.SiteInfo', group)
         self.groupInfo = createObject('groupserver.GroupInfo', group)
         self.listInfo = GSMailingListInfo(group)
-        
         self.__membersInfo = self.__memberStatusActions = None
         self.__postingIsSpecial = self.__form_fields = None
     
@@ -80,10 +79,7 @@ class GSGroupMemberManager(object):
         SIDE EFFECTS
             Resets the member and form fields caches.
         '''
-        #ptnCoachToRemove = data.pop('ptnCoachRemove')
         toChange = filter(lambda k:data.get(k), data.keys())
-        #if ptnCoachToRemove:
-        #    toChange['ptnCoachToRemove'] = True
         changesByAction, changesByMember, cancelledChanges = self.marshallChanges(toChange)
         retval = self.set_data(changesByAction, changesByMember, cancelledChanges)
         
@@ -111,22 +107,25 @@ class GSGroupMemberManager(object):
         return retval
     
     def sanitiseChanges(self, toChange):
+        # For members to be removed, cancel all other actions.
         cancelledChanges = {}
-        actions = toChange.keys()
-        
-        # For members to be removed, cancel all other actions,
-        # but don't bother reporting on these cancellations.
         for mId in toChange.get('remove',[]):
-            for a in filter(lambda x:(x!='remove') and (x!='ptnCoachToRemove'), actions):
+            for a in filter(lambda x:(x!='remove') and (x!='ptnCoachToRemove'), toChange.keys()):
                 members = toChange.get(a,[])
                 if mId in members:
                     members.remove(mId)
                     toChange[a] = members
         
+        toChange, cancelledChanges = self.cleanPtnCoach(toChange, cancelledChanges)
+        toChange, cancelledChanges = self.cleanPosting(toChange, cancelledChanges)
+        toChange, cancelledChanges = self.cleanModeration(toChange, cancelledChanges)
+        retval = (toChange, cancelledChanges)
+        return retval
+
+    def cleanPtnCoach(self, toChange, cancelledChanges):
         # Check if a member to be removed is also the Ptn Coach, and update removal if req'd.
         if self.groupInfo.ptn_coach and (self.groupInfo.ptn_coach in toChange.get('remove',[])):
             toChange['ptnCoachToRemove'] = True
-        
         # If more than one ptnCoach was specified, then cancel the change.
         ptnCoachToAdd = toChange.get('ptnCoach',[])
         if ptnCoachToAdd and (len(ptnCoachToAdd)>1):
@@ -136,8 +135,11 @@ class GSGroupMemberManager(object):
             toChange['ptnCoach'] = ptnCoachToAdd[0]
             if self.groupInfo.ptn_coach:   # Update Ptn Coach removal if req'd.
                 toChange['ptnCoachToRemove'] = True
-        
-        # Check for posting members exceeding the maximum.
+        retval = (toChange, cancelledChanges)
+        return retval
+    
+    def cleanPosting(self, toChange, cancelledChanges):
+        ''' Check for the number of posting members exceeding the maximum.'''
         if self.postingIsSpecial:
             numCurrentPostingMembers = len(self.listInfo.posting_members)
             numPostingMembersToRemove = len(toChange.get('postingMemberRemove',[]))
@@ -150,9 +152,12 @@ class GSGroupMemberManager(object):
                 addedMembersToCut = membersToAdd[-numAddedMembersToCut:]
                 cancelledChanges['postingMember'] = addedMembersToCut
                 index = (len(membersToAdd)-len(addedMembersToCut))
-                toChange['postingMemberAdd'] = membersToAdd[:index] 
-        
-        # Check for double moderation.
+                toChange['postingMemberAdd'] = membersToAdd[:index]
+        retval = (toChange, cancelledChanges)
+        return retval
+    
+    def cleanModeration(self, toChange, cancelledChanges):
+        ''' Check for members being set as both a moderator and moderated.'''
         toBeModerated = toChange.get('moderatedAdd',[])
         toBeModerators = toChange.get('moderatorAdd',[])
         doubleModerated = \
@@ -170,10 +175,9 @@ class GSGroupMemberManager(object):
             toChange['moderatorAdd'] = toBeModerators
         elif toChange.has_key('moderatorAdd'):
             toChange.pop('moderatorAdd')
-        
         retval = (toChange, cancelledChanges)
         return retval
-
+    
     def organiseChanges(self, toChange):
         changesByAction = {}
         changesByMember = {}
@@ -469,29 +473,9 @@ class GSGroupMemberManager(object):
             changes.append(self.removeModerator(userId, auditor))
         if userId in self.listInfo.mlist.getProperty('moderated_members', []):
             changes.append(self.unmoderate(userId, auditor))
+        retval = changes
 
         # Actually remove from group.
-        administrator = getSecurityManager().getUser()
-        adminInfo = createObject('groupserver.LoggedInUser', self.group)
-        ptnCoach = self.groupInfo.ptn_coach
-        notifyPtnCoach = ptnCoach and (ptnCoach.id != adminInfo.id)
-        userInfo.user.del_groupWithNotification('%s_member' % self.groupInfo.id)
-        if notifyPtnCoach:
-            n_dict = {
-              'groupId'      : self.groupInfo.id,
-              'groupName'    : self.groupInfo.name,
-              'siteName'     : self.siteInfo.name,
-              'canonical'    : getOption(self.group, 'canonicalHost'),
-              'supportEmail' : getOption(self.group, 'supportEmail'),
-              'memberId'     : userInfo.id,
-              'memberName'   : userInfo.name,
-              'joining_user' : userInfo.user,
-              'joining_group': self.group
-            }
-            ptnCoach.user.send_notification('leave_group_admin', 
-                                self.groupInfo.id, n_dict=n_dict)
-        leaveAuditor = LeaveAuditor(self.group, userInfo)
-        leaveAuditor.info(REMOVE)
-        retval = changes
+        leaver = GroupLeaver(userInfo, self.groupInfo)
         return retval
 
