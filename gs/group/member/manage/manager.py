@@ -10,9 +10,8 @@ from Products.GSGroup.changebasicprivacy import radio_widget
 from gs.group.member.leave.leaver import GroupLeaver
 from gs.group.member.leave.audit import LeaveAuditor, LEAVE
 from Products.GSGroupMember.groupMembersInfo import GSGroupMembersInfo
-from gs.group.member.manage.audit import StatusAuditor, GAIN, LOSE
 from gs.group.member.manage.statusformfields import MAX_POSTING_MEMBERS
-from gs.group.member.manage.groupmemberactions import GSMemberStatusActions
+from gs.group.member.manage.actions import GSMemberStatusActions
 from gs.group.member.manage.interfaces import IGSGroupMemberManager
 from gs.group.member.manage.interfaces import IGSMemberActionsSchema, IGSManageMembersForm
 
@@ -23,7 +22,6 @@ class GSGroupMemberManager(object):
         self.group = group
         self.siteInfo = createObject('groupserver.SiteInfo', group)
         self.groupInfo = createObject('groupserver.GroupInfo', group)
-        self.listInfo = GSMailingListInfo(group)
         self.__membersInfo = self.__memberStatusActions = None
         self.__postingIsSpecial = self.__form_fields = None
     
@@ -141,7 +139,8 @@ class GSGroupMemberManager(object):
     def cleanPosting(self, toChange, cancelledChanges):
         ''' Check for the number of posting members exceeding the maximum.'''
         if self.postingIsSpecial:
-            numCurrentPostingMembers = len(self.listInfo.posting_members)
+            listInfo = GSMailingListInfo(self.groupInfo.groupObj)
+            numCurrentPostingMembers = len(listInfo.posting_members)
             numPostingMembersToRemove = len(toChange.get('postingMemberRemove',[]))
             numPostingMembersToAdd = len(toChange.get('postingMemberAdd',[]))
             totalPostingMembersToBe = \
@@ -304,178 +303,3 @@ class GSGroupMemberManager(object):
             retval += '</ul>'
         return retval
         
-    def addAdmin(self, userId, auditor):
-        roles = list(self.group.get_local_roles_for_userid(userId))
-        assert 'GroupAdmin' not in roles, '%s was marked for becoming '\
-          'a GroupAdmin in %s (%s), but is one already.' %\
-           (userId, self.groupInfo.name, groupInfo.id)
-        self.group.manage_addLocalRoles(userId, ['GroupAdmin'])
-        auditor.info(GAIN, 'Group Administrator')
-        retval = 'Became a Group Administrator.'
-        return retval
-
-    def removeAdmin(self, userId, auditor):
-        roles = list(self.group.get_local_roles_for_userid(userId))
-        assert 'GroupAdmin' in roles, '%s was marked for removal '\
-          'as a GroupAdmin in %s (%s), but does not have the role.' %\
-           (userId, self.groupInfo.name, groupInfo.id)
-        roles.remove('GroupAdmin')
-        if roles:
-            self.group.manage_setLocalRoles(userId, roles)
-        else:
-            self.group.manage_delLocalRoles([userId])
-        auditor.info(LOSE, 'Group Administrator')
-        retval = 'No longer a Group Administrator.'
-        return retval
-    
-    def addModerator(self, userId, auditor):
-        groupList = self.listInfo.mlist
-        moderatorIds = [ m.id for m in self.listInfo.moderators ]
-        assert userId not in moderatorIds, '%s was marked for addition '\
-          'as a moderator in %s (%s), but is already a moderator.' %\
-           (userId, self.groupInfo.name, groupInfo.id)
-        moderatorIds.append(userId)
-        if groupList.hasProperty('moderator_members'):
-            groupList.manage_changeProperties(moderator_members=moderatorIds)
-        else:
-            groupList.manage_addProperty('moderator_members', moderatorIds, 'lines')
-        auditor.info(GAIN, 'Moderator')
-        retval = 'Became a Moderator.'
-        return retval
-        
-    def removeModerator(self, userId, auditor):
-        groupList = self.listInfo.mlist
-        moderatorIds = [ m.id for m in self.listInfo.moderators ]
-        assert userId in moderatorIds, '%s was marked for removal '\
-          'as a moderator in %s (%s), but is not listed as a moderator.' %\
-           (userId, self.groupInfo.name, groupInfo.id)
-        moderatorIds.remove(userId)
-        if groupList.hasProperty('moderator_members'):
-            groupList.manage_changeProperties(moderator_members=moderatorIds)
-        else:
-            groupList.manage_addProperty('moderator_members', moderatorIds, 'lines')
-        auditor.info(LOSE, 'Moderator')
-        retval = 'No longer a Moderator.'
-        return retval
-        
-    def moderate(self, userId, auditor):
-        groupList = self.listInfo.mlist
-        moderatedIds = [ m.id for m in self.listInfo.moderatees ]
-        assert userId not in moderatedIds, '%s was marked for '\
-          'moderation in %s (%s), but is already moderated.' %\
-           (userId, self.groupInfo.name, groupInfo.id)
-        moderatedIds.append(userId)
-        if groupList.hasProperty('moderated_members'):
-            groupList.manage_changeProperties(moderated_members=moderatedIds)
-        else:
-            groupList.manage_addProperty('moderated_members', moderatedIds, 'lines')
-        auditor.info(GAIN, 'Moderated')
-        retval = 'Became Moderated.'
-        return retval
-        
-    def unmoderate(self, userId, auditor):
-        groupList = self.listInfo.mlist
-        moderatedIds = [ m.id for m in self.listInfo.moderatees ]
-        assert userId in moderatedIds, '%s was marked to be unmoderated '\
-          'in %s (%s), but is not listed as a moderated member.' %\
-           (userId, self.groupInfo.name, groupInfo.id)
-        moderatedIds.remove(userId)
-        if groupList.hasProperty('moderated_members'):
-            groupList.manage_changeProperties(moderated_members=moderatedIds)
-        else:
-            groupList.manage_addProperty('moderated_members', moderatedIds, 'lines')
-        auditor.info(LOSE, 'Moderated')
-        retval = 'No longer Moderated.'
-        return retval
-        
-    def addPostingMember(self, userId, auditor):
-        groupList = self.listInfo.mlist
-        postingMemberIds = [ m.id for m in self.listInfo.posting_members ]
-        assert userId not in postingMemberIds, '%s was marked to become a '\
-          'posting member in %s (%s), but is already a posting member.' %\
-           (userId, self.groupInfo.name, groupInfo.id)        
-        numPostingMembers = len(postingMemberIds)
-        if numPostingMembers >= MAX_POSTING_MEMBERS:
-            retval = '***Not become a posting member, as the number of '\
-            'posting members is already at the maximum (%d)***' % MAX_POSTING_MEMBERS
-            return retval 
-        
-        postingMemberIds.append(userId)
-        if groupList.hasProperty('posting_members'):
-            groupList.manage_changeProperties(posting_members=postingMemberIds)
-        else:
-            groupList.manage_addProperty('posting_members', postingMemberIds, 'lines')
-        auditor.info(GAIN, 'Posting Member')
-        retval = 'Became a Posting Member'
-        return retval
-
-    def removePostingMember(self, userId):
-        groupList = self.listInfo.mlist
-        postingMemberIds = [ m.id for m in self.listInfo.posting_members ]
-        assert userId in postingMemberIds, '%s was marked for removal as '\
-          'a posting member in %s (%s), but is not a posting member.' %\
-           (userId, self.groupInfo.name, groupInfo.id)
-        postingMemberIds.remove(userId)
-        if groupList.hasProperty('posting_members'):
-            groupList.manage_changeProperties(posting_members=postingMemberIds)
-        else:
-            groupList.manage_addProperty('posting_members', postingMemberIds, 'lines')
-        userInfo = createObject('groupserver.UserFromId', self.group, userId)
-        auditor = StatusAuditor(self.group, userInfo)
-        auditor.info(LOSE, 'Posting Member')
-        retval = 'No longer a Posting Member.'
-        return retval
-    
-    def addPtnCoach(self, ptnCoachToAdd):
-        self.removePtnCoach()
-        if self.group.hasProperty('ptn_coach_id'):
-            self.group.manage_changeProperties(ptn_coach_id=ptnCoachToAdd)
-        else:
-            self.group.manage_addProperty('ptn_coach_id', ptnCoachToAdd, 'string')
-
-        if self.listInfo.mlist.hasProperty('ptn_coach_id'):
-            self.listInfo.mlist.manage_changeProperties(ptn_coach_id=ptnCoachToAdd)
-        else:
-            self.listInfo.mlist.manage_addProperty('ptn_coach_id', ptnCoachToAdd, 'string')
-        userInfo = createObject('groupserver.UserFromId', self.group, ptnCoachToAdd)
-        auditor = StatusAuditor(self.group, userInfo)
-        auditor.info(GAIN, 'Participation Coach')
-        retval = 'Became the Participation Coach.'
-        return retval
-    
-    def removePtnCoach(self):
-        retval = ('','')
-        oldPtnCoach = self.groupInfo.ptn_coach
-        if self.group.hasProperty('ptn_coach_id'):
-            self.group.manage_changeProperties(ptn_coach_id='')
-        if self.listInfo.mlist.hasProperty('ptn_coach_id'):
-            self.listInfo.mlist.manage_changeProperties(ptn_coach_id='')
-        if oldPtnCoach:
-            auditor = StatusAuditor(self.group, oldPtnCoach)
-            auditor.info(LOSE, 'Participation Coach')
-            retval = (oldPtnCoach.id, 'No longer the Participation Coach.')
-        return retval
-            
-    def removeMember(self, userId):
-        userInfo = createObject('groupserver.UserFromId', self.group, userId)
-        auditor = StatusAuditor(self.group, userInfo)
-        changes = ['Removed from the group.']
-        
-        # Remove all group roles and positions
-        oldPtnCoach = self.groupInfo.ptn_coach
-        if oldPtnCoach and (oldPtnCoach.id==userId):
-            changes.append(self.removePtnCoach()[1])
-        if 'GroupAdmin' in list(self.group.get_local_roles_for_userid(userId)):
-            changes.append(self.removeAdmin(userId, auditor))
-        if userId in self.listInfo.mlist.getProperty('posting_members', []):
-            changes.append(self.removePostingMember(userId))
-        if userId in self.listInfo.mlist.getProperty('moderator_members', []):
-            changes.append(self.removeModerator(userId, auditor))
-        if userId in self.listInfo.mlist.getProperty('moderated_members', []):
-            changes.append(self.unmoderate(userId, auditor))
-        retval = changes
-
-        # Actually remove from group.
-        leaver = GroupLeaver(userInfo, self.groupInfo)
-        return retval
-

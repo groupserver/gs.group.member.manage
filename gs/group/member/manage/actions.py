@@ -11,7 +11,7 @@ from gs.group.member.manage.statusformfields import GSStatusFormFields
 from gs.group.member.manage.interfaces import IGSMemberStatusActions
 
 class GSMemberStatusActions(object):
-    adapts(IGSUserInfo, IGSGroupInfo)
+    adapts(IGSUserInfo, IGSGroupInfo, IGSSiteInfo)
     implements(IGSMemberStatusActions)
 
     def __init__(self, userInfo, groupInfo, siteInfo):

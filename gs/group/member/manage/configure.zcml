@@ -16,7 +16,7 @@
   <browser:page 
     for="Products.XWFChat.interfaces.IGSGroupFolder"
     name="managemembers.html"
-    class=".managemembersform.GSManageGroupMembersForm"
+    class=".form.GSManageGroupMembersForm"
     permission="zope2.ManageUsers"/>
 
   <interface 

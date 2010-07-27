@@ -6,7 +6,7 @@ except ImportError:
 from zope.component import createObject
 from zope.formlib import form
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
-from gs.group.member.manage.groupmembermanager import GSGroupMemberManager
+from gs.group.member.manage.manager import GSGroupMemberManager
 from gs.group.member.manage.interfaces import IGSManageGroupMembersForm
 
 class GSManageGroupMembersForm(PageForm):
@@ -17,7 +17,6 @@ class GSManageGroupMembersForm(PageForm):
         PageForm.__init__(self, context, request)
         self.context = context
         self.request = request
-
         self.siteInfo = createObject('groupserver.SiteInfo', context)
         self.groupInfo = createObject('groupserver.GroupInfo', context)
         self.groupName = self.groupInfo.name
@@ -47,8 +46,7 @@ class GSManageGroupMembersForm(PageForm):
         
     @form.action(label=u'Change', failure='handle_change_action_failure')
     def handle_change(self, action, data):
-        status = self.memberManager.make_changes(data)
-        self.status = status
+        self.status = self.memberManager.make_changes(data)
         # Reset the form_fields cache so that the
         # page reloads with the updated widgets
         self.__form_fields = None
