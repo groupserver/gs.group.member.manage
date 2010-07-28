@@ -99,7 +99,8 @@ class GSStatusFormFields(object):
     def groupAdmin(self):
         if self.__groupAdmin == None:
             self.__groupAdmin = False
-            if (self.status.isNormalMember or \
+            if (self.status.isSiteAdmin or \
+                self.status.isNormalMember or \
                 self.status.isPtnCoach or \
                 self.status.isModerator) and not \
                 (self.status.isGroupAdmin or self.status.isModerated or \
@@ -128,6 +129,7 @@ class GSStatusFormFields(object):
             self.__ptnCoach = False
             if not(self.status.postingIsSpecial) and \
                (self.status.isNormalMember or \
+                self.status.isSiteAdmin or \
                 self.status.isGroupAdmin or \
                 self.status.isModerator) and not \
                 (self.status.isPtnCoach or self.status.isModerated or \

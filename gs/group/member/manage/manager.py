@@ -14,6 +14,9 @@ from gs.group.member.manage.statusformfields import MAX_POSTING_MEMBERS
 from gs.group.member.manage.actions import GSMemberStatusActions
 from gs.group.member.manage.interfaces import IGSGroupMemberManager
 from gs.group.member.manage.interfaces import IGSMemberActionsSchema, IGSManageMembersForm
+from gs.group.member.manage.utils import addAdmin, removeAdmin, addModerator, removeModerator
+from gs.group.member.manage.utils import moderate, unmoderate, addPostingMember, removePostingMember
+from gs.group.member.manage.utils import addPtnCoach, removePtnCoach, removeAllPositions
 
 class GSGroupMemberManager(object):
     implements(IGSGroupMemberManager)
@@ -25,7 +28,8 @@ class GSGroupMemberManager(object):
         self.__membersInfo = self.__memberStatusActions = None
         self.__postingIsSpecial = self.__form_fields = None
         self.toChange = self.cancelledChanges = {}
-        self.changesByMember = self.changesByAction = {}
+        self.changesByMember = {}
+        self.changesByAction = {}
         self.changeLog = ODict()
         self.summary = ''''''
     
@@ -171,10 +175,10 @@ class GSGroupMemberManager(object):
         elif self.toChange.has_key('moderatorAdd'):
             self.toChange.pop('moderatorAdd')
     
-    def organiseChanges(self, toChange):
+    def organiseChanges(self):
         for a in ['remove','postingMemberRemove','ptnCoachToRemove','ptnCoach']:
             if self.toChange.get(a,None):
-                self.changesByAction[a] = toChange.pop(a)
+                self.changesByAction[a] = self.toChange.pop(a)
         for k in self.toChange.keys():
             mIds = self.toChange[k]
             for mId in mIds:

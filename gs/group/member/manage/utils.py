@@ -20,9 +20,9 @@ def removeAdmin(groupInfo, userInfo):
        (userInfo.name, userInfo.id, groupInfo.name, groupInfo.id)
     roles.remove('GroupAdmin')
     if roles:
-        group.manage_setLocalRoles(userInfo.id, roles)
+        groupInfo.groupObj.manage_setLocalRoles(userInfo.id, roles)
     else:
-        group.manage_delLocalRoles([userInfo.id])
+        groupInfo.groupObj.manage_delLocalRoles([userInfo.id])
     auditor = StatusAuditor(groupInfo.groupObj, userInfo)
     auditor.info(LOSE, 'Group Administrator')
     retval = 'no longer a Group Administrator'
@@ -153,31 +153,35 @@ def addPtnCoach(groupInfo, userInfo):
     return retval
 
 def removePtnCoach(groupInfo):
-    retval = ('','')
+    retval = ('', None)
+    group = groupInfo.groupObj
     oldPtnCoach = groupInfo.ptn_coach
     if group.hasProperty('ptn_coach_id'):
         group.manage_changeProperties(ptn_coach_id='')
+    listInfo = GSMailingListInfo(group)
     if listInfo.mlist.hasProperty('ptn_coach_id'):
         listInfo.mlist.manage_changeProperties(ptn_coach_id='')
     if oldPtnCoach:
-        auditor = StatusAuditor(groupInfo.groupObj, oldPtnCoach)
+        auditor = StatusAuditor(group, oldPtnCoach)
         auditor.info(LOSE, 'Participation Coach')
         retval = ('no longer the Participation Coach', oldPtnCoach)
     return retval
         
-def removeAllPositions(self):
+def removeAllPositions(groupInfo, userInfo):
     retval = []
+    userId = userInfo.id
     oldPtnCoach = groupInfo.ptn_coach
-    if oldPtnCoach and (oldPtnCoach.id==userInfo.id):
+    if oldPtnCoach and (oldPtnCoach.id==userId):
         retval.append(removePtnCoach(groupInfo)[0])
-    listInfo = GSMailingListInfo(groupInfo.groupObj)
-    if 'GroupAdmin' in listInfo.mlist(groupInfo.groupObj.get_local_roles_for_userid(userInfo.id)):
+    group = groupInfo.groupObj
+    listInfo = GSMailingListInfo(group)
+    if 'GroupAdmin' in list(group.get_local_roles_for_userid(userId)):
         retval.append(removeAdmin(groupInfo, userInfo))
-    if userInfo.id in listInfo.mlist.getProperty('posting_members', []):
+    if userId in listInfo.mlist.getProperty('posting_members', []):
         retval.append(removePostingMember(groupInfo, userInfo))
-    if userInfo.id in listInfo.mlist.getProperty('moderator_members', []):
+    if userId in listInfo.mlist.getProperty('moderator_members', []):
         retval.append(removeModerator(groupInfo, userInfo))
-    if userInfo.id in listInfo.mlist.getProperty('moderated_members', []):
+    if userId in listInfo.mlist.getProperty('moderated_members', []):
         retval.append(unmoderate(groupInfo, userInfo))
     return retval
 
