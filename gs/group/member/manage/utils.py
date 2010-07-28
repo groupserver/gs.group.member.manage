@@ -165,29 +165,19 @@ def removePtnCoach(groupInfo):
         retval = ('no longer the Participation Coach', oldPtnCoach)
     return retval
         
-def removeMember(groupInfo, userInfo):
-    retval = ''
-    leaver = GroupLeaver(userInfo, groupInfo)
-    if leaver:
-        retval = removeAllPositions(groupInfo, userInfo)
-        retval.append(leaver.removeMember())
-        retval.append('removed from the group')    
-    return retval
-
-def removeAllPositions(groupInfo, userInfo):
-    changes = []
+def removeAllPositions(self):
+    retval = []
     oldPtnCoach = groupInfo.ptn_coach
     if oldPtnCoach and (oldPtnCoach.id==userInfo.id):
-        changes.append(removePtnCoach(groupInfo)[0])
+        retval.append(removePtnCoach(groupInfo)[0])
     listInfo = GSMailingListInfo(groupInfo.groupObj)
     if 'GroupAdmin' in listInfo.mlist(groupInfo.groupObj.get_local_roles_for_userid(userInfo.id)):
-        changes.append(removeAdmin(groupInfo, userInfo))
+        retval.append(removeAdmin(groupInfo, userInfo))
     if userInfo.id in listInfo.mlist.getProperty('posting_members', []):
-        changes.append(removePostingMember(groupInfo, userInfo))
+        retval.append(removePostingMember(groupInfo, userInfo))
     if userInfo.id in listInfo.mlist.getProperty('moderator_members', []):
-        changes.append(removeModerator(groupInfo, userInfo))
+        retval.append(removeModerator(groupInfo, userInfo))
     if userInfo.id in listInfo.mlist.getProperty('moderated_members', []):
-        changes.append(unmoderate(groupInfo, userInfo))
-    retval = changes
+        retval.append(unmoderate(groupInfo, userInfo))
     return retval
 

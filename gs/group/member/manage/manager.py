@@ -24,6 +24,10 @@ class GSGroupMemberManager(object):
         self.groupInfo = createObject('groupserver.GroupInfo', group)
         self.__membersInfo = self.__memberStatusActions = None
         self.__postingIsSpecial = self.__form_fields = None
+        self.toChange = self.cancelledChanges = {}
+        self.changesByMember = self.changesByAction = {}
+        self.changeLog = ODict()
+        self.summary = ''''''
     
     @property
     def membersInfo(self):
@@ -77,229 +81,231 @@ class GSGroupMemberManager(object):
         SIDE EFFECTS
             Resets the member and form fields caches.
         '''
-        toChange = filter(lambda k:data.get(k), data.keys())
-        changesByAction, changesByMember, cancelledChanges = self.marshallChanges(toChange)
-        retval = self.set_data(changesByAction, changesByMember, cancelledChanges)
+        changes = filter(lambda k:data.get(k), data.keys())
+        self.marshallChanges(changes)
+        self.set_data()
         
         # Reset the caches so that we get the member
         # data afresh when the form reloads.
         self.__membersInfo = None
         self.__memberStatusActions = None
         self.__form_fields = None
-        return retval
+        return self.summary
 
-    def marshallChanges(self, toChange):
-        changes = {}
-        if 'ptnCoachRemove' in toChange:
-            changes['ptnCoachToRemove'] = True
-            toChange.remove('ptnCoachRemove')
-        for k in toChange:
+    def marshallChanges(self, changes):
+        if 'ptnCoachRemove' in changes:
+            self.toChange['ptnCoachToRemove'] = True
+            changes.remove('ptnCoachRemove')
+        for k in changes:
             memberId, action = k.split('-')
-            if changes.has_key(action):
-                changes[action].append(memberId)
+            if self.toChange.has_key(action):
+                self.toChange[action].append(memberId)
             else:
-                changes[action] = [memberId]
-        toChange, cancelledChanges = self.sanitiseChanges(changes)
-        changesByAction, changesByMember = self.organiseChanges(toChange) 
-        retval = (changesByAction, changesByMember, cancelledChanges)
-        return retval
+                self.toChange[action] = [memberId]
+        self.sanitiseChanges()
+        self.organiseChanges() 
     
-    def sanitiseChanges(self, toChange):
-        # For members to be removed, cancel all other actions.
-        cancelledChanges = {}
-        for mId in toChange.get('remove',[]):
-            for a in filter(lambda x:(x!='remove') and (x!='ptnCoachToRemove'), toChange.keys()):
-                members = toChange.get(a,[])
+    def sanitiseChanges(self):
+        ''' Sanity-check and clean up all the requested changes. '''
+        self.cleanRemovals()
+        self.cleanPtnCoach()
+        self.cleanPosting()
+        self.cleanModeration()
+
+    def cleanRemovals(self):
+        ''' For members to be removed, cancel all other actions.'''        
+        for mId in self.toChange.get('remove',[]):
+            for a in filter(lambda x:(x!='remove') and (x!='ptnCoachToRemove'), self.toChange.keys()): #TODO: check this out
+                members = self.toChange.get(a,[])
                 if mId in members:
                     members.remove(mId)
-                    toChange[a] = members
-        
-        toChange, cancelledChanges = self.cleanPtnCoach(toChange, cancelledChanges)
-        toChange, cancelledChanges = self.cleanPosting(toChange, cancelledChanges)
-        toChange, cancelledChanges = self.cleanModeration(toChange, cancelledChanges)
-        retval = (toChange, cancelledChanges)
-        return retval
+                    self.toChange[a] = members
 
-    def cleanPtnCoach(self, toChange, cancelledChanges):
-        # Check if a member to be removed is also the Ptn Coach, and update removal if req'd.
-        if self.groupInfo.ptn_coach and (self.groupInfo.ptn_coach in toChange.get('remove',[])):
-            toChange['ptnCoachToRemove'] = True
-        # If more than one ptnCoach was specified, then cancel the change.
-        ptnCoachToAdd = toChange.get('ptnCoach',[])
+    def cleanPtnCoach(self):
+        ''' If more than one ptnCoach was specified, then cancel the change.'''
+        ptnCoachToAdd = self.toChange.get('ptnCoach',[])
         if ptnCoachToAdd and (len(ptnCoachToAdd)>1):
-            cancelledChanges['ptnCoach'] = ptnCoachToAdd
-            toChange.pop('ptnCoach')
+            self.cancelledChanges['ptnCoach'] = ptnCoachToAdd
+            self.toChange.pop('ptnCoach')
         elif len(ptnCoachToAdd)==1:
-            toChange['ptnCoach'] = ptnCoachToAdd[0]
-            if self.groupInfo.ptn_coach:   # Update Ptn Coach removal if req'd.
-                toChange['ptnCoachToRemove'] = True
-        retval = (toChange, cancelledChanges)
-        return retval
+            self.toChange['ptnCoach'] = ptnCoachToAdd[0]
+            # The only reason to do this would be so we can explicitly log that the
+            # previous PtnCoach has been removed. Do we bother? I don't think so.
+            #if self.groupInfo.ptn_coach:
+            #    self.toChange['ptnCoachToRemove'] = True
     
-    def cleanPosting(self, toChange, cancelledChanges):
+    def cleanPosting(self):
         ''' Check for the number of posting members exceeding the maximum.'''
         if self.postingIsSpecial:
             listInfo = GSMailingListInfo(self.groupInfo.groupObj)
             numCurrentPostingMembers = len(listInfo.posting_members)
-            numPostingMembersToRemove = len(toChange.get('postingMemberRemove',[]))
-            numPostingMembersToAdd = len(toChange.get('postingMemberAdd',[]))
+            numPostingMembersToRemove = len(self.toChange.get('postingMemberRemove',[]))
+            numPostingMembersToAdd = len(self.toChange.get('postingMemberAdd',[]))
             totalPostingMembersToBe = \
               (numCurrentPostingMembers - numPostingMembersToRemove + numPostingMembersToAdd) 
             if totalPostingMembersToBe > MAX_POSTING_MEMBERS:
                 numAddedMembersToCut = (totalPostingMembersToBe-MAX_POSTING_MEMBERS)
-                membersToAdd = toChange['postingMemberAdd']
+                membersToAdd = self.toChange['postingMemberAdd']
                 addedMembersToCut = membersToAdd[-numAddedMembersToCut:]
-                cancelledChanges['postingMember'] = addedMembersToCut
+                self.cancelledChanges['postingMember'] = addedMembersToCut
                 index = (len(membersToAdd)-len(addedMembersToCut))
-                toChange['postingMemberAdd'] = membersToAdd[:index]
-        retval = (toChange, cancelledChanges)
-        return retval
+                self.toChange['postingMemberAdd'] = membersToAdd[:index]
     
-    def cleanModeration(self, toChange, cancelledChanges):
+    def cleanModeration(self):
         ''' Check for members being set as both a moderator and moderated.'''
-        toBeModerated = toChange.get('moderatedAdd',[])
-        toBeModerators = toChange.get('moderatorAdd',[])
+        toBeModerated = self.toChange.get('moderatedAdd',[])
+        toBeModerators = self.toChange.get('moderatorAdd',[])
         doubleModerated = \
           [ mId for mId in toBeModerators if mId in toBeModerated ]
         if doubleModerated:
-            cancelledChanges['doubleModeration'] = doubleModerated
+            self.cancelledChanges['doubleModeration'] = doubleModerated
         for mId in doubleModerated:
             toBeModerated.remove(mId)
             toBeModerators.remove(mId)
         if toBeModerated:
-            toChange['moderatedAdd'] = toBeModerated
-        elif toChange.has_key('moderatedAdd'):
-            toChange.pop('moderatedAdd')
+            self.toChange['moderatedAdd'] = toBeModerated
+        elif self.toChange.has_key('moderatedAdd'):
+            self.toChange.pop('moderatedAdd')
         if toBeModerators:
-            toChange['moderatorAdd'] = toBeModerators
-        elif toChange.has_key('moderatorAdd'):
-            toChange.pop('moderatorAdd')
-        retval = (toChange, cancelledChanges)
-        return retval
+            self.toChange['moderatorAdd'] = toBeModerators
+        elif self.toChange.has_key('moderatorAdd'):
+            self.toChange.pop('moderatorAdd')
     
     def organiseChanges(self, toChange):
-        changesByAction = {}
-        changesByMember = {}
         for a in ['remove','postingMemberRemove','ptnCoachToRemove','ptnCoach']:
-            if toChange.get(a,None):
-                changesByAction[a] = toChange.pop(a)
-        for k in toChange.keys():
-            mIds = toChange[k]
+            if self.toChange.get(a,None):
+                self.changesByAction[a] = toChange.pop(a)
+        for k in self.toChange.keys():
+            mIds = self.toChange[k]
             for mId in mIds:
-                if not changesByMember.has_key(mId):
-                    changesByMember[mId] = [k]
+                if not self.changesByMember.has_key(mId):
+                    self.changesByMember[mId] = [k]
                 else:
-                    changesByMember[mId].append(k)
-        retval = (changesByAction, changesByMember)
-        return retval
+                    self.changesByMember[mId].append(k)
 
-    def set_data(self, changesByAction, changesByMember, cancelledChanges):
-        retval = ''''''
-        changeLog = ODict()
+    def set_data(self):
+        self.summariseCancellations()
+        self.removeMembers()
+        self.removePostingMembers()
+        self.removePtnCoach()
+        self.addPtnCoach()
+        self.makeChangesByMember()
+        self.finishSummary()
+
+    def summariseCancellations(self):
+        ''' Summarise actions not taken. '''
+        self.summariseCancelledPtnCoach()
+        self.summariseDoubleModeration()
+        self.summarisePostingMember()
         
-        # 0. Summarise actions not taken.
-        if cancelledChanges.has_key('ptnCoach'):
-            attemptedChangeIds = cancelledChanges['ptnCoach']
+    def summariseCancelledPtnCoach(self):
+        if self.cancelledChanges.has_key('ptnCoach'):
+            attemptedChangeIds = self.cancelledChanges['ptnCoach']
             attemptedChangeUsers = \
               [ createObject('groupserver.UserFromId', self.group, a)
                 for a in attemptedChangeIds ]
             attemptedNames = [a.name for a in attemptedChangeUsers ]
-            retval += '<p>The Participation Coach was <b>not changed</b>, '\
+            self.summary += '<p>The Participation Coach was <b>not changed</b>, '\
               'because there can be only one and you specified %d (%s).</p>' %\
               (len(attemptedChangeIds), comma_comma_and(attemptedNames))
-        if cancelledChanges.has_key('doubleModeration'):
-            attemptedChangeIds = cancelledChanges['doubleModeration']
+        
+    def summariseDoubleModeration(self):
+        if self.cancelledChanges.has_key('doubleModeration'):
+            attemptedChangeIds = self.cancelledChanges['doubleModeration']
             attemptedChangeUsers = \
               [ createObject('groupserver.UserFromId', self.group, a)
                 for a in attemptedChangeIds ]
             memberMembers = len(attemptedChangeIds)==1 and 'member was' or 'members were'
-            retval += '<p>The moderation level of the following %s '\
+            self.summary += '<p>The moderation level of the following %s '\
               '<b>not changed</b>, because members cannot be both ' \
               'moderated and moderators:</p><ul>' % memberMembers
             for m in attemptedChangeUsers:
-                retval += '<li><a href="%s">%s</a></li>' %\
+                self.summary += '<li><a href="%s">%s</a></li>' %\
                   (m.url, m.name)
-            retval += '</ul>'
-        if cancelledChanges.has_key('postingMember'):
-            attemptedChangeIds = cancelledChanges['postingMember']
+            self.summary += '</ul>'
+        
+    def summarisePostingMember(self):
+        if self.cancelledChanges.has_key('postingMember'):
+            attemptedChangeIds = self.cancelledChanges['postingMember']
             attemptedChangeUsers = \
               [ createObject('groupserver.UserFromId', self.group, a)
                 for a in attemptedChangeIds ]
             indefiniteArticle = len(attemptedChangeIds)==1 and 'a ' or ''
             memberMembers = len(attemptedChangeIds)==1 and 'member' or 'members'
-            retval += '<p>The following %s <b>did not become</b> %s'\
+            self.summary += '<p>The following %s <b>did not become</b> %s'\
               'posting %s, because otherwise the maximum of %d ' \
               'posting members would have been exceeded:</p><ul>' %\
                (memberMembers, indefiniteArticle, 
                 memberMembers, MAX_POSTING_MEMBERS)
             for m in attemptedChangeUsers:
-                retval += '<li><a href="%s">%s</a></li>' %\
+                self.summary += '<li><a href="%s">%s</a></li>' %\
                   (m.url, m.name)
-            retval += '</ul>'
-
-        # 1. Remove all the members to be removed.
-        for memberId in changesByAction.get('remove',[]):
-            changeLog[memberId] = self.removeMember(memberId)
+            self.summary += '</ul>'
         
-        # 2. Remove all the posting members to be removed.
-        for memberId in changesByAction.get('postingMemberRemove',[]):
-            change = self.removePostingMember(memberId)
-            if not changeLog.has_key(memberId):
-                changeLog[memberId] = [change]
+    def removeMembers(self):
+        ''' Remove all the members to be removed.'''
+        for memberId in self.changesByAction.get('remove',[]):
+            userInfo = createObject('groupserver.UserFromId', self.group, memberId)
+            leaver = GroupLeaver(self.groupInfo, userInfo)
+            self.changeLog[memberId] = leaver.removeMember()
+        
+    def removePostingMembers(self):
+        ''' Remove all the posting members to be removed. '''
+        for memberId in self.changesByAction.get('postingMemberRemove',[]):
+            userInfo = createObject('groupserver.UserFromId', self.group, memberId)
+            change = removePostingMember(self.groupInfo, userInfo)
+            if not self.changeLog.has_key(memberId):
+                self.changeLog[memberId] = [change]
             else:
-                changeLog[memberId].append(change)
+                self.changeLog[memberId].append(change)
         
-        # 3. If there's a ptn coach to be removed, do it now.
-        if changesByAction.get('ptnCoachToRemove', False):
-            oldCoachId, change = self.removePtnCoach()
-            if oldCoachId:
-                if not changeLog.has_key(oldCoachId):
-                    changeLog[oldCoachId] = [change]
+    def removePtnCoach(self):
+        if self.changesByAction.get('ptnCoachToRemove', False):
+            change, oldCoachId = removePtnCoach(self.groupInfo)
+            if change:
+                if not self.changeLog.has_key(oldCoachId):
+                    self.changeLog[oldCoachId] = [change]
                 else:
-                    changeLog[oldCoachId].append(change)
-        
-        # 4. If there's a ptn coach to add, do it now.
-        ptnCoachToAdd = changesByAction.get('ptnCoach', None)
+                    self.changeLog[oldCoachId].append(change)
+                    
+    def addPtnCoach(self):
+        ptnCoachToAdd = self.changesByAction.get('ptnCoach', None)
         if ptnCoachToAdd:
-            change = self.addPtnCoach(ptnCoachToAdd)
-            if not changeLog.has_key(ptnCoachToAdd):
-                changeLog[ptnCoachToAdd] = [change]
+            userInfo = createObject('groupserver.UserFromId', self.group, ptnCoachToAdd)
+            change = addPtnCoach(self.groupInfo, userInfo)
+            if not self.changeLog.has_key(ptnCoachToAdd):
+                self.changeLog[ptnCoachToAdd] = [change]
             else:
-                changeLog[ptnCoachToAdd].append(change)
-        
-        # 5. Make other changes member by member.
-        for memberId in changesByMember.keys():
-            userInfo = \
-              createObject('groupserver.UserFromId', 
-                self.group, memberId)
-            auditor = StatusAuditor(self.group, userInfo)
-            actions = changesByMember[memberId]
-            if not changeLog.has_key(memberId):
-                changeLog[memberId] = []
+                self.changeLog[ptnCoachToAdd].append(change)
+    
+    def makeChangesByMember(self):
+        for memberId in self.changesByMember.keys():
+            userInfo = createObject('groupserver.UserFromId', self.group, memberId)
+            actions = self.changesByMember[memberId]
+            if not self.changeLog.has_key(memberId):
+                self.changeLog[memberId] = []
             if 'groupAdminAdd' in actions:
-                changeLog[memberId].append(self.addAdmin(memberId, auditor))
+                self.changeLog[memberId].append(addAdmin(self.groupInfo, userInfo))
             if 'groupAdminRemove' in actions:
-                changeLog[memberId].append(self.removeAdmin(memberId, auditor))
+                self.changeLog[memberId].append(removeAdmin(self.groupInfo, userInfo))
             if 'moderatorAdd' in actions:
-                changeLog[memberId].append(self.addModerator(memberId, auditor))
+                self.changeLog[memberId].append(addModerator(self.groupInfo, userInfo))
             if 'moderatorRemove' in actions:
-                changeLog[memberId].append(self.removeModerator(memberId, auditor))
+                self.changeLog[memberId].append(removeModerator(self.groupInfo, userInfo))
             if 'moderatedAdd' in actions:
-                changeLog[memberId].append(self.moderate(memberId, auditor))
+                self.changeLog[memberId].append(moderate(self.groupInfo, userInfo))
             if 'moderatedRemove' in actions:
-                changeLog[memberId].append(self.unmoderate(memberId, auditor))
+                self.changeLog[memberId].append(unmoderate(self.groupInfo, userInfo))
             if 'postingMemberAdd' in actions:
-                changeLog[memberId].append(self.addPostingMember(memberId, auditor))
-
-        # 6. Format the feedback.
-        for memberId in changeLog.keys():
-            userInfo = \
-              createObject('groupserver.UserFromId', 
-                self.group, memberId)
-            retval += '<p><a href="%s">%s</a> has undergone '\
+                self.changeLog[memberId].append(addPostingMember(self.groupInfo, userInfo))
+    
+    def finishSummary(self):
+        for memberId in self.changeLog.keys():
+            userInfo = createObject('groupserver.UserFromId', self.group, memberId)
+            self.summary += '<p><a href="%s">%s</a> has undergone '\
               'the following changes:</p><ul>' % (userInfo.url, userInfo.name)
-            for change in changeLog[memberId]:
-                retval += '<li>%s</li>' % change
-            retval += '</ul>'
-        return retval
-        
+            for change in self.changeLog[memberId]:
+                self.summary += '<li>%s</li>' % change
+            self.summary += '</ul>'
+    
+    
