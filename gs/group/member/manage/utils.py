@@ -1,11 +1,15 @@
 # coding=utf-8
+from zope.component import createObject
 from Products.GSGroup.mailinglistinfo import GSMailingListInfo
 from gs.group.member.manage.audit import StatusAuditor, GAIN, LOSE
+from gs.group.member.manage.statusformfields import MAX_POSTING_MEMBERS
+from gs.group.member.invite.queries import InvitationQuery
+from gs.group.member.invite.audit import Auditor, WITHDRAW_INVITATION
 
 def addAdmin(groupInfo, userInfo):
     roles = list(groupInfo.groupObj.get_local_roles_for_userid(userInfo.id))
     assert 'GroupAdmin' not in roles, '%s (%s) was marked for becoming '\
-      'a GroupAdmin in %s (%s), but is one already.' %\
+      'a GroupAdmin in %s (%s), but is one already.' % \
        (userInfo.name, userInfo.id, groupInfo.name, groupInfo.id)
     groupInfo.groupObj.manage_addLocalRoles(userInfo.id, ['GroupAdmin'])
     auditor = StatusAuditor(groupInfo.groupObj, userInfo)
@@ -16,7 +20,7 @@ def addAdmin(groupInfo, userInfo):
 def removeAdmin(groupInfo, userInfo):
     roles = list(groupInfo.groupObj.get_local_roles_for_userid(userInfo.id))
     assert 'GroupAdmin' in roles, '%s (%s) was marked for removal '\
-      'as a GroupAdmin in %s (%s), but does not have the role.' %\
+      'as a GroupAdmin in %s (%s), but does not have the role.' % \
        (userInfo.name, userInfo.id, groupInfo.name, groupInfo.id)
     roles.remove('GroupAdmin')
     if roles:
@@ -32,7 +36,7 @@ def addModerator(groupInfo, userInfo):
     listInfo = GSMailingListInfo(groupInfo.groupObj)
     moderatorIds = [ m.id for m in listInfo.moderators ]
     assert userInfo.id not in moderatorIds, '%s (%s) was marked for addition '\
-      'as a moderator in %s (%s), but is already a moderator.' %\
+      'as a moderator in %s (%s), but is already a moderator.' % \
        (userInfo.name, userInfo.id, groupInfo.name, groupInfo.id)
     moderatorIds.append(userInfo.id)
     groupList = listInfo.mlist
@@ -49,7 +53,7 @@ def removeModerator(groupInfo, userInfo):
     listInfo = GSMailingListInfo(groupInfo.groupObj)
     moderatorIds = [ m.id for m in listInfo.moderators ]
     assert userInfo.id in moderatorIds, '%s (%s) was marked for removal '\
-      'as a moderator in %s (%s), but is not listed as a moderator.' %\
+      'as a moderator in %s (%s), but is not listed as a moderator.' % \
        (userInfo.name, userInfo.id, groupInfo.name, groupInfo.id)
     moderatorIds.remove(userInfo.id)
     groupList = listInfo.mlist
@@ -66,7 +70,7 @@ def moderate(groupInfo, userInfo):
     listInfo = GSMailingListInfo(groupInfo.groupObj)
     moderatedIds = [ m.id for m in listInfo.moderatees ]
     assert userInfo.id not in moderatedIds, '%s (%s) was marked for '\
-      'moderation in %s (%s), but is already moderated.' %\
+      'moderation in %s (%s), but is already moderated.' % \
        (userInfo.name, userInfo.id, groupInfo.name, groupInfo.id)
     moderatedIds.append(userInfo.id)
     groupList = listInfo.mlist
@@ -83,7 +87,7 @@ def unmoderate(groupInfo, userInfo):
     listInfo = GSMailingListInfo(groupInfo.groupObj)
     moderatedIds = [ m.id for m in listInfo.moderatees ]
     assert userInfo.id in moderatedIds, '%s (%s) was marked to be unmoderated '\
-      'in %s (%s), but is not listed as a moderated member.' %\
+      'in %s (%s), but is not listed as a moderated member.' % \
        (userInfo.name, userInfo.id, groupInfo.name, groupInfo.id)
     moderatedIds.remove(userInfo.id)
     groupList = listInfo.mlist
@@ -100,7 +104,7 @@ def addPostingMember(groupInfo, userInfo):
     listInfo = GSMailingListInfo(groupInfo.groupObj)
     postingMemberIds = [ m.id for m in listInfo.posting_members ]
     assert userInfo.id not in postingMemberIds, '%s (%s) was marked to become a '\
-      'posting member in %s (%s), but is already a posting member.' %\
+      'posting member in %s (%s), but is already a posting member.' % \
        (userInfo.name, userInfo.id, groupInfo.name, groupInfo.id)        
     numPostingMembers = len(postingMemberIds)
     if numPostingMembers >= MAX_POSTING_MEMBERS:
@@ -122,7 +126,7 @@ def removePostingMember(groupInfo, userInfo):
     listInfo = GSMailingListInfo(groupInfo.groupObj)
     postingMemberIds = [ m.id for m in listInfo.posting_members ]
     assert userInfo.id in postingMemberIds, '%s (%s) was marked for removal as '\
-      'a posting member in %s (%s), but is not a posting member.' %\
+      'a posting member in %s (%s), but is not a posting member.' % \
        (userInfo.name, userInfo.id, groupInfo.name, groupInfo.id)
     postingMemberIds.remove(userInfo.id)
     groupList = listInfo.mlist
@@ -171,7 +175,7 @@ def removeAllPositions(groupInfo, userInfo):
     retval = []
     userId = userInfo.id
     oldPtnCoach = groupInfo.ptn_coach
-    if oldPtnCoach and (oldPtnCoach.id==userId):
+    if oldPtnCoach and (oldPtnCoach.id == userId):
         retval.append(removePtnCoach(groupInfo)[0])
     group = groupInfo.groupObj
     listInfo = GSMailingListInfo(group)
@@ -183,5 +187,16 @@ def removeAllPositions(groupInfo, userInfo):
         retval.append(removeModerator(groupInfo, userInfo))
     if userId in listInfo.mlist.getProperty('moderated_members', []):
         retval.append(unmoderate(groupInfo, userInfo))
+    return retval
+
+def withdrawInvitation(groupInfo, userInfo):
+    adminInfo = createObject('groupserver.LoggedInUser', groupInfo.groupObj)
+    da = groupInfo.groupObj.zsqlalchemy
+    query = InvitationQuery(da)
+    siteInfo = groupInfo.siteInfo 
+    query.withdraw_invitation(siteInfo.id, groupInfo.id, userInfo.id, adminInfo.id)
+    auditor = Auditor(siteInfo, groupInfo, adminInfo, userInfo)
+    auditor.info(WITHDRAW_INVITATION)
+    retval = 'no longer has an invitation to join the group'
     return retval
 

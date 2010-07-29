@@ -1,22 +1,20 @@
 # coding=utf-8
-from AccessControl import getSecurityManager
 from zope.component import createObject
 from zope.interface import implements
 from zope.formlib import form
 from Products.XWFCore.odict import ODict
-from Products.XWFCore.XWFUtils import comma_comma_and, getOption
+from Products.XWFCore.XWFUtils import comma_comma_and
 from Products.GSGroup.mailinglistinfo import GSMailingListInfo
 from Products.GSGroup.changebasicprivacy import radio_widget
 from gs.group.member.leave.leaver import GroupLeaver
-from gs.group.member.leave.audit import LeaveAuditor, LEAVE
 from Products.GSGroupMember.groupMembersInfo import GSGroupMembersInfo
 from gs.group.member.manage.statusformfields import MAX_POSTING_MEMBERS
 from gs.group.member.manage.actions import GSMemberStatusActions
 from gs.group.member.manage.interfaces import IGSGroupMemberManager
-from gs.group.member.manage.interfaces import IGSMemberActionsSchema, IGSManageMembersForm
+from gs.group.member.manage.interfaces import IGSManageMembersForm
 from gs.group.member.manage.utils import addAdmin, removeAdmin, addModerator, removeModerator
 from gs.group.member.manage.utils import moderate, unmoderate, addPostingMember, removePostingMember
-from gs.group.member.manage.utils import addPtnCoach, removePtnCoach, removeAllPositions
+from gs.group.member.manage.utils import addPtnCoach, removePtnCoach, withdrawInvitation
 
 class GSGroupMemberManager(object):
     implements(IGSGroupMemberManager)
@@ -119,7 +117,7 @@ class GSGroupMemberManager(object):
     def cleanRemovals(self):
         ''' For members to be removed, cancel all other actions.'''        
         for mId in self.toChange.get('remove',[]):
-            for a in filter(lambda x:(x!='remove') and (x!='ptnCoachToRemove'), self.toChange.keys()): #TODO: check this out
+            for a in filter(lambda x:(x!='remove'), self.toChange.keys()):
                 members = self.toChange.get(a,[])
                 if mId in members:
                     members.remove(mId)
@@ -288,6 +286,8 @@ class GSGroupMemberManager(object):
             actions = self.changesByMember[memberId]
             if not self.changeLog.has_key(memberId):
                 self.changeLog[memberId] = []
+            if 'withdraw' in actions:
+                self.changeLog[memberId].append(withdrawInvitation(self.groupInfo, userInfo))
             if 'groupAdminAdd' in actions:
                 self.changeLog[memberId].append(addAdmin(self.groupInfo, userInfo))
             if 'groupAdminRemove' in actions:

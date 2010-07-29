@@ -1,5 +1,4 @@
 # coding=utf-8
-from zope.app.apidoc import interface
 from zope.component import createObject, adapts
 from zope.interface import implements
 from zope.formlib import form
