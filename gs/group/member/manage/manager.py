@@ -19,11 +19,12 @@ from gs.group.member.manage.utils import addPtnCoach, removePtnCoach, withdrawIn
 class GSGroupMemberManager(object):
     implements(IGSGroupMemberManager)
     
-    def __init__(self, group):
+    def __init__(self, group, showOnly=None):
         self.group = group
+        self.showOnly = showOnly
         self.siteInfo = createObject('groupserver.SiteInfo', group)
         self.groupInfo = createObject('groupserver.GroupInfo', group)
-        self.__membersInfo = self.__memberStatusActions = None
+        self.__membersInfo = self.__members = self.__memberStatusActions = None
         self.__postingIsSpecial = self.__form_fields = None
         self.toChange = self.cancelledChanges = {}
         self.changesByMember = {}
@@ -40,17 +41,34 @@ class GSGroupMemberManager(object):
     @property
     def memberStatusActions(self):
         if self.__memberStatusActions == None:
+            if self.showOnly == 'invited': 
+                self.__memberStatusActions = \
+                  [ GSMemberStatusActions(m, 
+                      self.groupInfo, self.siteInfo)
+                    for m in self.membersInfo.invitedMembers ]
+                return self.__memberStatusActions
             self.__memberStatusActions = \
               [ GSMemberStatusActions(m, 
                   self.groupInfo, self.siteInfo)
                 for m in self.membersInfo.members ]
+            if self.showOnly == 'managers':
+                self.__memberStatusActions = \
+                  [ m for m in self.__memberStatusActions 
+                    if (m.status.isSiteAdmin or m.status.isGroupAdmin) ]
+            elif self.showOnly == 'moderated':
+                self.__memberStatusActions = \
+                  [ m for m in self.__memberStatusActions if m.status.isModerated ]
+            elif self.showOnly == 'unverified':
+                self.__memberStatusActions = \
+                  [ m for m in self.__memberStatusActions if m.status.isUnverified ]
         return self.__memberStatusActions
     
     @property
     def postingIsSpecial(self):
         if self.__postingIsSpecial == None:
             self.__postingIsSpecial = \
-              self.memberStatusActions[0].status.postingIsSpecial
+              len(self.memberStatusActions)>0 and \
+                self.memberStatusActions[0].status.postingIsSpecial or False
         return self.__postingIsSpecial
     
     @property

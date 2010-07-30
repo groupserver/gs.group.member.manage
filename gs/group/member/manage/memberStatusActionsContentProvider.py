@@ -1,11 +1,5 @@
 # coding=utf-8
-from zope.contentprovider import tales
-from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from zope.app.pagetemplate import ViewPageTemplateFile
-try:
-    from zope.browserpage import metaconfigure
-except ImportError:
-    from zope.app.pagetemplate import metaconfigure
 from zope.component import createObject, provideAdapter, adapts
 from zope.interface import implements, Interface
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
@@ -25,16 +19,6 @@ class GSMemberStatusActionsContentProvider(object):
         self.request = request
         
     def update(self):
-        try:
-           # AM: When the page is first loaded, it needs
-           #  the "provider" expression type registered. 
-           metaconfigure.registerType('provider', 
-             tales.TALESProviderExpression)
-        except:
-           # But when it reloads upon form submission, it raises
-           # RegistrationError: Multiple registrations for Expression type "provider".
-           # So we just ignore the silly thing.
-           pass
         self.__updated = True
             
     def render(self):

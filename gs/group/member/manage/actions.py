@@ -1,8 +1,6 @@
 # coding=utf-8
-from zope.app.apidoc import interface
 from zope.component import createObject, adapts
 from zope.interface import implements
-from zope.formlib import form
 from Products.CustomUserFolder.interfaces import IGSUserInfo
 from Products.GSContent.interfaces import IGSSiteInfo
 from Products.GSGroup.interfaces import IGSGroupInfo

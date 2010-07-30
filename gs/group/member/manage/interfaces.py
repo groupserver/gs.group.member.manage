@@ -14,7 +14,7 @@ class IGSManageGroupMembersForm(Interface):
 class IGSManageMembersForm(Interface):
     """ One user-independent field."""
     ptnCoachRemove = Choice(vocabulary=SimpleVocabulary([SimpleTerm(True, \
-        True, u'Elect to have no participation coach')]),
+        True, u'No participation coach')]),
       required=False)
 
 class IGSGroupMemberManager(Interface):
@@ -85,4 +85,3 @@ class IGSMemberActionsSchema(Interface):
       description=u'Is this a dummy value?',
       required=False)
 
- 

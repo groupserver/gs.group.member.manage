@@ -35,6 +35,11 @@
         .ptnCoach {
           margin: 0;
         }
+        .ptnCoachRemove label {
+          font-size: 138.5%;
+          line-height: 1em;
+          margin: 1em 0;
+        }
       </style>
     </tal:block>
   </head>
@@ -72,21 +77,68 @@
           <span tal:replace="python:invitedMemberCount==1 and '1 invited member' or '%d invited members' % invitedMemberCount"/>
           &#8212; 
           in <span tal:replace="view/groupInfo/name">this group</span>.
+          (<a href="admin_invite.html">Invite more members</a>.)
         </p>
+        <ul
+          tal:define="show python:view.showOnly or 'all';
+            showAll python:show=='all';
+            showManagers python:show=='managers';
+            showModerated python:show=='moderated';
+            showUnverified python:show=='unverified';
+            showInvited python:show=='invited'">
+          <li tal:condition="showAll">Listing <strong>all the members</strong></li>
+          <li tal:condition="not:showAll">
+            <a href="#"
+              tal:attributes="href string:managemembers.html">List  
+              all the members of <span tal:replace="view/groupInfo/name" />
+            </a>
+          </li>
+          <li tal:condition="showManagers">Listing all <strong>managers</strong></li>
+          <li tal:condition="not:showManagers">
+            <a href="#"
+              tal:attributes="href string:managemembers.html?showOnly=managers">List  
+              only the managers of <span tal:replace="view/groupInfo/name" />
+            </a>
+          </li>
+          <li tal:condition="showModerated">Listing all <strong>moderated members</strong></li>
+          <li tal:condition="not:showModerated">
+            <a href="#"
+              tal:attributes="href string:managemembers.html?showOnly=moderated">List  
+              only the moderated members of <span tal:replace="view/groupInfo/name" />
+            </a>
+          </li>
+          <li tal:condition="showUnverified">Listing all <strong>members with no verified email addresses</strong></li>
+          <li tal:condition="not:showUnverified">
+            <a href="#"
+              tal:attributes="href string:managemembers.html?showOnly=unverified">List  
+              only the members of <span tal:replace="view/groupInfo/name" /> with no verified email addresses
+            </a>
+          </li>
+          <li tal:condition="showInvited">Listing all <strong>invited members</strong></li>
+          <li tal:condition="not:showInvited">
+            <a href="#"
+              tal:attributes="href string:managemembers.html?showOnly=invited">List  
+              only the invited members of <span tal:replace="view/groupInfo/name" />
+            </a>
+          </li>
+        </ul>
         <tal:block define="statusActions memberManager/memberStatusActions;
           widgets view/widgets">
           <div tal:replace="structure provider:groupserver.MemberStatusActions"/>
         </tal:block>
         <div class="statusActions"
-          tal:condition="not:memberManager/postingIsSpecial"
-          tal:attributes="class python:((len(memberManager.membersInfo.members)%2)==0) and 'statusActions odd' or 'statusActions'">
-          <h3>Participation Coach</h3>
-          <div class="ptnCoach" 
+          tal:define="hasPtnCoachRemove python:view.widgets.get('ptnCoachRemove')"
+          tal:condition="python:hasPtnCoachRemove and not(memberManager.postingIsSpecial)"
+          tal:attributes="class python:((len(memberManager.memberStatusActions)%2)==0) and 'statusActions odd' or 'statusActions'">
+          <div class="ptnCoach ptnCoachRemove" 
             tal:define="widgets python:[view.widgets['ptnCoachRemove']]">
             <div tal:replace="structure provider:groupserver.FormWidgets"/>
           </div>
         </div>
-        <div class="buttons" tal:condition="view/availableActions">
+        <p tal:condition="not:view/form_fields">
+          There are no members to display.
+        </p>
+        <div class="buttons" tal:condition="python:view.availableActions and view.form_fields">
           <tal:block repeat="action view/actions">
             <div class="formelementbutton">
               <span tal:replace="structure action/render">Button</span>

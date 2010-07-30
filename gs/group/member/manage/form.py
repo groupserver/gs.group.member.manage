@@ -7,7 +7,6 @@ from zope.component import createObject
 from zope.formlib import form
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 from gs.group.member.manage.manager import GSGroupMemberManager
-from gs.group.member.manage.interfaces import IGSManageGroupMembersForm
 
 class GSManageGroupMembersForm(PageForm):
     pageTemplateFileName = 'browser/templates/manage_members.pt'
@@ -21,7 +20,8 @@ class GSManageGroupMembersForm(PageForm):
         self.groupInfo = createObject('groupserver.GroupInfo', context)
         self.groupName = self.groupInfo.name
         self.label = u'Manage the Members of %s' % self.groupName
-        self.memberManager = GSGroupMemberManager(self.groupInfo.groupObj)
+        self.showOnly = request.form.get('showOnly','')
+        self.memberManager = GSGroupMemberManager(self.groupInfo.groupObj, self.showOnly)
         self.__form_fields = None
     
     @property
@@ -31,7 +31,10 @@ class GSManageGroupMembersForm(PageForm):
               not(self.request.form.has_key('form.ptnCoachRemove')) and \
               not(self.groupInfo.ptn_coach):
                 self.request.form['form.ptnCoachRemove'] = u'True'
-            self.__form_fields = self.memberManager.form_fields
+            if self.showOnly:
+                self.__form_fields = self.memberManager.form_fields.omit('ptnCoachRemove')
+            else:
+                self.__form_fields = self.memberManager.form_fields
         return self.__form_fields
     
     def setUpWidgets(self, ignore_request=False, data={}):

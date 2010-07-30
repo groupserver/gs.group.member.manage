@@ -115,9 +115,9 @@ class GSStatusFormFields(object):
             elif self.status.isGroupAdmin:
                 self.__groupAdmin = \
                   Bool(__name__=u'%s-groupAdminRemove' % self.userInfo.id,
-                    title=u'Revoke the Group Administrator privileges '\
+                    title=u'Remove the Group Administrator privileges '\
                       u'from %s' % self.userInfo.name,
-                    description=u'Revoke the Group Administrator privileges '\
+                    description=u'Remove the Group Administrator privileges '\
                       u'from %s' % self.userInfo.name,
                     required=False)
         return self.__groupAdmin
