@@ -168,7 +168,10 @@ def removePtnCoach(groupInfo):
     if oldPtnCoach:
         auditor = StatusAuditor(group, oldPtnCoach)
         auditor.info(LOSE, 'Participation Coach')
-        retval = ('no longer the Participation Coach', oldPtnCoach)
+        retval = ('no longer the Participation Coach', oldPtnCoach.id)
+    assert len(retval) == 2
+    assert type(retval[0]) == str
+    assert ((retval[1] == None) or (type(retval[1]) == str))
     return retval
         
 def removeAllPositions(groupInfo, userInfo):
