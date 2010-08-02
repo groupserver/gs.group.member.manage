@@ -72,6 +72,7 @@ class GainStatusEvent(BasicAuditEvent):
             self.instanceDatum,
             self.groupInfo.name, self.groupInfo.id,
             self.siteInfo.name, self.siteInfo.id)
+        retval = retval.encode('ascii', 'ignore')
         return retval
     
     @property
@@ -110,6 +111,7 @@ class LoseStatusEvent(BasicAuditEvent):
             self.instanceUserInfo.name, self.instanceUserInfo.id,
             self.groupInfo.name, self.groupInfo.id,
             self.siteInfo.name, self.siteInfo.id)
+        retval = retval.encode('ascii', 'ignore')
         return retval
     
     @property
