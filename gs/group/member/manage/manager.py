@@ -133,10 +133,13 @@ class GSGroupMemberManager(object):
         self.cleanModeration()
 
     def cleanRemovals(self):
-        ''' For members to be removed, cancel all other actions.'''        
-        for mId in self.toChange.get('remove',[]):
-            for a in filter(lambda x:(x!='remove'), self.toChange.keys()):
-                members = self.toChange.get(a,[])
+        ''' For members to be removed, cancel all other actions.'''
+        actions = self.toChange
+        if actions.has_key('ptnCoachToRemove'):
+            actions.pop('ptnCoachToRemove')
+        for mId in actions.get('remove',[]):
+            for a in filter(lambda x:(x!='remove'), actions.keys()):
+                members = actions.get(a,[])
                 if mId in members:
                     members.remove(mId)
                     self.toChange[a] = members
@@ -329,5 +332,4 @@ class GSGroupMemberManager(object):
             for change in self.changeLog[memberId]:
                 self.summary += '<li>%s</li>' % change
             self.summary += '</ul>'
-    
-    
+
