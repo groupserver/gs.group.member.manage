@@ -1,0 +1,106 @@
+.. sectnum::
+
+=======================
+Testing for Invitations
+=======================
+
+:Authors: Michael JasonSmith
+  Alice Murphy
+:Contact: Alice Murphy <alice@onlinegroups.net>
+:Date: 2010-08-03
+:Organization: `GroupServer.org <http://groupserver.org>`_
+:Copyright: This document is licensed under a  
+  `Creative Commons Attribution-Share Alike 3.0 New Zealand License
+  <http://creativecommons.org/licenses/by-sa/3.0/nz/>`_ by 
+  `OnlineGroups.Net <http://onlinegroups.net>`_.
+
+Group members can have different powers. The *Manage Members* page is used to grant or revoke powers. The page allow either `single actions`_ to be carried out, granting or revoking a single power. It also allows `multiple actions`_ to be carried out. However, in its simplest use-case the page provides a `static view`_ of the members of the group.
+
+Static View
+===========
+
+* The *Manage Members* page is visible to 
+
+  + A group administrator and 
+  + A site administrator.
+
+* A *Permission Denied* error is shown to logged in
+  
+  + Group members
+  + Site members
+  
+* A login page is shown to *Anonymous*.
+
+* All group members are shown.
+
+  + A group member who has the ``GroupAdmin`` role is marked as a
+    *group administrator*.
+  + A group member who has the ``DivisionAdmin`` role is marked as a
+    *Site Administrator*.
+  + A group member whose ID is set as the ``ptn_coach`` attribute of 
+    the group is marked as the *Participation Coach*.
+  + In an *announcement* group, a person who is listed in the
+    ``posting_member`` attribute of the mailing list is listed as a
+    *Posting Member*.
+  + A group member who has no other status is marked as a *normal* group 
+    member.
+
+* People who have been invited to join the group are shown.
+
+* Site members are not shown.
+
+Single Actions
+==============
+
+A group administrator can `remove a member`_, grant or revoke the
+`group administrator status`_, `participation coach status`_, `moderated
+status`_ or `moderator status`_ from a member,
+
+Remove A Member
+---------------
+
+  
+
+
+Invitations
+~~~~~~~~~~~
+
+Group Administrator Status
+--------------------------
+
+Adding Group Administrators
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Removing Group Administrators
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Participation Coach Status
+--------------------------
+
+Setting a Participation Coach
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Removing a Participation Coach
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Moderated Status
+----------------
+
+Adding Members to Moderation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Removing Members from Moderation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Moderator Status
+----------------
+
+Making a Member a Moderator
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Removing the Moderator Status
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+Multiple Actions
+================
+
