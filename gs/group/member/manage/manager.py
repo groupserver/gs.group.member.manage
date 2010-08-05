@@ -61,6 +61,9 @@ class GSGroupMemberManager(object):
             elif self.showOnly == 'unverified':
                 self.__memberStatusActions = \
                   [ m for m in self.__memberStatusActions if m.status.isUnverified ]
+            elif self.showOnly == 'posting':
+                self.__memberStatusActions = \
+                  [ m for m in self.__memberStatusActions if m.status.isPostingMember ]
         return self.__memberStatusActions
     
     @property
