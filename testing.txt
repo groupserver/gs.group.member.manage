@@ -31,7 +31,7 @@ Static View
   
 * A login page is shown to *Anonymous*.
 
-* All group members are shown.
+* All group members, and only group members, are shown.
 
   + A group member who has the ``GroupAdmin`` role is marked as a
     *group administrator*.
@@ -42,19 +42,24 @@ Static View
   + In an *announcement* group, a person who is listed in the
     ``posting_member`` attribute of the mailing list is listed as a
     *Posting Member*.
+  + In a *discussion* group with *moderation* turned on
+    
+    - Members who are listed in the ``moderated_members`` attribute of
+      the mailing list are listed as a *Moderated Member*.
+    - Members who are listed in the ``moderator_members`` attribute of
+      the mailing list are listed as *Moderators*.
+      
   + A group member who has no other status is marked as a *normal* group 
     member.
 
 * People who have been invited to join the group are shown.
 
-* Site members are not shown.
-
 Single Actions
 ==============
 
 A group administrator can `remove a member`_, grant or revoke the
-`group administrator status`_, `participation coach status`_, `moderated
-status`_ or `moderator status`_ from a member,
+`group administrator status`_, `participation coach status`_, or change
+the `moderation status`_ of a member.
 
 Remove A Member
 ---------------
@@ -64,17 +69,24 @@ Remove A Member
   + All normal members,
   + All group administrators,
   + All site administrators,
+  + Moderated members,
+  + Moderators,
   + The participation coach, and
   + Posting members in announcement groups.
-  
+
+* Selecting the *Remove* option will make the other options for the
+  member unavailable.
 * Selecting a member to be removed and clicking the *Change* button
   will cause the following to occur.
 
-  + The selected member is no longer a member of the group.
+  + The selected member is removed from 
     
-    - The selected member is not listed as a member of the user-group.
-    - The selected member not listed on the *Manage* *Members* page.
-    
+    - The user-group
+    - The list of moderators
+    - The list of moderated members
+    - The list of posting members
+    - The participation coach attribute of the group.
+  
   + The selected member is sent a notification saying that he or she
     has been removed from the group.
   + The administrators are sent a notification saying that the selected
@@ -93,7 +105,6 @@ Invitations
     has been withdrawn.
   + If the invitation-link is followed the member is shown a page saying
     that the invitation has been withdrawn.
-  + The invited member is not listed on the *Manage Members* page.
 
 Group Administrator Status
 --------------------------
@@ -109,21 +120,20 @@ Add Group Administrators
 
   + Existing group administrators, and
   + Invited group members.
-  
+
+* Selecting *Make a group administrator* will make the *Remove* and
+  *Moderate* options unavailable.
 * Selecting the *Make a group administrator* and clicking the *Change*
   button will make the selected member a group administrator.
-
 
 Remove Group Administrators
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * The *Remove administrator privileges* option is shown and can be
   selected for all group administrators.
-  
 * Selecting *Remove administrator privileges* and clicking the *Change*
   button will remove group administrator status from the selected 
   member.
-
 
 Participation Coach Status
 --------------------------
@@ -135,10 +145,12 @@ Set a Participation Coach
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * The option *Make a participation coach* is listed for all members
-  that are not the participation coach.
+  other than the participation coach and invited members.
 * Only one person can be selected as the participation coach.
-* Selecting *Make a participation coach* and clicking the *Change* 
-  button will make the selected member the participation coach.
+* Selecting the *Make a participation coach* option will make the
+  *Remove* and *Moderate* options unavailable.
+* Selecting the *Make a participation coach* option and clicking the
+  *Change* button will make the selected member the participation coach.
 * Selecting a different member as the participation coach will 
   
   + Remove the participation coach status from the previous coach and 
@@ -153,23 +165,54 @@ Remove the Participation Coach
   participation coach.
 
 
-Moderated Status
-----------------
+Moderation Status
+-----------------
 
-Adding Members to Moderation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+There are three moderation settings for a group:
 
-Removing Members from Moderation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#. No moderation, which is the default,
+#. Moderate specified members, and
+#. Moderate specified members and new members.
 
-Moderator Status
-----------------
+If either of the last two options have been selected the group 
+administrator should be able to `add members to moderation`_,
+`remove members from moderation`_, `make a member a moderator`_ and
+`remove the moderator status`_ from a member.
 
-Making a Member a Moderator
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Add Members to Moderation
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Removing the Moderator Status
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+* The *Start moderating* option is only available for normal members.
+* Selecting the *Start moderating* option will make the other options
+  for the member unavailable.
+* Selecting the *Start moderating* option and clicking the *Change*
+  button will make the selected member moderated.
+
+Remove Members from Moderation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* The *Stop moderating* option is only available for moderated members.
+* Selecting the *Stop moderating* option and clicking the *Change* 
+  button will remove the selected member from moderation.
+
+Make a Member a Moderator
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* The *Make a moderator* option is available on all administrators, 
+  participation coaches, and normal members.
+* Selecting the *Make a moderator* option makes the *Start moderating*
+  and *Remove* options unavailable.
+* Selecting the *Make a moderator* option and clicking the *Change*
+  button will make the selected member a moderator.
+
+Remove the Moderator Status
+~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+* The *Remove moderator status* option is available on all moderators.
+* Selecting the *Remover moderator status* option will make the *Remove*
+  option unavailable.
+* Selecting the *Remover moderator status* option and clicking the 
+  *Change* button will remove the moderator status from the member.
 
 Multiple Actions
 ================
