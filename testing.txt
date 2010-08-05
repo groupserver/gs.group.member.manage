@@ -1,8 +1,8 @@
 .. sectnum::
 
-=======================
-Testing for Invitations
-=======================
+======================
+Testing Manage Members
+======================
 
 :Authors: Michael JasonSmith
   Alice Murphy
@@ -59,29 +59,99 @@ status`_ or `moderator status`_ from a member,
 Remove A Member
 ---------------
 
-  
+* The *Remove* option is shown and can be selected for
 
+  + All normal members,
+  + All group administrators,
+  + All site administrators,
+  + The participation coach, and
+  + Posting members in announcement groups.
+  
+* Selecting a member to be removed and clicking the *Change* button
+  will cause the following to occur.
+
+  + The selected member is no longer a member of the group.
+    
+    - The selected member is not listed as a member of the user-group.
+    - The selected member not listed on the *Manage* *Members* page.
+    
+  + The selected member is sent a notification saying that he or she
+    has been removed from the group.
+  + The administrators are sent a notification saying that the selected
+    member has been removed from the group.
+  + Only the selected member is removed from the group.
 
 Invitations
 ~~~~~~~~~~~
 
+* The *Withdraw invitation* option is shown and can be selected for
+  all invited members.
+* Selecting the *Withdraw invitation* option and clicking the *Change*
+  button will cause the following to occur.
+  
+  + The invited member is sent a notification saying that the invitation
+    has been withdrawn.
+  + If the invitation-link is followed the member is shown a page saying
+    that the invitation has been withdrawn.
+  + The invited member is not listed on the *Manage Members* page.
+
 Group Administrator Status
 --------------------------
 
-Adding Group Administrators
+From the *Manage Members* page you can `add group administrators`_ and
+`remove group administrators`_.
+
+Add Group Administrators
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* The *Make a group administrator* option is shown and can be selected
+  for all members of the group except for
+
+  + Existing group administrators, and
+  + Invited group members.
+  
+* Selecting the *Make a group administrator* and clicking the *Change*
+  button will make the selected member a group administrator.
+
+
+Remove Group Administrators
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Removing Group Administrators
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* The *Remove administrator privileges* option is shown and can be
+  selected for all group administrators.
+  
+* Selecting *Remove administrator privileges* and clicking the *Change*
+  button will remove group administrator status from the selected 
+  member.
+
 
 Participation Coach Status
 --------------------------
 
-Setting a Participation Coach
+The administrator can `set a participation coach`_ or 
+`remove the participation coach`_ using the *Manage Members* page.
+  
+Set a Participation Coach
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* The option *Make a participation coach* is listed for all members
+  that are not the participation coach.
+* Only one person can be selected as the participation coach.
+* Selecting *Make a participation coach* and clicking the *Change* 
+  button will make the selected member the participation coach.
+* Selecting a different member as the participation coach will 
+  
+  + Remove the participation coach status from the previous coach and 
+  + Make the selected member the participation coach.
+
+Remove the Participation Coach
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Removing a Participation Coach
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* The option *No participation coach* is shown at the bottom of the page.
+* Selecting *No participation coach* and clicking the *Change*
+  button will remove the participation coach status from the current
+  participation coach.
+
 
 Moderated Status
 ----------------
