@@ -4,8 +4,7 @@
 Testing Manage Members
 ======================
 
-:Authors: Michael JasonSmith
-  Alice Murphy
+:Authors: Michael JasonSmith; Alice Murphy
 :Contact: Alice Murphy <alice@onlinegroups.net>
 :Date: 2010-08-03
 :Organization: `GroupServer.org <http://groupserver.org>`_
