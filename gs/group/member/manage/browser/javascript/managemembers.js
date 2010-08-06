@@ -49,7 +49,11 @@ GSManageMembers = function () {
         if (moderationAction == "moderatorAdd") {
             allRelatedWidgets = jQuery("#form\\." + memberId + "-moderatedAdd");
         } else {
-            allRelatedWidgets = jQuery("#form\\." + memberId + "-moderatorAdd");
+            ptnCoachInputName = memberId + "-ptnCoach";
+            allRelatedWidgets = [jQuery("#form\\." + memberId + "-moderatorAdd"),
+              jQuery("#form\\." + memberId + "-groupAdminAdd"),
+              jQuery("#form\\." + memberId + "-postingMemberAdd"),
+              jQuery("input[name='form\\." + ptnCoachInputName + "']")];
         }
 
         if (checkedValue == true) {
