@@ -16,7 +16,7 @@ class GSStatusFormFields(object):
     implements(IGSStatusFormFields)
 
     def __init__(self, status):
-        assert IGSGroupMembershipStatus.providedBy(status),\
+        assert IGSGroupMembershipStatus.providedBy(status), \
           u'%s is not a GSGroupMembershipStatus' % status
         
         self.status = status
@@ -46,7 +46,7 @@ class GSStatusFormFields(object):
     def adminUserInfo(self):
         if self.__adminUserInfo == None:
             self.__adminUserInfo = \
-              createObject('groupserver.LoggedInUser', 
+              createObject('groupserver.LoggedInUser',
                            self.groupInfo.groupObj)
         return self.__adminUserInfo
     
@@ -88,7 +88,7 @@ class GSStatusFormFields(object):
                 fields = \
                   form.Fields(
                     fields
-                    +
+                    + 
                     form.Fields(f)
                   )
             self.__form_fields = fields.omit('dummy')
@@ -152,19 +152,19 @@ class GSStatusFormFields(object):
                self.status.isInvited or \
                self.status.isUnverified or \
                self.status.isOddlyConfigured):
-                self.__moderator =\
+                self.__moderator = \
                   Bool(__name__=u'%s-moderatorAdd' % self.userInfo.id,
-                    title=u'Make %s a Moderator for this group' %\
+                    title=u'Make %s a Moderator for this group' % \
                       self.userInfo.name,
-                    description=u'Make %s a Moderator for this group' %\
+                    description=u'Make %s a Moderator for this group' % \
                       self.userInfo.name,
                     required=False)
             elif self.status.groupIsModerated and self.status.isModerator:
-                self.__moderator =\
+                self.__moderator = \
                   Bool(__name__=u'%s-moderatorRemove' % self.userInfo.id,
-                    title=u'Revoke Moderator status from %s' %\
+                    title=u'Revoke Moderator status from %s' % \
                       self.userInfo.name,
-                    description=u'Revoke Moderator status from %s' %\
+                    description=u'Revoke Moderator status from %s' % \
                       self.userInfo.name,
                     required=False)
         return self.__moderator
@@ -174,19 +174,19 @@ class GSStatusFormFields(object):
         if self.__moderate == None:
             self.__moderate = False
             if self.status.groupIsModerated and self.status.isNormalMember:
-                self.__moderate =\
+                self.__moderate = \
                   Bool(__name__=u'%s-moderatedAdd' % self.userInfo.id,
-                    title=u'Start moderating messages from %s' %\
+                    title=u'Start moderating messages from %s' % \
                       self.userInfo.name,
-                    description=u'Start moderating messages from %s' %\
+                    description=u'Start moderating messages from %s' % \
                       self.userInfo.name,
                     required=False)
             elif self.status.groupIsModerated and self.status.isModerated:
-                self.__moderate =\
+                self.__moderate = \
                   Bool(__name__=u'%s-moderatedRemove' % self.userInfo.id,
-                    title=u'Stop moderating messages from %s' %\
+                    title=u'Stop moderating messages from %s' % \
                       self.userInfo.name,
-                    description=u'Stop moderating messages from %s' %\
+                    description=u'Stop moderating messages from %s' % \
                       self.userInfo.name,
                     required=False)
         return self.__moderate         
@@ -200,19 +200,19 @@ class GSStatusFormFields(object):
               not (self.status.isPostingMember or \
                    self.status.isUnverified or \
                    self.status.isOddlyConfigured): 
-                self.__postingMember =\
+                self.__postingMember = \
                   Bool(__name__=u'%s-postingMemberAdd' % self.userInfo.id,
-                    title=u'Make %s a Posting Member' %\
+                    title=u'Make %s a Posting Member' % \
                       self.userInfo.name,
-                    description=u'Make %s a Posting Member' %\
+                    description=u'Make %s a Posting Member' % \
                       self.userInfo.name,
                     required=False)
             elif self.status.postingIsSpecial and self.status.isPostingMember:
-                self.__postingMember =\
+                self.__postingMember = \
                   Bool(__name__=u'%s-postingMemberRemove' % self.userInfo.id,
-                    title=u'Revoke the Posting Member privileges from %s' %\
+                    title=u'Revoke the Posting Member privileges from %s' % \
                       self.userInfo.name,
-                    description=u'Revoke the Posting Member privileges from %s' %\
+                    description=u'Revoke the Posting Member privileges from %s' % \
                       self.userInfo.name,
                     required=False)
         return self.__postingMember
@@ -228,11 +228,11 @@ class GSStatusFormFields(object):
             #      self.adminUserStatus.isGroupAdmin):
             if (not self.status.isSiteAdmin) and (not self.status.isGroupAdmin) and\
               (not self.status.isInvited):
-                self.__remove =\
+                self.__remove = \
                   Bool(__name__=u'%s-remove' % self.userInfo.id,
-                    title=u'Remove %s from the group' %\
+                    title=u'Remove %s from the group' % \
                       self.userInfo.name,
-                    description=u'Remove %s from the group' %\
+                    description=u'Remove %s from the group' % \
                       self.userInfo.name,
                     required=False)
         return self.__remove
@@ -242,11 +242,11 @@ class GSStatusFormFields(object):
         if self.__withdraw == None:
             self.__withdraw = False
             if self.status.isInvited:
-                self.__withdraw =\
+                self.__withdraw = \
                   Bool(__name__=u'%s-withdraw' % self.userInfo.id,
-                    title=u'Withdraw the invitation sent to %s' %\
+                    title=u'Withdraw the invitation sent to %s' % \
                       self.userInfo.name,
-                    description=u'Withdraw the invitation sent to %s' %\
+                    description=u'Withdraw the invitation sent to %s' % \
                       self.userInfo.name,
                     required=False)
         return self.__withdraw

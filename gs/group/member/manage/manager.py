@@ -24,8 +24,11 @@ class GSGroupMemberManager(object):
         self.showOnly = showOnly
         self.siteInfo = createObject('groupserver.SiteInfo', group)
         self.groupInfo = createObject('groupserver.GroupInfo', group)
+        mailingListInfo = createObject('groupserver.MailingListInfo', group)
+        self.groupIsModerated = mailingListInfo.is_moderated
+        self.postingIsSpecial = (self.groupInfo.group_type == 'announcement')
         self.__membersInfo = self.__members = self.__memberStatusActions = None
-        self.__postingIsSpecial = self.__form_fields = None
+        self.__form_fields = None
         self.toChange = self.cancelledChanges = {}
         self.changesByMember = {}
         self.changesByAction = {}
@@ -65,14 +68,6 @@ class GSGroupMemberManager(object):
                 self.__memberStatusActions = \
                   [ m for m in self.__memberStatusActions if m.status.isPostingMember ]
         return self.__memberStatusActions
-    
-    @property
-    def postingIsSpecial(self):
-        if self.__postingIsSpecial == None:
-            self.__postingIsSpecial = \
-              len(self.memberStatusActions)>0 and \
-                self.memberStatusActions[0].status.postingIsSpecial or False
-        return self.__postingIsSpecial
     
     @property
     def form_fields(self):
