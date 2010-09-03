@@ -50,23 +50,25 @@ class GSGroupMemberManager(object):
                       self.groupInfo, self.siteInfo)
                     for m in self.membersInfo.invitedMembers ]
                 return self.__memberStatusActions
-            self.__memberStatusActions = \
+            memberStatusActions = \
               [ GSMemberStatusActions(m, 
                   self.groupInfo, self.siteInfo)
                 for m in self.membersInfo.members ]
             if self.showOnly == 'managers':
                 self.__memberStatusActions = \
-                  [ m for m in self.__memberStatusActions 
+                  [ m for m in memberStatusActions 
                     if (m.status.isSiteAdmin or m.status.isGroupAdmin) ]
             elif self.showOnly == 'moderated':
                 self.__memberStatusActions = \
-                  [ m for m in self.__memberStatusActions if m.status.isModerated ]
+                  [ m for m in memberStatusActions if m.status.isModerated ]
             elif self.showOnly == 'unverified':
                 self.__memberStatusActions = \
-                  [ m for m in self.__memberStatusActions if m.status.isUnverified ]
+                  [ m for m in memberStatusActions if m.status.isUnverified ]
             elif self.showOnly == 'posting':
                 self.__memberStatusActions = \
-                  [ m for m in self.__memberStatusActions if m.status.isPostingMember ]
+                  [ m for m in memberStatusActions if m.status.isPostingMember ]
+            else:
+                self.__memberStatusActions = memberStatusActions
         return self.__memberStatusActions
     
     @property
