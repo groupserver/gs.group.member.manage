@@ -45,7 +45,12 @@ class GSGroupMemberManager(object):
     @property
     def membersToShow(self):
         if self.__membersToShow == None:
-            if self.showOnly in [m.id for m in self.membersInfo.members]:
+            if self.showOnly and len(self.showOnly.split(' ')) > 1:
+                userIds = self.showOnly.split(' ')
+                self.__membersToShow = \
+                  [ m for m in self.membersInfo.members 
+                    if m.id in userIds ]
+            elif self.showOnly in [m.id for m in self.membersInfo.members]:
                 self.__membersToShow = \
                   [ m for m in self.membersInfo.members 
                     if m.id==self.showOnly ]
