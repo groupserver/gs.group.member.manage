@@ -24,10 +24,11 @@ class GSGroupMemberManager(object):
         self.showOnly = showOnly
         self.siteInfo = createObject('groupserver.SiteInfo', group)
         self.groupInfo = createObject('groupserver.GroupInfo', group)
-        mailingListInfo = createObject('groupserver.MailingListInfo', group)
-        self.groupIsModerated = mailingListInfo.is_moderated
+        self.mailingListInfo = createObject('groupserver.MailingListInfo', group)
+        self.groupIsModerated = self.mailingListInfo.is_moderated
         self.postingIsSpecial = (self.groupInfo.group_type == 'announcement')
-        self.__membersInfo = self.__members = self.__memberStatusActions = None
+        self.__membersInfo = self.__members = None
+        self.__membersToShow = self.__memberStatusActions = None
         self.__form_fields = None
         self.toChange = self.cancelledChanges = {}
         self.changesByMember = {}
@@ -40,39 +41,46 @@ class GSGroupMemberManager(object):
         if self.__membersInfo == None:
             self.__membersInfo = GSGroupMembersInfo(self.group)
         return self.__membersInfo
+
+    @property
+    def membersToShow(self):
+        if self.__membersToShow == None:
+            if self.showOnly in [m.id for m in self.membersInfo.members]:
+                self.__membersToShow = \
+                  [ m for m in self.membersInfo.members 
+                    if m.id==self.showOnly ]
+            elif self.showOnly == 'invited':
+                self.__membersToShow = self.membersInfo.invitedMembers
+            elif self.showOnly == 'managers':
+                groupAdmins = self.groupInfo.group_admins
+                siteAdmins = self.groupInfo.site_admins
+                admins = groupAdmins + siteAdmins
+                groupAdminIds = set([a.id for a in groupAdmins])
+                siteAdminIds = set([a.id for a in siteAdmins])
+                distinctAdminIds = groupAdminIds.union(siteAdminIds)
+                membersToShow = []
+                for uId in distinctAdminIds:
+                    admin = [a for a in admins if a.id==uId][0]
+                    membersToShow.append(admin)
+                self.__membersToShow = membersToShow 
+            elif self.showOnly == 'moderated':
+                self.__membersToShow = self.mailingListInfo.moderatees
+            elif self.showOnly == 'unverified':
+                self.__membersToShow = \
+                  [ m for m in self.membersInfo.members 
+                    if not(m.user.get_verifiedEmailAddresses()) ]
+            elif self.showOnly == 'posting' and self.postingIsSpecial:
+                self.__membersToShow = self.mailingListInfo.posting_members
+            else:
+                self.__membersToShow = self.membersInfo.members
+        return self.__membersToShow
     
     @property
     def memberStatusActions(self):
         if self.__memberStatusActions == None:
-#            if self.showOnly == 'invited': 
-#                self.__memberStatusActions = \
-#                  [ GSMemberStatusActions(m, 
-#                      self.groupInfo, self.siteInfo)
-#                    for m in self.membersInfo.invitedMembers ]
-#                return self.__memberStatusActions
-#            memberStatusActions = \
-#              [ GSMemberStatusActions(m, 
-#                  self.groupInfo, self.siteInfo)
-#                for m in self.membersInfo.members ]
-#            if self.showOnly == 'managers':
-#                self.__memberStatusActions = \
-#                  [ m for m in memberStatusActions 
-#                    if (m.status.isSiteAdmin or m.status.isGroupAdmin) ]
-#            elif self.showOnly == 'moderated':
-#                self.__memberStatusActions = \
-#                  [ m for m in memberStatusActions if m.status.isModerated ]
-#            elif self.showOnly == 'unverified':
-#                self.__memberStatusActions = \
-#                  [ m for m in memberStatusActions if m.status.isUnverified ]
-#            elif self.showOnly == 'posting':
-#                self.__memberStatusActions = \
-#                  [ m for m in memberStatusActions if m.status.isPostingMember ]
-#            else:
-#                self.__memberStatusActions = memberStatusActions
             self.__memberStatusActions = \
-              [ GSMemberStatusActions(m, 
-                  self.groupInfo, self.siteInfo)
-                for m in self.membersInfo.members ]
+              [ GSMemberStatusActions(m, self.groupInfo, self.siteInfo)
+                for m in self.membersToShow ]
         return self.__memberStatusActions
     
     @property
