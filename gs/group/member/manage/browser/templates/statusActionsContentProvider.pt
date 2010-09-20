@@ -16,7 +16,7 @@
           tal:attributes="href userInfo/url" 
           tal:content="userInfo/name">
           A Member
-        </a> &#8212; <span tal:replace="status/status_label"/>
+        </a> &#8212; <span tal:replace="structure status/status_label"/>
       </h3>
       <tal:block 
         define="allWidgets view/widgets;
