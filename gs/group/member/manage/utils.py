@@ -1,6 +1,7 @@
 # coding=utf-8
 from zope.component import createObject
 from Products.GSGroup.mailinglistinfo import GSMailingListInfo
+from Products.GSGroupMember.groupmembershipstatus import GSGroupMembershipStatus
 from gs.group.member.manage.audit import StatusAuditor, GAIN, LOSE
 from gs.group.member.manage.statusformfields import MAX_POSTING_MEMBERS
 from gs.group.member.invite.queries import InvitationQuery
@@ -176,19 +177,16 @@ def removePtnCoach(groupInfo):
         
 def removeAllPositions(groupInfo, userInfo):
     retval = []
-    userId = userInfo.id
-    oldPtnCoach = groupInfo.ptn_coach
-    if oldPtnCoach and (oldPtnCoach.id == userId):
+    status = GSGroupMembershipStatus(userInfo, groupInfo, groupInfo.siteInfo)
+    if status.isPtnCoach:
         retval.append(removePtnCoach(groupInfo)[0])
-    group = groupInfo.groupObj
-    listInfo = GSMailingListInfo(group)
-    if 'GroupAdmin' in list(group.get_local_roles_for_userid(userId)):
+    if status.isGroupAdmin:
         retval.append(removeAdmin(groupInfo, userInfo))
-    if userId in listInfo.mlist.getProperty('posting_members', []):
+    if status.postingIsSpecial and status.isPostingMember:
         retval.append(removePostingMember(groupInfo, userInfo))
-    if userId in listInfo.mlist.getProperty('moderator_members', []):
+    if status.isModerator:
         retval.append(removeModerator(groupInfo, userInfo))
-    if userId in listInfo.mlist.getProperty('moderated_members', []):
+    if status.isModerated:
         retval.append(unmoderate(groupInfo, userInfo))
     return retval
 

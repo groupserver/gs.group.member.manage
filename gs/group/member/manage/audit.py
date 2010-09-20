@@ -103,14 +103,29 @@ class LoseStatusEvent(BasicAuditEvent):
           instanceUserInfo, siteInfo, groupInfo, instanceDatum, None,
           SUBSYSTEM)
           
+    @property
+    def adminRemoved(self):
+        retval = False
+        if self.userInfo.id and self.userInfo.id!= self.instanceUserInfo.id:
+            retval = True
+        return retval
+          
     def __str__(self):
-        retval = u'%s (%s) removed the status of %s from %s (%s) '\
-          u'in %s (%s) on %s (%s).' % \
-           (self.userInfo.name, self.userInfo.id,
-            self.instanceDatum,
-            self.instanceUserInfo.name, self.instanceUserInfo.id,
-            self.groupInfo.name, self.groupInfo.id,
-            self.siteInfo.name, self.siteInfo.id)
+        if self.adminRemoved:
+          retval = u'%s (%s) removed the status of %s from %s (%s) '\
+            u'in %s (%s) on %s (%s).' % \
+             (self.userInfo.name, self.userInfo.id,
+              self.instanceDatum,
+              self.instanceUserInfo.name, self.instanceUserInfo.id,
+              self.groupInfo.name, self.groupInfo.id,
+              self.siteInfo.name, self.siteInfo.id)
+        else:
+          retval = u'%s (%s) lost the status of %s '\
+            u'in %s (%s) on %s (%s).' % \
+             (self.instanceUserInfo.name, self.instanceUserInfo.id,
+              self.instanceDatum,
+              self.groupInfo.name, self.groupInfo.id,
+              self.siteInfo.name, self.siteInfo.id)
         retval = retval.encode('ascii', 'ignore')
         return retval
     
