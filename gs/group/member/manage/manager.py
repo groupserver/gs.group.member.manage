@@ -155,6 +155,8 @@ class GSGroupMemberManager(object):
         # Reset the caches so that we get the member
         # data afresh when the form reloads.
         self.__membersInfo = None
+        self.__membersToShow = None
+        self.__membersRequested = None
         self.__memberStatusActions = None
         self.__form_fields = None
         return self.summary

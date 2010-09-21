@@ -22,10 +22,10 @@ class GSManageGroupMembersForm(PageForm):
         self.label = u'Manage the Members of %s' % self.groupName
         self.showOnly = request.form.get('showOnly','')
         self.page = request.form.get('page','1')
-        self.memberManager = GSGroupMemberManager(self.groupInfo.groupObj, 
-                                                  self.page, self.showOnly)
+        self.__memberManager = self.__membersInfo = None
+        self.__memberStatusActions = None
         self.__form_fields = None
-    
+
     @property
     def form_fields(self):
         if self.__form_fields == None:
@@ -54,8 +54,6 @@ class GSManageGroupMembersForm(PageForm):
         self.status = self.memberManager.make_changes(data)
         # Reset the form_fields cache so that the
         # page reloads with the updated widgets
-        self.__membersInfo = None
-        self.__memberStatusActions = None
         self.__form_fields = None
 
     def handle_change_action_failure(self, action, data, errors):
@@ -64,4 +62,11 @@ class GSManageGroupMembersForm(PageForm):
         else:
             self.status = u'<p>There are errors:</p>'
         
-        
+    @property
+    def memberManager(self):
+        if self.__memberManager == None:
+            self.__memberManager = \
+               GSGroupMemberManager(self.groupInfo.groupObj, 
+                                    self.page, self.showOnly)
+        return self.__memberManager
+
