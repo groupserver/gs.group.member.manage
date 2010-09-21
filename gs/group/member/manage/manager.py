@@ -45,7 +45,9 @@ class GSGroupMemberManager(object):
     @property
     def membersToShow(self):
         if self.__membersToShow == None:
-            if self.showOnly and len(self.showOnly.split(' ')) > 1:
+            if not self.showOnly:
+                self.__membersToShow = self.membersInfo.members
+            elif len(self.showOnly.split(' ')) > 1:
                 userIds = self.showOnly.split(' ')
                 self.__membersToShow = \
                   [ m for m in self.membersInfo.members 
@@ -54,6 +56,8 @@ class GSGroupMemberManager(object):
                 self.__membersToShow = \
                   [ m for m in self.membersInfo.members 
                     if m.id==self.showOnly ]
+            elif self.showOnly == 'posting' and self.postingIsSpecial:
+                self.__membersToShow = self.mailingListInfo.posting_members
             elif self.showOnly == 'invited':
                 self.__membersToShow = self.membersInfo.invitedMembers
             elif self.showOnly == 'managers':
@@ -74,10 +78,8 @@ class GSGroupMemberManager(object):
                 self.__membersToShow = \
                   [ m for m in self.membersInfo.members 
                     if not(m.user.get_verifiedEmailAddresses()) ]
-            elif self.showOnly == 'posting' and self.postingIsSpecial:
-                self.__membersToShow = self.mailingListInfo.posting_members
             else:
-                self.__membersToShow = self.membersInfo.members
+                self.__membersToShow = []
         return self.__membersToShow
     
     @property
