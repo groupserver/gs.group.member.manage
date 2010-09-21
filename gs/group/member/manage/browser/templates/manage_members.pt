@@ -101,8 +101,7 @@
             showInvitedIsValid view/memberManager/membersInfo/invitedMembers;
             showInvited python:show=='invited';
             showPostingIsValid view/memberManager/postingIsSpecial;
-            showPosting python:showPostingIsValid and show=='posting'"
-          tal:condition="not:view/memberManager/isLargeGroup">
+            showPosting python:showPostingIsValid and show=='posting'">
           <li tal:condition="showAll">
             Listing <strong>all the members</strong> <span tal:condition="view/memberManager/totalPages">(Page
               <strong tal:content="view/memberManager/page"/> of 
