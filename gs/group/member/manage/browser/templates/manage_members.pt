@@ -114,7 +114,7 @@
             showInvited python:show=='invited';
             showPostingIsValid view/memberManager/postingIsSpecial;
             showPosting python:showPostingIsValid and show=='posting'">
-          <li>
+          <li tal:condition="view/memberManager/membersToShow">
             <span tal:condition="showAll">Listing <strong>all the members</strong></span>
             <span tal:condition="showManagers">Listing all <strong>managers</strong></span>
             <span tal:condition="showPosting">Listing all <strong>posting</strong></span>
