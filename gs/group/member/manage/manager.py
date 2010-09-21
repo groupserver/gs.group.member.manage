@@ -16,25 +16,35 @@ from gs.group.member.manage.utils import addAdmin, removeAdmin, addModerator, re
 from gs.group.member.manage.utils import moderate, unmoderate, addPostingMember, removePostingMember
 from gs.group.member.manage.utils import addPtnCoach, removePtnCoach, withdrawInvitation
 
+MAX_TO_SHOW = 100
+
 class GSGroupMemberManager(object):
     implements(IGSGroupMemberManager)
     
-    def __init__(self, group, showOnly=None):
+    def __init__(self, group, page, showOnly=None):
         self.group = group
         self.showOnly = showOnly
+        self.batch = int(page)
         self.siteInfo = createObject('groupserver.SiteInfo', group)
         self.groupInfo = createObject('groupserver.GroupInfo', group)
         self.mailingListInfo = createObject('groupserver.MailingListInfo', group)
         self.groupIsModerated = self.mailingListInfo.is_moderated
         self.postingIsSpecial = (self.groupInfo.group_type == 'announcement')
         self.__membersInfo = self.__members = None
-        self.__membersToShow = self.__memberStatusActions = None
-        self.__form_fields = None
+        self.__membersRequested = self.__membersToShow = None
+        self.__memberStatusActions = self.__form_fields = None
         self.toChange = self.cancelledChanges = {}
         self.changesByMember = {}
         self.changesByAction = {}
         self.changeLog = ODict()
         self.summary = ''''''
+
+    @property
+    def isLargeGroup(self):
+        retval = False
+        if self.membersInfo.fullMemberCount > MAX_TO_SHOW:
+            retval = True
+        return retval
     
     @property
     def membersInfo(self):
@@ -45,29 +55,40 @@ class GSGroupMemberManager(object):
     @property
     def membersToShow(self):
         if self.__membersToShow == None:
+            self.__membersToShow = self.membersRequested
+            numRequested = len(self.membersRequested)
+            if numRequested > MAX_TO_SHOW:
+                startIndex = MAX_TO_SHOW*self.batch
+                endIndex = startIndex+MAX_TO_SHOW-1
+                self.__membersToShow = self.membersRequested[startIndex:endIndex]
+        return self.__membersToShow
+
+    @property
+    def membersRequested(self):
+        if self.__membersRequested == None:
             if not self.showOnly:
-                self.__membersToShow = self.membersInfo.members
+                self.__membersRequested = self.membersInfo.members
             elif len(self.showOnly.split(' ')) > 1:
                 userIds = self.showOnly.split(' ')
-                self.__membersToShow = \
+                self.__membersRequested = \
                   [ m for m in self.membersInfo.members if m.id in userIds ]
             elif self.showOnly in [m.id for m in self.membersInfo.members]:
-                self.__membersToShow = \
+                self.__membersRequested = \
                   [ m for m in self.membersInfo.members if m.id==self.showOnly ]
             elif self.showOnly == 'posting' and self.postingIsSpecial:
-                self.__membersToShow = self.mailingListInfo.posting_members
+                self.__membersRequested = self.mailingListInfo.posting_members
             elif self.showOnly == 'invited':
-                self.__membersToShow = self.membersInfo.invitedMembers
+                self.__membersRequested = self.membersInfo.invitedMembers
             elif self.showOnly == 'managers':
-                self.__membersToShow = self.get_managers() 
+                self.__membersRequested = self.get_managers() 
             elif self.showOnly == 'moderated':
-                self.__membersToShow = self.mailingListInfo.moderatees
+                self.__membersRequested = self.mailingListInfo.moderatees
             elif self.showOnly == 'unverified':
-                self.__membersToShow = [ m for m in self.membersInfo.members 
+                self.__membersRequested = [ m for m in self.membersInfo.members 
                     if not(m.user.get_verifiedEmailAddresses()) ]
             else:
-                self.__membersToShow = []
-        return self.__membersToShow
+                self.__membersRequested = []
+        return self.__membersRequested
     
     def get_managers(self):
         groupAdmins = self.groupInfo.group_admins
@@ -97,11 +118,7 @@ class GSGroupMemberManager(object):
               form.Fields(IGSManageMembersForm)
             for m in self.memberStatusActions:
                 fields = \
-                  form.Fields(
-                    fields
-                    +
-                    form.Fields(m.form_fields)
-                  )
+                  form.Fields(fields + form.Fields(m.form_fields))
             fields['ptnCoachRemove'].custom_widget = radio_widget
             self.__form_fields = fields
         return self.__form_fields

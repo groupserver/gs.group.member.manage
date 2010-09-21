@@ -90,7 +90,7 @@
             showInvited python:show=='invited';
             showPostingIsValid view/memberManager/postingIsSpecial;
             showPosting python:showPostingIsValid and show=='posting'"
-          tal:condition="python:memberManager.membersInfo.fullMemberCount &lt;= 127">
+          tal:condition="not:view/memberManager/isLargeGroup">
           <li tal:condition="showAll">Listing <strong>all the members</strong></li>
           <li tal:condition="not:showAll">
             <a href="#"
@@ -136,6 +136,8 @@
         </ul>
         <input type="hidden" class="hidden" name="showOnly" value=""
           tal:attributes="value view/showOnly"/>
+        <input type="hidden" class="hidden" name="page" value=""
+          tal:attributes="value view/page"/>
         <tal:block define="statusActions memberManager/memberStatusActions;
           widgets view/widgets">
           <div tal:replace="structure provider:groupserver.MemberStatusActions"/>
