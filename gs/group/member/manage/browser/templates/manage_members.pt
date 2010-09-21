@@ -40,6 +40,17 @@
           line-height: 1em;
           margin: 1em 0;
         }
+        .navlinks {
+          list-style: none inside none;
+        }
+        .navlinks li {
+          display: inline;
+        }
+        .navlinks a, .navlinks span {
+          background-position:left center;
+          background-repeat:no-repeat;
+          padding-left:20px;
+        }
         .first {
           background-image: url("/++resource++postImages/arrow_left_bar.png");
         }
@@ -106,18 +117,27 @@
             Listing <strong>all the members</strong> <span tal:condition="view/memberManager/totalPages">(Page
               <strong tal:content="view/memberManager/page"/> of 
               <strong tal:content="view/memberManager/totalPages"/>)</span> &#8212;
-              <a href="#"
-                tal:condition="view/memberManager/firstPageLink"
-                tal:attributes="href string:managemembers.html?page=${view/memberManager/firstPageLink}"><span class="first">First page</span></a>
-              <a href="#"
-                tal:condition="view/memberManager/prevPageLink"
-                tal:attributes="href string:managemembers.html?page=${view/memberManager/prevPageLink}"><span class="prev">Previous page</span></a>
-              <a href="#"
-                tal:condition="view/memberManager/nextPageLink"
-                tal:attributes="href string:managemembers.html?page=${view/memberManager/nextPageLink}"><span class="next">Next page</span></a>
-              <a href="#"
-                tal:condition="view/memberManager/lastPageLink"
-                tal:attributes="href string:managemembers.html?page=${view/memberManager/lastPageLink}"><span class="next">Last page</span></a>
+              <ul class="navlinks">
+                <li>
+                  <a href="#"
+                    tal:attributes="href string:managemembers.html?page=${view/memberManager/firstPageLink}"
+                    tal:omit-tag="view/memberManager/firstPageLink"><span class="first">First page</span></a>
+                </li>
+                <li>
+                  <a href="#"
+                    tal:attributes="href string:managemembers.html?page=${view/memberManager/prevPageLink}"
+                    tal:omit-tag="view/memberManager/prevPageLink"><span class="prev">Previous page</span></a>
+                </li>
+                <li>
+                  <a href="#"
+                    tal:attributes="href string:managemembers.html?page=${view/memberManager/nextPageLink}"
+                    tal:omit-tag="view/memberManager/nextPageLink"><span class="next">Next page</span></a>
+                </li>
+                <li>
+                  <a href="#"
+                    tal:attributes="href string:managemembers.html?page=${view/memberManager/lastPageLink}"
+                    tal:omit-tag="view/memberManager/lastPageLink"><span class="next">Last page</span></a>
+                </li>
           </li>
           <li tal:condition="not:showAll">
             <a href="#"
