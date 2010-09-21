@@ -40,6 +40,18 @@
           line-height: 1em;
           margin: 1em 0;
         }
+        .first {
+          background-image: url("/++resource++postImages/arrow_left_bar.png");
+        }
+        .prev {
+          background-image: url("/++resource++postImages/arrow_left.png");
+        }
+        .next {
+          background-image: url("/++resource++postImages/arrow_right.png");
+        }
+        .last {
+          background-image: url("/++resource++postImages/arrow_right_bar.png");
+        }
       </style>
     </tal:block>
   </head>
@@ -91,7 +103,23 @@
             showPostingIsValid view/memberManager/postingIsSpecial;
             showPosting python:showPostingIsValid and show=='posting'"
           tal:condition="not:view/memberManager/isLargeGroup">
-          <li tal:condition="showAll">Listing <strong>all the members</strong></li>
+          <li tal:condition="showAll">
+            Listing <strong>all the members</strong> <span tal:condition="view/memberManager/totalPages">(Page
+              <strong tal:content="view/memberManager/page"/> of 
+              <strong tal:content="view/memberManager/totalPages"/>)</span> &#8212;
+              <a href="#"
+                tal:condition="view/memberManager/firstPageLink"
+                tal:attributes="href string:managemembers.html?page=${view/memberManager/firstPageLink}"><span class="first">First page</span></a>
+              <a href="#"
+                tal:condition="view/memberManager/prevPageLink"
+                tal:attributes="href string:managemembers.html?page=${view/memberManager/prevPageLink}"><span class="prev">Previous page</span></a>
+              <a href="#"
+                tal:condition="view/memberManager/nextPageLink"
+                tal:attributes="href string:managemembers.html?page=${view/memberManager/nextPageLink}"><span class="next">Next page</span></a>
+              <a href="#"
+                tal:condition="view/memberManager/lastPageLink"
+                tal:attributes="href string:managemembers.html?page=${view/memberManager/lastPageLink}"><span class="next">Last page</span></a>
+          </li>
           <li tal:condition="not:showAll">
             <a href="#"
               tal:attributes="href string:managemembers.html">List  

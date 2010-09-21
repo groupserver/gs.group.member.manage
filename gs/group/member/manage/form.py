@@ -21,7 +21,7 @@ class GSManageGroupMembersForm(PageForm):
         self.groupName = self.groupInfo.name
         self.label = u'Manage the Members of %s' % self.groupName
         self.showOnly = request.form.get('showOnly','')
-        self.page = request.form.get('page','0')
+        self.page = request.form.get('page','1')
         self.memberManager = GSGroupMemberManager(self.groupInfo.groupObj, 
                                                   self.page, self.showOnly)
         self.__form_fields = None
@@ -33,7 +33,7 @@ class GSManageGroupMembersForm(PageForm):
               not(self.request.form.has_key('form.ptnCoachRemove')) and \
               not(self.groupInfo.ptn_coach):
                 self.request.form['form.ptnCoachRemove'] = u'True'
-            if self.showOnly:
+            if self.showOnly or not(self.memberManager.membersToShow):
                 self.__form_fields = self.memberManager.form_fields.omit('ptnCoachRemove')
             else:
                 self.__form_fields = self.memberManager.form_fields

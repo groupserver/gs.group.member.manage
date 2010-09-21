@@ -1,4 +1,5 @@
 # coding=utf-8
+from math import ceil
 from zope.component import createObject
 from zope.interface import implements
 from zope.formlib import form
@@ -24,7 +25,9 @@ class GSGroupMemberManager(object):
     def __init__(self, group, page, showOnly=None):
         self.group = group
         self.showOnly = showOnly
-        self.batch = int(page)
+        self.page = int(page)
+        self.totalPages = 0
+        self.firstPageLink = self.prevPageLink = self.nextPageLink = self.lastPageLink = None
         self.siteInfo = createObject('groupserver.SiteInfo', group)
         self.groupInfo = createObject('groupserver.GroupInfo', group)
         self.mailingListInfo = createObject('groupserver.MailingListInfo', group)
@@ -55,12 +58,19 @@ class GSGroupMemberManager(object):
     @property
     def membersToShow(self):
         if self.__membersToShow == None:
-            self.__membersToShow = self.membersRequested
             numRequested = len(self.membersRequested)
             if numRequested > MAX_TO_SHOW:
-                startIndex = MAX_TO_SHOW*self.batch
-                endIndex = startIndex+MAX_TO_SHOW-1
+                currentBatch = self.page - 1
+                startIndex = MAX_TO_SHOW * currentBatch
+                endIndex = startIndex + MAX_TO_SHOW - 1
                 self.__membersToShow = self.membersRequested[startIndex:endIndex]
+                self.totalPages = int(ceil(float(numRequested)/MAX_TO_SHOW))
+                self.firstPageLink = (self.page > 1) and 1 or 0
+                self.lastPageLink = (self.page < self.totalPages) and self.totalPages or 0
+                self.prevPageLink = (self.page > 1) and (self.page - 1) or 0
+                self.nextPageLink = (self.page < self.totalPages) and (self.page + 1) or 0
+            else:
+                self.__membersToShow = self.membersRequested
         return self.__membersToShow
 
     @property
