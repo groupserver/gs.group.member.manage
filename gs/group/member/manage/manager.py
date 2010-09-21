@@ -4,7 +4,7 @@ from zope.component import createObject
 from zope.interface import implements
 from zope.formlib import form
 from Products.XWFCore.odict import ODict
-from Products.XWFCore.XWFUtils import comma_comma_and
+from Products.XWFCore.XWFUtils import comma_comma_and, sort_by_name
 from Products.GSGroup.mailinglistinfo import GSMailingListInfo
 from Products.GSGroup.changebasicprivacy import radio_widget
 from gs.group.member.leave.leaver import GroupLeaver
@@ -111,6 +111,7 @@ class GSGroupMemberManager(object):
         for uId in distinctAdminIds:
             admin = [a for a in admins if a.id==uId][0]
             managers.append(admin)
+        managers.sort(sort_by_name)
         return managers
     
     @property
