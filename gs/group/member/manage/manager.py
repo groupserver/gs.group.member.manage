@@ -50,37 +50,37 @@ class GSGroupMemberManager(object):
             elif len(self.showOnly.split(' ')) > 1:
                 userIds = self.showOnly.split(' ')
                 self.__membersToShow = \
-                  [ m for m in self.membersInfo.members 
-                    if m.id in userIds ]
+                  [ m for m in self.membersInfo.members if m.id in userIds ]
             elif self.showOnly in [m.id for m in self.membersInfo.members]:
                 self.__membersToShow = \
-                  [ m for m in self.membersInfo.members 
-                    if m.id==self.showOnly ]
+                  [ m for m in self.membersInfo.members if m.id==self.showOnly ]
             elif self.showOnly == 'posting' and self.postingIsSpecial:
                 self.__membersToShow = self.mailingListInfo.posting_members
             elif self.showOnly == 'invited':
                 self.__membersToShow = self.membersInfo.invitedMembers
             elif self.showOnly == 'managers':
-                groupAdmins = self.groupInfo.group_admins
-                siteAdmins = self.groupInfo.site_admins
-                admins = groupAdmins + siteAdmins
-                groupAdminIds = set([a.id for a in groupAdmins])
-                siteAdminIds = set([a.id for a in siteAdmins])
-                distinctAdminIds = groupAdminIds.union(siteAdminIds)
-                membersToShow = []
-                for uId in distinctAdminIds:
-                    admin = [a for a in admins if a.id==uId][0]
-                    membersToShow.append(admin)
-                self.__membersToShow = membersToShow 
+                self.__membersToShow = self.get_managers() 
             elif self.showOnly == 'moderated':
                 self.__membersToShow = self.mailingListInfo.moderatees
             elif self.showOnly == 'unverified':
-                self.__membersToShow = \
-                  [ m for m in self.membersInfo.members 
+                self.__membersToShow = [ m for m in self.membersInfo.members 
                     if not(m.user.get_verifiedEmailAddresses()) ]
             else:
                 self.__membersToShow = []
         return self.__membersToShow
+    
+    def get_managers(self):
+        groupAdmins = self.groupInfo.group_admins
+        siteAdmins = self.groupInfo.site_admins
+        admins = groupAdmins + siteAdmins
+        groupAdminIds = set([a.id for a in groupAdmins])
+        siteAdminIds = set([a.id for a in siteAdmins])
+        distinctAdminIds = groupAdminIds.union(siteAdminIds)
+        managers = []
+        for uId in distinctAdminIds:
+            admin = [a for a in admins if a.id==uId][0]
+            managers.append(admin)
+        return managers
     
     @property
     def memberStatusActions(self):
