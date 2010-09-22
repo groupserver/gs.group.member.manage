@@ -86,33 +86,18 @@ class GSGroupMemberManager(object):
                 self.__membersRequested = \
                   [ m for m in self.membersInfo.members if m.id==self.showOnly ]
             elif self.showOnly == 'posting' and self.postingIsSpecial:
-                self.__membersRequested = self.mailingListInfo.posting_members
+                self.__membersRequested = self.membersInfo.postingMembers
             elif self.showOnly == 'invited':
                 self.__membersRequested = self.membersInfo.invitedMembers
             elif self.showOnly == 'managers':
-                self.__membersRequested = self.get_managers() 
+                self.__membersRequested = self.membersInfo.managers
             elif self.showOnly == 'moderated':
-                self.__membersRequested = self.mailingListInfo.moderatees
+                self.__membersRequested = self.membersInfo.moderatees
             elif self.showOnly == 'unverified':
-                self.__membersRequested = [ m for m in self.membersInfo.members 
-                    if not(m.user.get_verifiedEmailAddresses()) ]
+                self.__membersRequested = self.membersInfo.unverifiedMembers
             else:
                 self.__membersRequested = []
         return self.__membersRequested
-    
-    def get_managers(self):
-        groupAdmins = self.groupInfo.group_admins
-        siteAdmins = self.groupInfo.site_admins
-        admins = groupAdmins + siteAdmins
-        groupAdminIds = set([a.id for a in groupAdmins])
-        siteAdminIds = set([a.id for a in siteAdmins])
-        distinctAdminIds = groupAdminIds.union(siteAdminIds)
-        managers = []
-        for uId in distinctAdminIds:
-            admin = [a for a in admins if a.id==uId][0]
-            managers.append(admin)
-        managers.sort(sort_by_name)
-        return managers
     
     @property
     def memberStatusActions(self):
