@@ -4,25 +4,23 @@ from zope.interface import implements
 from Products.CustomUserFolder.interfaces import IGSUserInfo
 from Products.GSContent.interfaces import IGSSiteInfo
 from Products.GSGroup.interfaces import IGSGroupInfo
+from Products.GSGroupMember.interfaces import IGSGroupMembersInfo
 from Products.GSGroupMember.groupmembershipstatus import GSGroupMembershipStatus
 from gs.group.member.manage.statusformfields import GSStatusFormFields
 from gs.group.member.manage.interfaces import IGSMemberStatusActions
 
 class GSMemberStatusActions(object):
-    adapts(IGSUserInfo, IGSGroupInfo, IGSSiteInfo)
+    adapts(IGSUserInfo, IGSGroupMembersInfo)
     implements(IGSMemberStatusActions)
 
-    def __init__(self, userInfo, groupInfo, siteInfo):
+    def __init__(self, userInfo, membersInfo):
         assert IGSUserInfo.providedBy(userInfo),\
           u'%s is not a GSUserInfo' % userInfo
-        assert IGSGroupInfo.providedBy(groupInfo),\
-          u'%s is not a GSGroupInfo' % groupInfo
-        assert IGSSiteInfo.providedBy(siteInfo),\
-          u'%s is not a GSSiteInfo' % siteInfo
-        
+        assert IGSGroupMembersInfo.providedBy(membersInfo), \
+          u'%s is not a GSGroupMembersInfo' % membersInfo
+                  
         self.userInfo = userInfo
-        self.groupInfo = groupInfo
-        self.siteInfo = siteInfo
+        self.membersInfo = membersInfo
     
         self.__status = None
         self.__form_fields = None
@@ -31,8 +29,7 @@ class GSMemberStatusActions(object):
     def status(self):
         if self.__status == None:
             self.__status = \
-              GSGroupMembershipStatus(self.userInfo, 
-                self.groupInfo, self.siteInfo)
+              GSGroupMembershipStatus(self.userInfo, self.membersInfo)
         return self.__status
     
     @property

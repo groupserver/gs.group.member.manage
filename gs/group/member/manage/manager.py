@@ -118,18 +118,16 @@ class GSGroupMemberManager(object):
     def memberStatusActions(self):
         if self.__memberStatusActions == None:
             self.__memberStatusActions = \
-              [ GSMemberStatusActions(m, self.groupInfo, self.siteInfo)
+              [ GSMemberStatusActions(m, self.membersInfo)
                 for m in self.membersToShow ]
         return self.__memberStatusActions
     
     @property
     def form_fields(self):
         if self.__form_fields == None:
-            fields = \
-              form.Fields(IGSManageMembersForm)
+            fields = form.Fields(IGSManageMembersForm)
             for m in self.memberStatusActions:
-                fields = \
-                  form.Fields(fields + form.Fields(m.form_fields))
+                fields = form.Fields(fields + form.Fields(m.form_fields))
             fields['ptnCoachRemove'].custom_widget = radio_widget
             self.__form_fields = fields
         return self.__form_fields
