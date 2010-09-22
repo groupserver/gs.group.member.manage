@@ -1,7 +1,9 @@
 # coding=utf-8
 from zope.component import createObject
 from Products.GSGroup.mailinglistinfo import GSMailingListInfo
-from Products.GSGroupMember.groupmembershipstatus import GSGroupMembershipStatus
+from Products.GSGroupMember.groupMembersInfo import GSGroupMembersInfo
+from Products.GSGroupMember.groupmembershipstatus import \
+    GSGroupMembershipStatus
 from gs.group.member.manage.audit import StatusAuditor, GAIN, LOSE
 from gs.group.member.manage.statusformfields import MAX_POSTING_MEMBERS
 from gs.group.member.invite.queries import InvitationQuery
@@ -176,8 +178,11 @@ def removePtnCoach(groupInfo):
     return retval
         
 def removeAllPositions(groupInfo, userInfo):
+    # --=mpj17=-- To test this: remove someone from a group. Should this
+    #       be in the utils for gs.group.member.leave?
     retval = []
-    status = GSGroupMembershipStatus(userInfo, groupInfo, groupInfo.siteInfo)
+    membersInfo = GSGroupMembersInfo(groupInfo.groupObj)
+    status = GSGroupMembershipStatus(userInfo, membersInfo)
     if status.isPtnCoach:
         retval.append(removePtnCoach(groupInfo)[0])
     if status.isGroupAdmin:
