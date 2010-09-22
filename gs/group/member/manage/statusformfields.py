@@ -53,6 +53,10 @@ class GSStatusFormFields(object):
     @property
     def adminUserStatus(self):
         if self.__adminUserStatus == None:
+            # TODO: Fix.
+            # --=mpj17=-- GSGroupMembershipStatus takes two arguments: a
+            #   user and a GSGroupMembersInfo. However, the line below
+            #   is not tripped, so I ain't fixing it.
             self.__adminUserStatus = \
               GSGroupMembershipStatus(self.adminUserInfo,
                 self.groupInfo, self.siteInfo)
