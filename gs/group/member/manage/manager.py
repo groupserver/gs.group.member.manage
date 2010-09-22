@@ -17,7 +17,7 @@ from gs.group.member.manage.utils import addAdmin, removeAdmin, addModerator, re
 from gs.group.member.manage.utils import moderate, unmoderate, addPostingMember, removePostingMember
 from gs.group.member.manage.utils import addPtnCoach, removePtnCoach, withdrawInvitation
 
-MAX_TO_SHOW = 100
+MAX_TO_SHOW = 20
 
 class GSGroupMemberManager(object):
     implements(IGSGroupMemberManager)
