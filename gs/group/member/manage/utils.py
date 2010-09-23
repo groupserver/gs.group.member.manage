@@ -1,9 +1,6 @@
 # coding=utf-8
 from zope.component import createObject
 from Products.GSGroup.mailinglistinfo import GSMailingListInfo
-from Products.GSGroupMember.groupMembersInfo import GSGroupMembersInfo
-from Products.GSGroupMember.groupmembershipstatus import \
-    GSGroupMembershipStatus
 from gs.group.member.manage.audit import StatusAuditor, GAIN, LOSE
 from gs.group.member.manage.statusformfields import MAX_POSTING_MEMBERS
 from gs.group.member.invite.queries import InvitationQuery
@@ -177,24 +174,6 @@ def removePtnCoach(groupInfo):
     assert ((retval[1] == None) or (type(retval[1]) == str))
     return retval
         
-def removeAllPositions(groupInfo, userInfo):
-    # --=mpj17=-- To test this: remove someone from a group. Should this
-    #       be in the utils for gs.group.member.leave?
-    retval = []
-    membersInfo = GSGroupMembersInfo(groupInfo.groupObj)
-    status = GSGroupMembershipStatus(userInfo, membersInfo)
-    if status.isPtnCoach:
-        retval.append(removePtnCoach(groupInfo)[0])
-    if status.isGroupAdmin:
-        retval.append(removeAdmin(groupInfo, userInfo))
-    if status.postingIsSpecial and status.isPostingMember:
-        retval.append(removePostingMember(groupInfo, userInfo))
-    if status.isModerator:
-        retval.append(removeModerator(groupInfo, userInfo))
-    if status.isModerated:
-        retval.append(unmoderate(groupInfo, userInfo))
-    return retval
-
 def withdrawInvitation(groupInfo, userInfo):
     adminInfo = createObject('groupserver.LoggedInUser', groupInfo.groupObj)
     da = groupInfo.groupObj.zsqlalchemy

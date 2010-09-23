@@ -5,7 +5,6 @@ from zope.formlib import form
 from zope.schema import Bool, Choice
 from zope.schema.vocabulary import SimpleTerm, SimpleVocabulary
 from Products.GSGroup.changebasicprivacy import radio_widget
-from Products.GSGroupMember.groupmembershipstatus import GSGroupMembershipStatus
 from Products.GSGroupMember.interfaces import IGSGroupMembershipStatus
 from gs.group.member.manage.interfaces import IGSStatusFormFields, IGSMemberActionsSchema
 
@@ -39,28 +38,7 @@ class GSStatusFormFields(object):
     #   the logged-in user and use their status 
     #   to determine whether some actions can be
     #   taken, but that's not currently possible.
-    #   These properties can stay here as testament
-    #   to our good intentions, and hopefully can
-    #   be modified in the future.
-    @property
-    def adminUserInfo(self):
-        if self.__adminUserInfo == None:
-            self.__adminUserInfo = \
-              createObject('groupserver.LoggedInUser',
-                           self.groupInfo.groupObj)
-        return self.__adminUserInfo
-    
-    @property
-    def adminUserStatus(self):
-        if self.__adminUserStatus == None:
-            # TODO: Fix.
-            # --=mpj17=-- GSGroupMembershipStatus takes two arguments: a
-            #   user and a GSGroupMembersInfo. However, the line below
-            #   is not tripped, so I ain't fixing it.
-            self.__adminUserStatus = \
-              GSGroupMembershipStatus(self.adminUserInfo,
-                self.groupInfo, self.siteInfo)
-        return self.__adminUserStatus
+    #   Further comments below, where relevant.
     
     @property
     def allFields(self):
