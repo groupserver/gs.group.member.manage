@@ -101,7 +101,8 @@
           <span tal:replace="python:invitedMemberCount==1 and '1 invited member' or '%d invited members' % invitedMemberCount"/>
           &#8212; 
           in <span tal:replace="view/groupInfo/name">this group</span>.
-          (<a href="admin_invite.html">Invite more members</a>.)
+          (<a href="admin_invite.html">Invite more members</a>, or view the 
+           <a href="log.html">Join and Leave Log</a>)
         </p>
         <ul
           tal:define="show python:view.showOnly or 'all';
