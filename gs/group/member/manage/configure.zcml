@@ -18,9 +18,14 @@
     name="managemembers.html"
     class=".form.GSManageGroupMembersForm"
     permission="zope2.ManageUsers"/>
-
   <interface 
     interface=".interfaces.IGSMemberStatusActionsContentProvider"
     type="zope.contentprovider.interfaces.ITALNamespaceData"/>
 
+  <browser:page 
+    for="Products.XWFChat.interfaces.IGSGroupFolder"
+    name="bounce_info.html"
+    template="browser/templates/bounceinfo.pt"
+    class=".bounceinfo.BounceInfo"
+    permission="zope2.ManageUsers"/>
 </configure>

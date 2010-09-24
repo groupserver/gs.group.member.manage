@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:metal="http://xml.zope.org/namespaces/metal"
+  xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <tal:block metal:use-macro="context/@@groupserver_layout/page">
+    <head>
+      <title metal:fill-slot="title">
+        Email History for 
+        <tal:block replace="view/userInfo/name" />:
+        <tal:block replace="view/groupInfo/name" />:
+        <tal:block replace="view/siteInfo/name"/>
+      </title>
+    </head>
+    <body>
+      <div metal:fill-slot="body">
+        <h1>Email History for <span tal:replace="view/userInfo/name"/></h1>
+        <!--Apologise, and state what went wrong -->
+        <p id="apology">
+          The group member <span tal:replace="view/userInfo/name"/> currently
+          has no verified email addresses.
+        </p>
+        <!-- Give a detailed explanation about what went wrong, and -->
+        <!--   what can be done.-->
+        <div id="explanation">
+          <p>
+            <span tal:replace="view/userInfo/name"/> has the following addresses. 
+          </p>
+          <p>
+            If you have the means to contact <span tal:replace="view/userInfo/name"/>
+            in real life, please do so and ask them to log in and add a new email 
+            address to their profile.
+          </p>
+        </div><!--explanation-->
+        <!--Lastly, give the technical details about the error. Bots may-->
+        <!--find this useful.-->
+        <p id="technical">
+          
+        </p>
+      </div>
+    </body>
+  </tal:block>
+</html>
+
+
