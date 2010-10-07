@@ -35,7 +35,7 @@
           <p>
             It is likely that <span tal:replace="view/userInfo/name"/>'s email 
             address was consistently rejecting messages, and was reset to  
-            "unverified" as result. It is also possible that
+            "unverified" as a result. It is also possible that
             <span tal:replace="view/userInfo/name"/> has never verified an address.
           </p>
           <ul tal:repeat="address view/emailAddresses">
