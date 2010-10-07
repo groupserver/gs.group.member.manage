@@ -26,7 +26,7 @@
           <h4>What can be done?</h4>  
           <p>
             If you have the means to contact <span tal:replace="view/userInfo/name"/>
-            in real life, please ask them to add a new email address to their profile.
+            some other way, please ask them to add a new email address to their profile.
           </p>
         </div>
         <!-- Give an explanation about what went wrong -->
