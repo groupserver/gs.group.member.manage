@@ -14,11 +14,15 @@
         <h1 tal:content="view/label"><span tal:replace="view/userInfo/name"/></h1>
         <!--Summarise what has gone wrong -->
         <div id="summary">
-          <h4>What's the problem?</h4>
+          <h4>What's the trouble?</h4>
           <p>
             The <span class="group" tal:content="view/groupInfo/name"/> member 
-            <span tal:replace="view/userInfo/name"/> currently has no verified 
-            email addresses.  
+            <span tal:replace="view/userInfo/name"/> has no verified email 
+            addresses registered. Verified addresses are those which have been 
+            verified as belonging to the group member and accept incoming messages. 
+            Without at least one verified email address, 
+            <span tal:replace="view/userInfo/name"/> cannot receive messages 
+            from the group.
           </p>
         </div>
         <!-- Tell the admin what they can do -->
@@ -26,7 +30,7 @@
           <h4>What can be done?</h4>  
           <p>
             If you have the means to contact <span tal:replace="view/userInfo/name"/>
-            in real life, please ask them to add a new email address to their profile.
+            some other way, please ask them to add a new email address to their profile.
           </p>
         </div>
         <!-- Give an explanation about what went wrong -->
@@ -35,7 +39,7 @@
           <p>
             It is likely that <span tal:replace="view/userInfo/name"/>'s email 
             address was consistently rejecting messages, and was reset to  
-            "unverified" as result. It is also possible that
+            "unverified" as a result. It is also possible that
             <span tal:replace="view/userInfo/name"/> has never verified an address.
           </p>
           <ul tal:repeat="address view/emailAddresses">
