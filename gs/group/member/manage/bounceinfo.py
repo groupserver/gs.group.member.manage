@@ -6,7 +6,6 @@ from Products.XWFCore.XWFUtils import munge_date
 from Products.XWFMailingListManager.bounceaudit import SUBSYSTEM
 from Products.XWFMailingListManager.bounceaudit import BOUNCE, DISABLE
 from Products.GSAuditTrail.utils import marshal_data
-from Products.GSGroup.groupInfo import groupInfo_to_anchor
 from queries import BounceHistoryQuery
 
 class BounceInfo(BrowserView):
@@ -41,10 +40,11 @@ class BounceInfo(BrowserView):
         return self.__bounceHistory
     
     def munge_event(self, e):
-        e = marshal_data(self.context, e)
+        e = marshal_data(self.context, e, siteInfo=self.siteInfo, 
+                         groupInfo=self.groupInfo)
         event = createObject(SUBSYSTEM, self.context, **e)
         retval = u''
-        if (event.code == DISABLE) or ((event.code == BOUNCE) and (event.groupInfo.id == self.groupInfo.id)):
+        if (event.code == DISABLE):
             retval = event.xhtml
         elif (event.code == BOUNCE):
             retval = u'Email delivery failed (%s)' %\
