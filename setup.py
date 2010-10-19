@@ -25,6 +25,7 @@ setup(name='gs.group.member.manage',
     zip_safe=False,
     install_requires=[
         'setuptools',
+        'gs.content.form',
         # -*- Extra requirements: -*-
     ],
     entry_points="""
