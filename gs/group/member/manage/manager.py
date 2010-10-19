@@ -148,12 +148,16 @@ class GSGroupMemberManager(object):
         if 'ptnCoachRemove' in changes:
             self.toChange['ptnCoachToRemove'] = True
             changes.remove('ptnCoachRemove')
-        for k in changes:
-            memberId, action = k.split('-')
-            if self.toChange.has_key(action):
-                self.toChange[action].append(memberId)
-            else:
-                self.toChange[action] = [memberId]
+        actions = ['ptnCoach','groupAdminAdd','groupAdminRemove',
+          'moderatorAdd','moderatorRemove','moderatedAdd','moderatedRemove',
+          'postingMemberAdd','postingMemberRemove','remove','withdraw']
+        for a in actions:
+            aLength = len(a)
+            requests = [ k.split('-%s' % a)[0] for k in changes 
+                if k[-aLength:] == a ]
+            if requests:
+                self.toChange[a] = requests 
+              
         self.sanitiseChanges()
         self.organiseChanges() 
     
