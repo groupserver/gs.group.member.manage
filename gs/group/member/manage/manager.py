@@ -174,7 +174,6 @@ class GSGroupMemberManager(object):
         for mId in actions.get('remove',[]):
             for a in filter(lambda x:(x!='remove' and x!='ptnCoachToRemove'), actions.keys()):
                 members = actions.get(a,[])
-                print '%s: %s (%s)' % (a, members, type(members))
                 if mId in members:
                     members.remove(mId)
                     self.toChange[a] = members
