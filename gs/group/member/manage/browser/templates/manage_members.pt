@@ -76,14 +76,18 @@
                     tal:omit-tag="not:view/memberManager/prevPageLink"><span class="prev">Previous page</span></a>
                 </li>
                 <li>
-                  <a href="#"
+                  <a href="#" class="next"
                     tal:attributes="href string:${baseURL}page=${view/memberManager/nextPageLink}"
-                    tal:omit-tag="not:view/memberManager/nextPageLink"><span class="next">Next page</span></a>
+                    tal:condition="view/memberManager/nextPageLink">Next page</a>
+                    <span tal:condition="not:view/memberManager/nextPageLink"
+                      class="next">Next page</span>
                 </li>
                 <li>
-                  <a href="#"
+                  <a href="#" class="last"
                     tal:attributes="href string:${baseURL}page=${view/memberManager/lastPageLink}"
-                    tal:omit-tag="not:view/memberManager/lastPageLink"><span class="next">Last page</span></a>
+                    tal:condition="view/memberManager/lastPageLink">Last Page</a>
+                    <span class="next"
+                      tal:condition="not:view/memberManager/lastPageLink">Last page</span>
                 </li>
               </ul>
             </tal:block>
@@ -174,14 +178,18 @@
                     tal:omit-tag="not:view/memberManager/prevPageLink"><span class="prev">Previous page</span></a>
                 </li>
                 <li>
-                  <a href="#"
+                  <a href="#" class="next"
                     tal:attributes="href string:${baseURL}page=${view/memberManager/nextPageLink}"
-                    tal:omit-tag="not:view/memberManager/nextPageLink"><span class="next">Next page</span></a>
+                    tal:condition="view/memberManager/nextPageLink">Next page</a>
+                    <span tal:condition="not:view/memberManager/nextPageLink"
+                      class="next">Next page</span>
                 </li>
                 <li>
-                  <a href="#"
+                  <a href="#" class="last"
                     tal:attributes="href string:${baseURL}page=${view/memberManager/lastPageLink}"
-                    tal:omit-tag="not:view/memberManager/lastPageLink"><span class="next">Last page</span></a>
+                    tal:condition="view/memberManager/lastPageLink">Last Page</a>
+                    <span class="next"
+                      tal:condition="not:view/memberManager/lastPageLink">Last page</span>
                 </li>
               </ul>
             </tal:block>
