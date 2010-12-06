@@ -4,68 +4,6 @@
       <span tal:replace="view/label"/> :
       <span tal:replace="view/siteInfo/get_name">A Site</span>
     </title>
-    <tal:block metal:fill-slot="style">
-      <style type="text/css">
-        .message-result p {
-          margin: 0;
-        }
-        .message-result ul {
-          margin: 0 0 0.69em;
-        }
-        .message-result li {
-          margin: 0 1em 0;
-        }
-        .statusActions {
-          position: relative;
-          border-top: thin solid black;
-          border-bottom: thin solid black;
-          padding-bottom: 1em;
-          padding-left: 0.69em;
-          overflow: hidden;
-        }
-        .userimage {
-          padding: 0;
-          float: right;
-          margin-top: 1em;
-          margin-right: 1em;
-        }
-        .form-widget {
-          margin: 0.69em 0 0.69em;
-        }
-        .ptnCoach {
-          margin: 0;
-        }
-        .ptnCoachRemove label {
-          font-size: 138.5%;
-          line-height: 1em;
-          margin: 1em 0;
-        }
-        .navlinks {
-          display: inline;
-          list-style: none inside none;
-        }
-        .navlinks li {
-          display: inline;
-        }
-        .navlinks a, .navlinks span {
-          background-position:left center;
-          background-repeat:no-repeat;
-          padding-left:20px;
-        }
-        .first {
-          background-image: url("/++resource++postImages/arrow_left_bar.png");
-        }
-        .prev {
-          background-image: url("/++resource++postImages/arrow_left.png");
-        }
-        .next {
-          background-image: url("/++resource++postImages/arrow_right.png");
-        }
-        .last {
-          background-image: url("/++resource++postImages/arrow_right_bar.png");
-        }
-      </style>
-    </tal:block>
   </head>
   <body>
     <div metal:fill-slot="messages" tal:condition="view/status" 
@@ -125,7 +63,7 @@
             <tal:block condition="view/memberManager/totalPages">(Page 
               <strong tal:content="view/memberManager/page"/> of 
               <strong tal:content="view/memberManager/totalPages"/>) &#8212;
-              <ul class="navlinks"
+              <ul class="navlinks inline-list"
                 tal:define="baseURL python:view.showOnly and 'managemembers.html?showOnly=%s&amp;' % view.showOnly or 'managemembers.html?'">
                 <li>
                   <a href="#"
@@ -223,7 +161,7 @@
             <tal:block condition="view/memberManager/totalPages">(Page 
               <strong tal:content="view/memberManager/page"/> of 
               <strong tal:content="view/memberManager/totalPages"/>) &#8212;
-              <ul class="navlinks"
+              <ul class="navlinks inline-list"
                 tal:define="baseURL python:view.showOnly and 'managemembers.html?showOnly=%s&amp;' % view.showOnly or 'managemembers.html?'">
                 <li>
                   <a href="#"
