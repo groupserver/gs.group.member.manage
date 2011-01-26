@@ -6,6 +6,7 @@ from Products.XWFCore.XWFUtils import munge_date
 from Products.XWFMailingListManager.bounceaudit import SUBSYSTEM
 from Products.XWFMailingListManager.bounceaudit import BOUNCE, DISABLE
 from Products.GSAuditTrail.utils import marshal_data
+from gs.profile.email.base.emailuser import EmailUser
 from queries import BounceHistoryQuery
 
 class BounceInfo(BrowserView):
@@ -32,7 +33,8 @@ class BounceInfo(BrowserView):
         if self.__bounceHistory == None:
             retval = {}
             query = BounceHistoryQuery(self.context, self.context.zsqlalchemy)
-            emailAddresses = self.userInfo.user.get_emailAddresses()
+            eu = EmailUser(self.context, self.userInfo)
+            emailAddresses = eu.get_addresses()
             for email in emailAddresses:
                 retval[email] = [ self.munge_event(e) 
                   for e in query.bounce_events(email) ]
