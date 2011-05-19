@@ -28,4 +28,13 @@
     template="browser/templates/bounceinfo.pt"
     class=".bounceinfo.BounceInfo"
     permission="zope2.ManageUsers"/>
+
+  <!--The Admin Tab -->
+  <browser:viewlet name="gs-group-member-manage-home-admin-tab"
+    manager="gs.group.home.interfaces.IGroupHomepageAdminLinks"
+    template="browser/templates/admin_list.pt"
+    class=".adminlist.MembersListViewlet"
+    permission="zope2.Public"
+    weight="3"
+    title="Request" />
 </configure>
