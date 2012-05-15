@@ -3,8 +3,8 @@ from zope.component import createObject
 from Products.GSGroup.mailinglistinfo import GSMailingListInfo
 from gs.group.member.manage.audit import StatusAuditor, GAIN, LOSE
 from gs.group.member.manage.statusformfields import MAX_POSTING_MEMBERS
-from gs.group.member.invite.queries import InvitationQuery
-from gs.group.member.invite.audit import Auditor, WITHDRAW_INVITATION
+from gs.group.member.invite.base.queries import InvitationQuery
+from gs.group.member.invite.base.audit import Auditor, WITHDRAW_INVITATION
 
 def addAdmin(groupInfo, userInfo):
     roles = list(groupInfo.groupObj.get_local_roles_for_userid(userInfo.id))
