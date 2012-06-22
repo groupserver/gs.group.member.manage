@@ -1,24 +1,26 @@
 # coding=utf-8
 import sqlalchemy as sa
 from Products.XWFMailingListManager.bounceaudit import SUBSYSTEM
+from gs.database import getSession, getTable
 
 class BounceHistoryQuery(object):
     
-    def __init__(self, context, da):
-        self.auditEventTable = da.createTable('audit_event')
+    def __init__(self, context):
+        self.auditEventTable = getTable('audit_event')
     
     def bounce_events(self, email):
         aet = self.auditEventTable
 #        SELECT * FROM bounce_audit 
 #        WHERE subsystem == SUBSYSTEM
 #          AND instance_datum == email;
-        s = aet.select()
+        s = aet.select(order_by=sa.desc(aet.c.event_date))
         s.append_whereclause(aet.c.subsystem == SUBSYSTEM)
         s.append_whereclause(aet.c.instance_datum == email)
-        s.order_by(sa.desc(aet.c.event_date))
+
+        session = getSession()
 
         retval = []        
-        r = s.execute()
+        r = session.execute(s)
         if r.rowcount:
             retval = [{
                 'event_id':            x['id'],
@@ -31,5 +33,6 @@ class BounceHistoryQuery(object):
                 'group_id':            x['group_id'],
                 'instanceDatum':       x['instance_datum'],
                 'supplementaryDatum':  x['supplementary_datum']} for x in r]
+        
         return retval
 

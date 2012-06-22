@@ -176,8 +176,7 @@ def removePtnCoach(groupInfo):
         
 def withdrawInvitation(groupInfo, userInfo):
     adminInfo = createObject('groupserver.LoggedInUser', groupInfo.groupObj)
-    da = groupInfo.groupObj.zsqlalchemy
-    query = InvitationQuery(da)
+    query = InvitationQuery()
     siteInfo = groupInfo.siteInfo 
     query.withdraw_invitation(siteInfo.id, groupInfo.id, userInfo.id, adminInfo.id)
     auditor = Auditor(siteInfo, groupInfo, adminInfo, userInfo)

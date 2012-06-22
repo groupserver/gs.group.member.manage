@@ -32,7 +32,7 @@ class BounceInfo(BrowserView):
     def bounceHistory(self):
         if self.__bounceHistory == None:
             retval = {}
-            query = BounceHistoryQuery(self.context, self.context.zsqlalchemy)
+            query = BounceHistoryQuery(self.context)
             eu = EmailUser(self.context, self.userInfo)
             emailAddresses = eu.get_addresses()
             for email in emailAddresses:
