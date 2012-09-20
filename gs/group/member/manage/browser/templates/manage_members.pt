@@ -1,9 +1,14 @@
-<html metal:use-macro="context/@@groupserver_layout/page">
+<html metal:use-macro="context/@@groupserver_full_layout/page">
   <head>
     <title metal:fill-slot="title">
       <span tal:replace="view/label"/> :
       <span tal:replace="view/siteInfo/get_name">A Site</span>
     </title>
+    <tal:block metal:fill-slot="metadata">
+        <link rel="up" href="#" title="The group"
+           tal:attributes="href view/groupInfo/relative_url;
+                           title view/groupInfo/name"/>
+    </tal:block>
   </head>
   <body>
     <tal:block content="structure provider:groupserver.FormStatusMessage"
@@ -12,7 +17,7 @@
     <tal:block metal:fill-slot="body"
       define="memberManager view/memberManager">
       <h1 tal:content="view/label">
-        Manage the Members of 
+        Manage the Members of
         <span tal:replace="view/groupInfo/name">this group</span>
       </h1>
       <form enctype="multipart/form-data"  method="post" action="."
@@ -21,14 +26,16 @@
           tal:define="membersInfo memberManager/membersInfo;
             fullMemberCount membersInfo/fullMemberCount;
             invitedMemberCount membersInfo/invitedMemberCount">
-          There 
-          <span tal:replace="python:fullMemberCount==1 and 'is 1 member' or 'are %d members' % fullMemberCount"/> 
+          There
+          <span tal:replace="python:fullMemberCount==1 and 'is 1 member' or 'are %d members' % fullMemberCount"/>
           &#8212; and
           <span tal:replace="python:invitedMemberCount==1 and '1 invited member' or '%d invited members' % invitedMemberCount"/>
-          &#8212; 
-          in <span tal:replace="view/groupInfo/name">this group</span>.
-          (<a href="admin_invite.html">Invite more members</a>, or view the 
-           <a href="log.html">Join and Leave Log</a>)
+          &#8212;
+          in <a class="group" href="#"
+                tal:attributes="href view/groupInfo/relative_url"
+                tal:content="view/groupInfo/name">this group</a>.
+          (You can <a href="admin_invite.html">invite more members</a>, and
+           view the <a href="log.html">Join and Leave Log.</a>)
         </p>
         <ul
           tal:define="show python:view.showOnly or 'all';
@@ -48,8 +55,8 @@
             <span tal:condition="showModerated">Listing all <strong>moderated members</strong></span>
             <span tal:condition="showUnverified">Listing all <strong>members with no verified email addresses</strong></span>
             <span tal:condition="showInvited">Listing all <strong>invited members</strong></span>
-            <tal:block condition="view/memberManager/totalPages">(Page 
-              <strong tal:content="view/memberManager/page"/> of 
+            <tal:block condition="view/memberManager/totalPages">(Page
+              <strong tal:content="view/memberManager/page"/> of
               <strong tal:content="view/memberManager/totalPages"/>) &#8212;
               <ul class="navlinks inline-list"
                 tal:define="baseURL python:view.showOnly and 'managemembers.html?showOnly=%s&amp;' % view.showOnly or 'managemembers.html?'">
@@ -82,27 +89,27 @@
           </li>
           <li tal:condition="not:showAll">
             <a href="#"
-              tal:attributes="href string:managemembers.html">List all the 
+              tal:attributes="href string:managemembers.html">List all the
               members of <span tal:replace="view/groupInfo/name" /></a></li>
           <li tal:condition="not:showManagers">
             <a href="#"
-              tal:attributes="href string:managemembers.html?showOnly=managers">List only the 
+              tal:attributes="href string:managemembers.html?showOnly=managers">List only the
               managers of <span tal:replace="view/groupInfo/name" /></a></li>
           <li tal:condition="python:showPostingIsValid and not(showPosting)">
             <a href="#"
-              tal:attributes="href string:managemembers.html?showOnly=invited">List only the 
+              tal:attributes="href string:managemembers.html?showOnly=invited">List only the
               invited members of <span tal:replace="view/groupInfo/name" /></a></li>
           <li tal:condition="python:showModeratedIsValid and not(showModerated)">
             <a href="#"
-              tal:attributes="href string:managemembers.html?showOnly=moderated">List only the  
+              tal:attributes="href string:managemembers.html?showOnly=moderated">List only the
               moderated members of <span tal:replace="view/groupInfo/name" /></a></li>
           <li tal:condition="not:showUnverified">
             <a href="#"
-              tal:attributes="href string:managemembers.html?showOnly=unverified">List only the 
+              tal:attributes="href string:managemembers.html?showOnly=unverified">List only the
               members of <span tal:replace="view/groupInfo/name" /> with no verified email addresses</a></li>
           <li tal:condition="python:showInvitedIsValid and not(showInvited)">
             <a href="#"
-              tal:attributes="href string:managemembers.html?showOnly=invited">List only the 
+              tal:attributes="href string:managemembers.html?showOnly=invited">List only the
               invited members of <span tal:replace="view/groupInfo/name" /></a></li>
         </ul>
         <input type="hidden" class="hidden" name="showOnly" value=""
@@ -117,7 +124,7 @@
           tal:define="hasPtnCoachRemove python:view.widgets.get('ptnCoachRemove')"
           tal:condition="python:hasPtnCoachRemove and not(memberManager.postingIsSpecial)"
           tal:attributes="class python:((len(memberManager.memberStatusActions)%2)==0) and 'statusActions odd' or 'statusActions'">
-          <div class="ptnCoach ptnCoachRemove" 
+          <div class="ptnCoach ptnCoachRemove"
             tal:define="widgets python:[view.widgets['ptnCoachRemove']]">
             <div tal:replace="structure provider:groupserver.FormWidgets"/>
           </div>
@@ -150,8 +157,8 @@
             <span tal:condition="showModerated">Listing all <strong>moderated members</strong></span>
             <span tal:condition="showUnverified">Listing all <strong>members with no verified email addresses</strong></span>
             <span tal:condition="showInvited">Listing all <strong>invited members</strong></span>
-            <tal:block condition="view/memberManager/totalPages">(Page 
-              <strong tal:content="view/memberManager/page"/> of 
+            <tal:block condition="view/memberManager/totalPages">(Page
+              <strong tal:content="view/memberManager/page"/> of
               <strong tal:content="view/memberManager/totalPages"/>) &#8212;
               <ul class="navlinks inline-list"
                 tal:define="baseURL python:view.showOnly and 'managemembers.html?showOnly=%s&amp;' % view.showOnly or 'managemembers.html?'">
@@ -184,27 +191,27 @@
           </li>
           <li tal:condition="not:showAll">
             <a href="#"
-              tal:attributes="href string:managemembers.html">List all the 
+              tal:attributes="href string:managemembers.html">List all the
               members of <span tal:replace="view/groupInfo/name" /></a></li>
           <li tal:condition="not:showManagers">
             <a href="#"
-              tal:attributes="href string:managemembers.html?showOnly=managers">List only the 
+              tal:attributes="href string:managemembers.html?showOnly=managers">List only the
               managers of <span tal:replace="view/groupInfo/name" /></a></li>
           <li tal:condition="python:showPostingIsValid and not(showPosting)">
             <a href="#"
-              tal:attributes="href string:managemembers.html?showOnly=invited">List only the 
+              tal:attributes="href string:managemembers.html?showOnly=invited">List only the
               invited members of <span tal:replace="view/groupInfo/name" /></a></li>
           <li tal:condition="python:showModeratedIsValid and not(showModerated)">
             <a href="#"
-              tal:attributes="href string:managemembers.html?showOnly=moderated">List only the  
+              tal:attributes="href string:managemembers.html?showOnly=moderated">List only the
               moderated members of <span tal:replace="view/groupInfo/name" /></a></li>
           <li tal:condition="not:showUnverified">
             <a href="#"
-              tal:attributes="href string:managemembers.html?showOnly=unverified">List only the 
+              tal:attributes="href string:managemembers.html?showOnly=unverified">List only the
               members of <span tal:replace="view/groupInfo/name" /> with no verified email addresses</a></li>
           <li tal:condition="python:showInvitedIsValid and not(showInvited)">
             <a href="#"
-              tal:attributes="href string:managemembers.html?showOnly=invited">List only the 
+              tal:attributes="href string:managemembers.html?showOnly=invited">List only the
               invited members of <span tal:replace="view/groupInfo/name" /></a></li>
         </ul>
       </form>
