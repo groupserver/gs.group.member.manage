@@ -16,18 +16,22 @@ class GSManageGroupMembersForm(GroupForm):
         self.label = u'Manage the Members of %s' % self.groupName
         self.showOnly = request.form.get('showOnly', '')
         self.page = request.form.get('page', '1')
+        self.__form_fields = None
 
-    @Lazy
+    @property
     def form_fields(self):
-        if (not(self.memberManager.postingIsSpecial)
-                and not('form.ptnCoachRemove' in self.request.form)
-                and not(self.groupInfo.ptn_coach)):
-            self.request.form['form.ptnCoachRemove'] = u'True'
-        if self.showOnly or not(self.memberManager.membersToShow):
-            retval = self.memberManager.form_fields.omit('ptnCoachRemove')
-        else:
-            retval = self.memberManager.form_fields
-        return retval
+        # Deliberately not a @Lazy property. See handle_change below.
+        if self.__form_fields is None:
+            if (not(self.memberManager.postingIsSpecial)
+                    and not('form.ptnCoachRemove' in self.request.form)
+                    and not(self.groupInfo.ptn_coach)):
+                self.request.form['form.ptnCoachRemove'] = u'True'
+            if self.showOnly or not(self.memberManager.membersToShow):
+                retval = self.memberManager.form_fields.omit('ptnCoachRemove')
+            else:
+                retval = self.memberManager.form_fields
+            self.__form_fields = retval
+        return self.__form_fields
 
     def setUpWidgets(self, ignore_request=False, data={}):
         self.adapters = {}
