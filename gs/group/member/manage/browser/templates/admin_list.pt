@@ -1,34 +1,14 @@
-<li id="manage-links" 
-  tal:condition="python:view.memberCount>0"><strong>Manage</strong> the 
-  <span class="val" tal:condition="view/memberCount">few</span> group 
-  member<span tal:condition="python:view.memberCount!=1">s</span>
-  <ul>
-    <li id="manage-links" 
-      tal:define="many python:view.memberCount > 127;
-        mmm string:admingroup/manage_many_members;
-        mm string:managemembers.html">
-      <a tal:attributes="href python:many and mmm or mm"
-        href="#"><strong>Manage</strong> the 
-        <em tal:condition="many">many</em> 
-        group members</a>
-    </li>
-    <li tal:condition="view/isModerated">
-      <a href="managemembers.html?showOnly=moderated">Manage 
-        the <em>moderated</em> members</a>
-    </li>
-    <li><a  href="managemembers.html?showOnly=unverified">Manage 
-        the members with <em>no verified email addresses</em></a>
-    </li>
-    <li><a  href="managemembers.html?showOnly=invited">Manage the 
-        <em>invited</em> members</a>
-    </li>
-    <li tal:condition="view/isAnnouncement">
-      <a href="managemembers.html?showOnly=posting">Manage 
-        the posting members</a>
-    </li>
-    <li><a href="managemembers.html?showOnly=managers">Manage
-      the <em>managers</em></a>
-    </li>
-  </ul>
-</li><!--change-properties-links-->
-
+<tal:block>
+  <li id="gs-group-member-manage-admin-links-few" 
+      tal:condition="python:view.memberCount&gt;0 and view.memberCount&lt;127">
+    <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html"
+      href="managemembers.html"><strong>Manage</strong> the 
+      member<span tal:condition="python:view.memberCount!=1">s</span></a>
+  </li>
+  <li id="gs-group-member-manage-admin-links-many" 
+      tal:condition="python:view.memberCount &gt;= 127">
+    <a tal:attributes="href string:${view/groupInfo/relative_url}/admingroup/manage_many_members;"
+       href="#"><strong>Manage</strong> the 
+    <em>many</em> group members</a>
+  </li>
+</tal:block>
