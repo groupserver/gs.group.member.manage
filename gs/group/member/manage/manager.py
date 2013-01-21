@@ -1,5 +1,6 @@
 # coding=utf-8
 from math import ceil
+from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
 from zope.interface import implements
 from zope.formlib import form
@@ -27,24 +28,44 @@ class GSGroupMemberManager(object):
         self.showOnly = showOnly
         self.page = int(page)
         self.totalPages = 0
-        self.firstPageLink = self.prevPageLink = self.nextPageLink = None
-        self.lastPageLink = None
-        self.siteInfo = createObject('groupserver.SiteInfo', group)
-        self.groupInfo = createObject('groupserver.GroupInfo', group)
-        self.mailingListInfo = createObject('groupserver.MailingListInfo',
-                                            group)
-        self.groupIsModerated = self.mailingListInfo.is_moderated
-        self.postingIsSpecial = (self.groupInfo.group_type == 'announcement')
-        self.__membersInfo = self.__members = None
-        self.__membersRequested = self.__membersToShow = None
-        self.__memberStatusActions = self.__form_fields = None
         self.toChange = self.cancelledChanges = {}
         self.changesByMember = {}
         self.changesByAction = {}
         self.changeLog = ODict()
         self.summary = ''''''
+        self.firstPageLink = self.prevPageLink = self.nextPageLink = None
+        self.lastPageLink = None
+        # --=mpj17=-- These are deliberately not @Lazy. See self.make_changes
+        self.__membersInfo = self.__members = None
+        self.__membersRequested = self.__membersToShow = None
+        self.__memberStatusActions = self.__form_fields = None
 
-    @property
+    @Lazy
+    def siteInfo(self):
+        retval = createObject('groupserver.SiteInfo', self.group)
+        return retval
+
+    @Lazy
+    def groupInfo(self):
+        retval = createObject('groupserver.GroupInfo', self.group)
+        return retval
+
+    @Lazy
+    def mailingListInfo(self):
+        retval = createObject('groupserver.MailingListInfo', self.group)
+        return retval
+
+    @Lazy
+    def groupIsModerated(self):
+        retval = self.mailingListInfo.is_moderated
+        return retval
+
+    @Lazy
+    def postingIsSpecial(self):
+        retval = self.groupInfo.group_type == 'announcement'
+        return retval
+
+    @Lazy
     def isLargeGroup(self):
         retval = False
         if self.membersInfo.fullMemberCount > MAX_TO_SHOW:

@@ -1,13 +1,14 @@
 # coding=utf-8
-from zope.component import createObject, adapts
+from zope.cachedescriptors.property import Lazy
+from zope.component import adapts
 from zope.interface import implements
 from Products.CustomUserFolder.interfaces import IGSUserInfo
-from Products.GSContent.interfaces import IGSSiteInfo
-from Products.GSGroup.interfaces import IGSGroupInfo
 from Products.GSGroupMember.interfaces import IGSGroupMembersInfo
-from Products.GSGroupMember.groupmembershipstatus import GSGroupMembershipStatus
+from Products.GSGroupMember.groupmembershipstatus import \
+    GSGroupMembershipStatus
 from gs.group.member.manage.statusformfields import GSStatusFormFields
 from gs.group.member.manage.interfaces import IGSMemberStatusActions
+
 
 class GSMemberStatusActions(object):
     adapts(IGSUserInfo, IGSGroupMembersInfo)
@@ -18,25 +19,16 @@ class GSMemberStatusActions(object):
           u'%s is not a GSUserInfo' % userInfo
         assert IGSGroupMembersInfo.providedBy(membersInfo), \
           u'%s is not a GSGroupMembersInfo' % membersInfo
-                  
+
         self.userInfo = userInfo
         self.membersInfo = membersInfo
-    
-        self.__status = None
-        self.__form_fields = None
-    
-    @property
+
+    @Lazy
     def status(self):
-        if self.__status == None:
-            self.__status = \
-              GSGroupMembershipStatus(self.userInfo, self.membersInfo)
-        return self.__status
-    
-    @property
+        retval = GSGroupMembershipStatus(self.userInfo, self.membersInfo)
+        return retval
+
+    @Lazy
     def form_fields(self):
-        if self.__form_fields == None:
-            self.__form_fields =\
-              GSStatusFormFields(self.status).form_fields
-        return self.__form_fields
-    
-    
+        retval = GSStatusFormFields(self.status).form_fields
+        return retval
