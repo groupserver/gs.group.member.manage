@@ -12,7 +12,7 @@
     factory=".audit.StatusAuditEventFactory"
     name="groupserver.GSGroupMemberStatus"
     permission="zope.Public" />
-	
+        
   <browser:page 
     for="Products.XWFChat.interfaces.IGSGroupFolder"
     name="managemembers.html"
@@ -30,11 +30,13 @@
     permission="zope2.ManageUsers"/>
 
   <!--The Admin Tab -->
-  <browser:viewlet name="gs-group-member-manage-home-admin-tab"
-    manager="gs.group.home.interfaces.IGroupHomepageAdminLinks"
+  <browser:viewlet 
+    name="gs-group-member-manage-home-admin-tab"
+    for="gs.group.base.interfaces.IGSGroupMarker"
+    manager="gs.group.member.base.interfaces.IGroupMemberAdminLinks"
     template="browser/templates/admin_list.pt"
     class=".adminlist.MembersListViewlet"
-    permission="zope2.Public"
-    weight="3"
-    title="Request" />
+    permission="zope2.ManageUsers"
+    weight="30"
+    title="Manage Members" />
 </configure>
