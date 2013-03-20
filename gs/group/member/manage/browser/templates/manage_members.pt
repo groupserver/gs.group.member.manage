@@ -1,4 +1,7 @@
-<html metal:use-macro="context/@@groupserver_full_layout/page">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:metal="http://xml.zope.org/namespaces/metal"
+  metal:use-macro="context/@@groupserver_layout/page">
   <head>
     <title metal:fill-slot="title">
       <span tal:replace="view/label"/> :
@@ -14,11 +17,22 @@
     <tal:block content="structure provider:groupserver.FormStatusMessage"
       define="errors view/errors; status view/status; widgets view/widgets"
       metal:fill-slot="messages">&#160;</tal:block>
+     <ul metal:fill-slot="breadcrumb">
+      <li><a tal:attributes="title string:${view/siteInfo/name} Homepage"
+             href="/" title="Home">&#8962;</a></li>
+      <li>
+        <a class="group" 
+           tal:attributes="href string:${view/groupInfo/relativeURL}/">
+          <strong
+            tal:content="view/groupInfo/name">This group</strong></a>
+      </li>
+      <li>Manage Members</li>
+    </ul>
+   
     <tal:block metal:fill-slot="body"
       define="memberManager view/memberManager">
       <h1 tal:content="view/label">
-        Manage the Members of
-        <span tal:replace="view/groupInfo/name">this group</span>
+        Manage Members
       </h1>
       <form enctype="multipart/form-data"  method="post" action="."
         tal:attributes="action request/URL" id="manage-members">

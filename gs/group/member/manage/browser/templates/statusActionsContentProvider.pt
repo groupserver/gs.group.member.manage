@@ -7,17 +7,16 @@
       isOdd repeat/memberStatusActions/odd"
     tal:attributes="id string:${userInfo/id}-actions;
       class python:isOdd and 'statusActions even' or 'statusActions odd'">
-    <div
-      tal:define="user userInfo/user"
-      tal:replace="structure provider:groupserver.UserImage" />
     <div class="statusText">
-      <h3>
-        <a href="#"
-          tal:attributes="href userInfo/url" 
-          tal:content="userInfo/name">
-          A Member
+      <div
+        tal:define="user userInfo/user; size string:20;"
+        tal:replace="structure provider:groupserver.SquareUserImage" />
+      <h4 class="vcard">
+        <a href="#" class="url"
+           tal:attributes="href userInfo/url" >
+          <span class="fn" tal:content="userInfo/name">A Member</span>
         </a> &#8212; <span tal:replace="structure status/status_label"/>
-      </h3>
+      </h4>
       <tal:block 
         define="allWidgets view/widgets;
           fieldIds python:[ f.__name__ for f in fields ]"
