@@ -33,7 +33,7 @@
   <browser:viewlet 
     name="gs-group-member-manage-home-admin-tab"
     for="gs.group.base.interfaces.IGSGroupMarker"
-    manager="gs.group.member.base.interfaces.IGroupMemberAdminLinks"
+    manager="gs.group.member.info.interfaces.IGroupMemberAdminLinks"
     template="browser/templates/admin_list.pt"
     class=".adminlist.MembersListViewlet"
     permission="zope2.ManageUsers"

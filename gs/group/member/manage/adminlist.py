@@ -1,7 +1,7 @@
 # coding=utf-8
 from zope.component import createObject
 from zope.cachedescriptors.property import Lazy
-from gs.group.member.base.viewlet import GroupAdminViewlet
+from gs.group.member.viewlet import GroupAdminViewlet
 
 
 class MembersListViewlet(GroupAdminViewlet):
