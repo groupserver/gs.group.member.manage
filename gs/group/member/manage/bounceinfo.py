@@ -2,17 +2,17 @@
 from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
 from Products.XWFCore.XWFUtils import munge_date
-from gs.group.member.bounce.audit import SUBSYSTEM, BOUNCE, DISABLE
 from Products.GSAuditTrail.utils import marshal_data
-from gs.group.base.page import GroupPage
+from gs.group.base import GroupPage
 from gs.profile.email.base.emailuser import EmailUser
+from gs.group.member.bounce.audit import SUBSYSTEM, BOUNCE, DISABLE
 from queries import BounceHistoryQuery
 
 
 class BounceInfo(GroupPage):
 
-    def __init__(self, context, request):
-        GroupPage.__init__(self, context, request)
+    def __init__(self, group, request):
+        super(BounceInfo, self).__init__(group, request)
         self.label = u'%s\'s Email Addresses' % self.userInfo.name
 
     @Lazy

@@ -7,8 +7,7 @@ from zope.schema import Bool, Choice
 from zope.schema.vocabulary import SimpleTerm, SimpleVocabulary
 from gs.content.form.radio import radio_widget
 from Products.GSGroupMember.interfaces import IGSGroupMembershipStatus
-from gs.group.member.manage.interfaces import IGSStatusFormFields,\
-    IGSMemberActionsSchema
+from interfaces import IGSStatusFormFields, IGSMemberActionsSchema
 
 MAX_POSTING_MEMBERS = 5
 

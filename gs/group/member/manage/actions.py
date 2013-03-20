@@ -6,8 +6,8 @@ from Products.CustomUserFolder.interfaces import IGSUserInfo
 from Products.GSGroupMember.interfaces import IGSGroupMembersInfo
 from Products.GSGroupMember.groupmembershipstatus import \
     GSGroupMembershipStatus
-from gs.group.member.manage.statusformfields import GSStatusFormFields
-from gs.group.member.manage.interfaces import IGSMemberStatusActions
+from statusformfields import GSStatusFormFields
+from interfaces import IGSMemberStatusActions
 
 
 class GSMemberStatusActions(object):

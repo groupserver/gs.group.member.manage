@@ -2,7 +2,7 @@
 from zope.cachedescriptors.property import Lazy
 from zope.formlib import form
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
-from gs.group.base.form import GroupForm
+from gs.group.base import GroupForm
 from manager import GSGroupMemberManager
 
 
@@ -10,8 +10,8 @@ class GSManageGroupMembersForm(GroupForm):
     pageTemplateFileName = 'browser/templates/manage_members.pt'
     template = ZopeTwoPageTemplateFile(pageTemplateFileName)
 
-    def __init__(self, context, request):
-        GroupForm.__init__(self, context, request)
+    def __init__(self, group, request):
+        super(GSManageGroupMembersForm, self).__init__(group, request)
         self.groupName = self.groupInfo.name
         self.label = u'Manage the Members of %s' % self.groupName
         self.showOnly = request.form.get('showOnly', '')
