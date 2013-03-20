@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import provideAdapter, adapts
 from zope.interface import implements, Interface

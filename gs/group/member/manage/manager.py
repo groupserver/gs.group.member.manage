@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 from math import ceil
 from zope.cachedescriptors.property import Lazy
 from zope.component import createObject

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#lint:enable
 import memberStatusActionsContentProvider
 
 from zope.tales.tales import RegistrationError
@@ -7,8 +9,9 @@ try:
 except ImportError:
     from zope.app.pagetemplate import metaconfigure
 try:
-    metaconfigure.registerType('provider', 
+    metaconfigure.registerType('provider',
       tales.TALESProviderExpression)
 except RegistrationError:
     # Almost certainly registered somewhere else
     pass
+#lint:disable

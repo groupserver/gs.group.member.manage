@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 from zope.component import createObject
 from zope.cachedescriptors.property import Lazy
 from gs.group.member.viewlet import GroupAdminViewlet

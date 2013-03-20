@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 import sqlalchemy as sa
 from gs.group.member.bounce.audit import SUBSYSTEM
 from gs.database import getSession, getTable

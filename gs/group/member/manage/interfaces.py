@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 """Interfaces for the member-management pages."""
 from zope.interface import Attribute
 from zope.interface.interface import Interface

@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 from zope.component import createObject
 from Products.GSGroup.mailinglistinfo import GSMailingListInfo
 from gs.group.member.manage.audit import StatusAuditor, GAIN, LOSE

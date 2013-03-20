@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
 from Products.XWFCore.XWFUtils import munge_date
