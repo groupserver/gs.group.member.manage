@@ -11,4 +11,28 @@
        href="#"><strong>Manage</strong> the 
     <em>many</em> group members</a>
   </li>
+  <tal:block condition="python: view.memberCount &gt;= 10">
+    <li id="gs-group-member-manage-admin-links-moderated"
+        tal:condition="view/isModerated">
+      <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html?showOnly=moderated;"
+         href="#">Manage the <em>moderated</em> members</a>
+    </li>
+    <li id="gs-group-member-manage-admin-links-not-verified">
+      <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html?showOnly=unverified"
+         href="#">Manage the members with <em>no verified email addresses</em></a>
+    </li>
+    <li id="gs-group-member-manage-admin-links-invited">
+      <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html?showOnly=invited"
+         href="#">Manage the <em>invited</em> members</a>
+    </li>
+    <li id="gs-group-member-manage-admin-links-annoucement"
+        tal:condition="view/isAnnouncement">
+      <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html?showOnly=posting"
+         href="#">Manage the posting members</a>
+    </li>
+    <li id="gs-group-member-manage-admin-links-managers">
+      <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html?showOnly=managers"
+         href="#">Manage the <em>managers</em></a>
+    </li>
+  </tal:block>
 </tal:block>
