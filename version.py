@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 version = '2.0'
 release = False
 
@@ -55,12 +56,10 @@ def get_version():
 
         version_string = "%s-%s-%s" % (version, datestring, globalid)
 
-    except CommandError, IntegerError:
+    except (CommandError, ValueError, TypeError):
         version_string = parse_version_from_package()
 
     return version_string
 
 if __name__ == '__main__':
     print get_version()
-
-
