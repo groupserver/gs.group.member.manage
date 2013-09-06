@@ -1,0 +1,29 @@
+<li id="gs-group-member-manage-admin-link-many">
+  <a tal:attributes="href view/link"
+     href="#"><strong>Manage</strong> the 
+     <span tal:condition="view/many">many</span> members</a>
+  <ul>
+    <li id="gs-group-member-manage-admin-links-moderated"
+        tal:condition="view/isModerated">
+      <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html?showOnly=moderated;"
+         href="#"><em>Moderated</em> members</a>
+    </li>
+    <li id="gs-group-member-manage-admin-links-invited">
+      <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html?showOnly=invited"
+         href="#"><em>Invited</em> members</a>
+    </li>
+    <li id="gs-group-member-manage-admin-links-not-verified">
+      <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html?showOnly=unverified"
+         href="#">Members with no <em>verified</em> email addresses</a>
+    </li>
+    <li id="gs-group-member-manage-admin-links-annoucement"
+        tal:condition="view/isAnnouncement">
+      <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html?showOnly=posting"
+         href="#">Posting members</a>
+    </li>
+    <li id="gs-group-member-manage-admin-links-managers">
+      <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html?showOnly=managers"
+         href="#">The managers</a>
+    </li>
+  </ul>
+</li>

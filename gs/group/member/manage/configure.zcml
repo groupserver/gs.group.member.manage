@@ -31,12 +31,21 @@
 
   <!--The Admin Tab -->
   <browser:viewlet 
-    name="gs-group-member-manage-home-admin-tab"
+    name="gs-group-member-manage-few-link"
     for="gs.group.base.interfaces.IGSGroupMarker"
     manager="gs.group.member.info.interfaces.IGroupMemberAdminLinks"
-    template="browser/templates/admin_list.pt"
-    class=".adminlist.MembersListViewlet"
+    template="browser/templates/admin_link_few.pt"
+    class=".adminlist.FewMembersListViewlet"
     permission="zope2.ManageUsers"
     weight="30"
     title="Manage Members" />
+  <browser:viewlet 
+    name="gs-group-member-manage-options"
+    for="gs.group.base.interfaces.IGSGroupMarker"
+    manager="gs.group.member.info.interfaces.IGroupMemberAdminLinks"
+    template="browser/templates/admin_link_options.pt"
+    class=".adminlist.OptionsMembersListViewlet"
+    permission="zope2.ManageUsers"
+    weight="30"
+    title="Manage Many Members" />
 </configure>
