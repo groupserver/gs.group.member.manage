@@ -55,7 +55,7 @@ class OptionsMembersListViewlet(MembersListViewlet):
 
     @Lazy
     def many(self):
-        retval = (self.memberCount > 0) and (self.memberCount < SOME)
+        retval = self.memberCount >= SOME
         return retval
 
     @Lazy
