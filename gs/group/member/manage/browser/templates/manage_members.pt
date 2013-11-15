@@ -45,11 +45,12 @@
           &#8212; and
           <span tal:replace="python:invitedMemberCount==1 and '1 invited member' or '%d invited members' % invitedMemberCount"/>
           &#8212;
-          in <a class="group" href="#"
-          tal:attributes="href view/groupInfo/relative_url"
-          tal:content="view/groupInfo/name">this group</a>.
-          (You can <a href="admin_invite.html">invite more members</a>, and
-          view the <a href="log.html">Join and Leave Log.</a>)
+          in
+          <a class="group" href="#"
+             tal:attributes="href view/groupInfo/relative_url"
+             tal:content="view/groupInfo/name">this group</a>.
+          (You can <a href="admin_join.html">invite more members</a>, and
+          view the <a href="members.html">Join and leave log.</a>)
         </p>
         <ul
           tal:define="show python:view.showOnly or 'all';
