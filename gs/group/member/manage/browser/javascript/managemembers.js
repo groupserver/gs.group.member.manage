@@ -1,11 +1,12 @@
-// ABEL module for interlocks on the manage members form.
+// Interlocks on the manage members form.
 jQuery.noConflict();
 GSManageMembers = function () {
     // Private methods
-    var ptnCoachChange = function () {
-        var updatedWidget = jQuery(this);
-        var allRelatedWidgets = jQuery(".ptnCoach :radio");
-        var checkedValue = updatedWidget.attr("checked");
+    function ptnCoachChange() {
+        var updatedWidget=null, allRelatedWidgets=null, checkedValue=null;
+        updatedWidget = jQuery(this);
+        allRelatedWidgets = jQuery(".ptnCoach :radio");
+        checkedValue = updatedWidget.attr("checked");
 
         if (checkedValue == true) {
             // If we select a Ptn Coach button, deselect all others
@@ -17,11 +18,13 @@ GSManageMembers = function () {
         }
     }
     
-    var removeMemberChange = function () {
-        var updatedWidget = jQuery(this);
-        var memberId = updatedWidget.attr('id').split('-')[0].split('.')[1];
-        var allRelatedWidgets = jQuery("#" + memberId + "-actions input");
-        var checkedValue = updatedWidget.attr("checked");
+    function removeMemberChange() {
+        var updatedWidget=null, memberId=null, allRelatedWidgets=null,
+            checkedValue=null;
+        updatedWidget = jQuery(this);
+        memberId = updatedWidget.attr('id').split('-')[0].split('.')[1];
+        allRelatedWidgets = jQuery("#" + memberId + "-actions input");
+        checkedValue = updatedWidget.attr("checked");
 
         if (checkedValue == true) {
             // If we select the remove button, deselect and 
@@ -39,12 +42,14 @@ GSManageMembers = function () {
         }
     }
     
-    var moderationChange = function () {
-        var updatedWidget = jQuery(this);
-        var memberId = updatedWidget.attr('id').split('-')[0].split('.')[1];
-        var moderationAction = updatedWidget.attr('id').split('-')[1];
-        var checkedValue = updatedWidget.attr("checked");
-        var allRelatedWidgets = null;
+    function moderationChange() {
+        var updatedWidget=null, memberId=null, moderationAction=null,
+            checkedValue=null, allRelatedWidgets=null;
+        updatedWidget = jQuery(this);
+        memberId = updatedWidget.attr('id').split('-')[0].split('.')[1];
+        moderationAction = updatedWidget.attr('id').split('-')[1];
+        checkedValue = updatedWidget.attr("checked");
+
         
         if (moderationAction == "moderatorAdd") {
             allRelatedWidgets = jQuery("#form\\." + memberId + "-moderatedAdd");
@@ -83,3 +88,6 @@ GSManageMembers = function () {
     };
 }(); // GSManageMembers
 
+jQuery(window).load( function () {
+    GSManageMembers.init();
+});

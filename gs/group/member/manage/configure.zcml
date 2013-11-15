@@ -16,7 +16,13 @@
 
   <include package="zope.viewlet" file="meta.zcml" />
 
-  <browser:resource name="managemembers-20100806.js"
+  <browser:resource
+    name="managemembers-20131115.js"
+    file="browser/javascript/managemembers.js"
+    permission="zope.Public" />
+
+  <browser:resource
+    name="managemembers-20100806.js"
     file="browser/javascript/managemembers.js"
     permission="zope.Public" />
 
