@@ -232,6 +232,6 @@
       </form>
     </tal:block>
     <script type="text/javascript" defer="true" metal:fill-slot="javascript"
-            src="/++resource++managemembers-20131115.js">&#160;</script>
+            src="/++resource++managemembers-20131115-min.js">&#160;</script>
   </body>
 </html>
