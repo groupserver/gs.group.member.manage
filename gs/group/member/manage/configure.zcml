@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Copyright © 2013 OnlineGroups.net and Contributors. -->
+<!-- All Rights Reserved. -->
+
+<!-- This software is subject to the provisions of the Zope Public -->
+<!-- License, Version 2.1 (ZPL).  A copy of the ZPL should accompany this -->
+<!-- distribution. -->
+
+<!-- THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED -->
+<!-- WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED -->
+<!-- WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND -->
+<!-- FITNESS FOR A PARTICULAR PURPOSE. -->
 <configure xmlns="http://namespaces.zope.org/zope"
-  xmlns:browser="http://namespaces.zope.org/browser"
-  xmlns:five="http://namespaces.zope.org/five"
-  i18n_domain="groupserver">
+           xmlns:browser="http://namespaces.zope.org/browser"
+           i18n_domain="groupserver">
+
+  <include package="zope.viewlet" file="meta.zcml" />
 
   <browser:resource name="managemembers-20100806.js"
     file="browser/javascript/managemembers.js"
     permission="zope.Public" />
 
-  <utility 
+  <utility
     factory=".audit.StatusAuditEventFactory"
     name="groupserver.GSGroupMemberStatus"
     permission="zope.Public" />
-        
-  <browser:page 
+
+  <browser:page
     for="Products.XWFChat.interfaces.IGSGroupFolder"
     name="managemembers.html"
     class=".form.GSManageGroupMembersForm"
     permission="zope2.ManageUsers"/>
-  <interface 
+  <interface
     interface=".interfaces.IGSMemberStatusActionsContentProvider"
     type="zope.contentprovider.interfaces.ITALNamespaceData"/>
 
-  <browser:page 
+  <browser:page
     for="Products.XWFChat.interfaces.IGSGroupFolder"
     name="bounce_info.html"
     template="browser/templates/bounceinfo.pt"
@@ -30,7 +42,7 @@
     permission="zope2.ManageUsers"/>
 
   <!--The Admin Tab -->
-  <browser:viewlet 
+  <browser:viewlet
     name="gs-group-member-manage-few-link"
     for="gs.group.base.interfaces.IGSGroupMarker"
     manager="gs.group.member.info.interfaces.IGroupMemberAdminLinks"
@@ -39,7 +51,7 @@
     permission="zope2.ManageUsers"
     weight="30"
     title="Manage Members" />
-  <browser:viewlet 
+  <browser:viewlet
     name="gs-group-member-manage-options"
     for="gs.group.base.interfaces.IGSGroupMarker"
     manager="gs.group.member.info.interfaces.IGroupMemberAdminLinks"
