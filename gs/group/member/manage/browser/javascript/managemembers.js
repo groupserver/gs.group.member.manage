@@ -6,15 +6,15 @@ GSManageMembers = function () {
         var updatedWidget=null, allRelatedWidgets=null, checkedValue=null;
         updatedWidget = jQuery(this);
         allRelatedWidgets = jQuery(".ptnCoach :radio");
-        checkedValue = updatedWidget.attr("checked");
+        checkedValue = updatedWidget.prop("checked");
 
         if (checkedValue == true) {
             // If we select a Ptn Coach button, deselect all others
             for ( i=0 ; i < allRelatedWidgets.length ; i=i+1 ) {
-                jQuery(allRelatedWidgets[i]).attr("checked", false);
+                jQuery(allRelatedWidgets[i]).prop("checked", false);
             }
             // Then re-select the one that changed
-            updatedWidget.attr("checked", true);
+            updatedWidget.prop("checked", true);
         }
     }
     
@@ -24,16 +24,16 @@ GSManageMembers = function () {
         updatedWidget = jQuery(this);
         memberId = updatedWidget.attr('id').split('-')[0].split('.')[1];
         allRelatedWidgets = jQuery("#" + memberId + "-actions input");
-        checkedValue = updatedWidget.attr("checked");
+        checkedValue = updatedWidget.prop("checked");
 
         if (checkedValue == true) {
             // If we select the remove button, deselect and 
             // disable all other options for this member
             for ( i=0 ; i < allRelatedWidgets.length ; i=i+1 ) {
-                jQuery(allRelatedWidgets[i]).attr("checked", false).attr("disabled", "disabled");
+                jQuery(allRelatedWidgets[i]).prop("checked", false).attr("disabled", "disabled");
             }
             // Then re-select and re-enable the one that changed
-            updatedWidget.removeAttr("disabled").attr("checked", true);
+            updatedWidget.removeAttr("disabled").prop("checked", true);
         } else {
             // If we deselect the remove button, re-enable all other options for this member
             for ( i=0 ; i < allRelatedWidgets.length ; i=i+1 ) {
@@ -48,7 +48,7 @@ GSManageMembers = function () {
         updatedWidget = jQuery(this);
         memberId = updatedWidget.attr('id').split('-')[0].split('.')[1];
         moderationAction = updatedWidget.attr('id').split('-')[1];
-        checkedValue = updatedWidget.attr("checked");
+        checkedValue = updatedWidget.prop("checked");
 
         
         if (moderationAction == "moderatorAdd") {
@@ -65,10 +65,10 @@ GSManageMembers = function () {
             // If we select the one Moderation checkbox, deselect and 
             // disable the other for this member
             for ( i=0 ; i < allRelatedWidgets.length ; i=i+1 ) {
-                jQuery(allRelatedWidgets[i]).attr("checked", false).attr("disabled", "disabled");
+                jQuery(allRelatedWidgets[i]).prop("checked", false).attr("disabled", "disabled");
             }
             // Then re-select and re-enable the one that changed
-            updatedWidget.removeAttr("disabled").attr("checked", true);
+            updatedWidget.removeAttr("disabled").prop("checked", true);
         } else {
             // If we deselect the Moderation checkbox, re-enable the other option
             for ( i=0 ; i < allRelatedWidgets.length ; i=i+1 ) {
