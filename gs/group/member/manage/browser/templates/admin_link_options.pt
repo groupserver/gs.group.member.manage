@@ -23,7 +23,7 @@
     </li>
     <li id="gs-group-member-manage-admin-links-managers">
       <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html?showOnly=managers"
-         href="#">The managers</a>
+         href="#">The administrators</a>
     </li>
   </ul>
 </li>
