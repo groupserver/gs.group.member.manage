@@ -1,6 +1,6 @@
 <li id="gs-group-member-manage-admin-link-many">
   <a tal:attributes="href view/link"
-     href="#"><strong>Manage</strong> the 
+     href="#"><strong>Manage</strong> the
      <span tal:condition="view/many">many</span> members</a>
   <ul>
     <li id="gs-group-member-manage-admin-links-moderated"

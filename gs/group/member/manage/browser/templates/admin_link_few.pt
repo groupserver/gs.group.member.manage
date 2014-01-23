@@ -1,5 +1,5 @@
 <li id="gs-group-member-manage-admin-link-few">
   <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html"
-     href="managemembers.html"><strong>Manage</strong> the 
+     href="managemembers.html"><strong>Manage</strong> the
       member<span tal:condition="python:view.memberCount!=1">s</span></a>
 </li>
