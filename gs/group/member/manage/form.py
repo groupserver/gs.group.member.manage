@@ -1,9 +1,23 @@
 # -*- coding: utf-8 -*-
+##############################################################################
+#
+# Copyright © 2014 OnlineGroups.net and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+from __future__ import absolute_import, unicode_literals
 from zope.cachedescriptors.property import Lazy
 from zope.formlib import form
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 from gs.group.base import GroupForm
-from manager import GSGroupMemberManager
+from .manager import GSGroupMemberManager
 
 
 class GSManageGroupMembersForm(GroupForm):
@@ -13,7 +27,7 @@ class GSManageGroupMembersForm(GroupForm):
     def __init__(self, group, request):
         super(GSManageGroupMembersForm, self).__init__(group, request)
         self.groupName = self.groupInfo.name
-        self.label = u'Manage the Members of %s' % self.groupName
+        self.label = 'Manage the Members of %s' % self.groupName
         self.showOnly = request.form.get('showOnly', '')
         self.page = request.form.get('page', '1')
         self.__form_fields = None
@@ -25,7 +39,7 @@ class GSManageGroupMembersForm(GroupForm):
             if (not(self.memberManager.postingIsSpecial)
                     and not('form.ptnCoachRemove' in self.request.form)
                     and not(self.groupInfo.ptn_coach)):
-                self.request.form['form.ptnCoachRemove'] = u'True'
+                self.request.form['form.ptnCoachRemove'] = 'True'
             if self.showOnly or not(self.memberManager.membersToShow):
                 retval = self.memberManager.form_fields.omit('ptnCoachRemove')
             else:
@@ -43,7 +57,7 @@ class GSManageGroupMembersForm(GroupForm):
             widget._displayItemForMissingValue = False
         assert self.widgets
 
-    @form.action(label=u'Change', failure='handle_change_action_failure')
+    @form.action(label='Change', failure='handle_change_action_failure')
     def handle_change(self, action, data):
         self.status = self.memberManager.make_changes(data)
         # Reset the form_fields cache so that the
@@ -52,9 +66,9 @@ class GSManageGroupMembersForm(GroupForm):
 
     def handle_change_action_failure(self, action, data, errors):
         if len(errors) == 1:
-            self.status = u'<p>There is an error:</p>'
+            self.status = '<p>There is an error:</p>'
         else:
-            self.status = u'<p>There are errors:</p>'
+            self.status = '<p>There are errors:</p>'
 
     @Lazy
     def memberManager(self):

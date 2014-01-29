@@ -1,4 +1,18 @@
 # -*- coding: utf-8 -*-
+##############################################################################
+#
+# Copyright © 2014 OnlineGroups.net and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+from __future__ import absolute_import, unicode_literals
 from math import ceil
 from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
@@ -10,10 +24,10 @@ from Products.GSGroup.mailinglistinfo import GSMailingListInfo
 from gs.content.form.radio import radio_widget
 from gs.group.member.leave.leaver import GroupLeaver
 from Products.GSGroupMember.groupMembersInfo import GSGroupMembersInfo
-from statusformfields import MAX_POSTING_MEMBERS
-from actions import GSMemberStatusActions
-from interfaces import IGSGroupMemberManager, IGSManageMembersForm
-from utils import addAdmin, removeAdmin, addModerator, removeModerator,\
+from .statusformfields import MAX_POSTING_MEMBERS
+from .actions import GSMemberStatusActions
+from .interfaces import IGSGroupMemberManager, IGSManageMembersForm
+from .utils import addAdmin, removeAdmin, addModerator, removeModerator,\
     moderate, unmoderate, addPostingMember, removePostingMember, addPtnCoach,\
     removePtnCoach, withdrawInvitation
 

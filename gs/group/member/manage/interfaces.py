@@ -1,5 +1,18 @@
 # -*- coding: utf-8 -*-
-"""Interfaces for the member-management pages."""
+##############################################################################
+#
+# Copyright © 2014 OnlineGroups.net and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+from __future__ import absolute_import, unicode_literals
 from zope.interface import Attribute
 from zope.interface.interface import Interface
 from zope.schema import List, Text, Bool, Choice
@@ -16,7 +29,7 @@ class IGSManageGroupMembersForm(Interface):
 class IGSManageMembersForm(Interface):
     """ One user-independent field."""
     ptnCoachRemove = Choice(vocabulary=SimpleVocabulary([SimpleTerm(True,
-        True, u'No participation coach')]),
+        True, 'No participation coach')]),
       required=False)
 
 
@@ -41,17 +54,17 @@ class IGSMemberStatusActions(Interface):
 class IGSMemberStatusActionsContentProvider(Interface):
     """The content provider for the actions available to change """
     """a group member's status within the group"""
-    statusActions = List(title=u'Instances',
-      description=u'GSMemberStatusActions instances',
+    statusActions = List(title='Instances',
+      description='GSMemberStatusActions instances',
       required=True)
-    widgets = List(title=u'Widgets',
-      description=u'Form Widgets',
+    widgets = List(title='Widgets',
+      description='Form Widgets',
       required=True)
-    pageTemplateFileName = Text(title=u"Page Template File Name",
-      description=u'The name of the ZPT file that is used to render the '
-        u'group member\'s status and the appropriate form widgets.',
+    pageTemplateFileName = Text(title="Page Template File Name",
+      description='The name of the ZPT file that is used to render the '
+        'group member\'s status and the appropriate form widgets.',
       required=False,
-      default=u"browser/templates/statusActionsContentProvider.pt")
+      default="browser/templates/statusActionsContentProvider.pt")
 
 
 class IGSStatusFormFields(Interface):
@@ -69,28 +82,28 @@ class IGSStatusFormFields(Interface):
                                 "logged-in administrator")
     form_fields = Attribute("The fields to be displayed in a form to change "
                             "the membership status of this user")
-    groupAdmin = Bool(title=u'Make fn a Group Administrator (or Unmake)',
-      description=u'Make fn a Group Administrator (or Unmake)',
+    groupAdmin = Bool(title='Make fn a Group Administrator (or Unmake)',
+      description='Make fn a Group Administrator (or Unmake)',
       required=False)
-    ptnCoach = Bool(title=u'Make fn the Participation Coach (or Unmake)',
-      description=u'Make fn the Participation Coach (or Unmake)',
+    ptnCoach = Bool(title='Make fn the Participation Coach (or Unmake)',
+      description='Make fn the Participation Coach (or Unmake)',
       required=False)
-    moderator = Bool(title=u'Make fn a Moderator (or Unmake)',
-      description=u'Make fn a Moderator (or Unmake)',
+    moderator = Bool(title='Make fn a Moderator (or Unmake)',
+      description='Make fn a Moderator (or Unmake)',
       required=False)
-    moderate = Bool(title=u'Moderate fn (or Unmoderate)',
-      description=u'Moderate fn (or Unmoderate)',
+    moderate = Bool(title='Moderate fn (or Unmoderate)',
+      description='Moderate fn (or Unmoderate)',
       required=False)
-    postingMember = Bool(title=u'Make fn a Posting Member (or Unmake)',
-      description=u'Make fn a Posting Member (or Unmake)',
+    postingMember = Bool(title='Make fn a Posting Member (or Unmake)',
+      description='Make fn a Posting Member (or Unmake)',
       required=False)
-    remove = Bool(title=u'Remove fn from the Group',
-      description=u'Remove fn from the Group',
+    remove = Bool(title='Remove fn from the Group',
+      description='Remove fn from the Group',
       required=False)
 
 
 class IGSMemberActionsSchema(Interface):
     """ Dummy interface to get the schema started."""
-    dummy = Bool(title=u'Dummy',
-      description=u'Is this a dummy value?',
+    dummy = Bool(title='Dummy',
+      description='Is this a dummy value?',
       required=False)

@@ -1,4 +1,18 @@
 # -*- coding: utf-8 -*-
+##############################################################################
+#
+# Copyright © 2014 OnlineGroups.net and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+from __future__ import absolute_import, unicode_literals
 from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
 from Products.XWFCore.XWFUtils import munge_date
@@ -6,14 +20,14 @@ from Products.GSAuditTrail.utils import marshal_data
 from gs.group.base import GroupPage
 from gs.profile.email.base.emailuser import EmailUser
 from gs.group.member.bounce.audit import SUBSYSTEM, BOUNCE, DISABLE
-from queries import BounceHistoryQuery
+from .queries import BounceHistoryQuery
 
 
 class BounceInfo(GroupPage):
 
     def __init__(self, group, request):
         super(BounceInfo, self).__init__(group, request)
-        self.label = u'%s\'s Email Addresses' % self.userInfo.name
+        self.label = '%s\'s Email Addresses' % self.userInfo.name
 
     @Lazy
     def userInfo(self):
@@ -23,7 +37,7 @@ class BounceInfo(GroupPage):
 
     @Lazy
     def emailAddresses(self):
-        retval = self.bounceHistory.keys()
+        retval = list(self.bounceHistory.keys())
         return retval
 
     @Lazy
@@ -41,10 +55,10 @@ class BounceInfo(GroupPage):
         e = marshal_data(self.context, e, siteInfo=self.siteInfo,
                          groupInfo=self.groupInfo)
         event = createObject(SUBSYSTEM, self.context, **e)
-        retval = u''
+        retval = ''
         if (event.code == DISABLE):
             retval = event.xhtml
         elif (event.code == BOUNCE):
-            retval = u'Email delivery failed (%s)' %\
+            retval = 'Email delivery failed (%s)' %\
               munge_date(self.context, event.date)
         return retval

@@ -1,10 +1,24 @@
 # -*- coding: utf-8 -*-
+##############################################################################
+#
+# Copyright © 2014 OnlineGroups.net and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+from __future__ import absolute_import, unicode_literals
 from zope.component import createObject
 from Products.GSGroup.mailinglistinfo import GSMailingListInfo
 from gs.group.member.invite.base.queries import InvitationQuery
 from gs.group.member.invite.base.audit import Auditor, WITHDRAW_INVITATION
-from audit import StatusAuditor, GAIN, LOSE
-from statusformfields import MAX_POSTING_MEMBERS
+from .audit import StatusAuditor, GAIN, LOSE
+from .statusformfields import MAX_POSTING_MEMBERS
 
 
 def addAdmin(groupInfo, userInfo):

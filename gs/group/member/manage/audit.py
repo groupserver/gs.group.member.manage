@@ -1,4 +1,18 @@
 # -*- coding: utf-8 -*-
+##############################################################################
+#
+# Copyright © 2013 OnlineGroups.net and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+from __future__ import unicode_literals
 from pytz import UTC
 from datetime import datetime
 from zope.cachedescriptors.property import Lazy
@@ -25,9 +39,9 @@ class StatusAuditEventFactory(object):
     """
     implements(IFactory)
 
-    title = u'GroupServer Group Status Audit Event Factory'
-    description = u'Creates a GroupServer event auditor for group status '\
-        u'changes'
+    title = 'GroupServer Group Status Audit Event Factory'
+    description = 'Creates a GroupServer event auditor for group status '\
+        'changes'
 
     def __call__(self, context, event_id, code, date,
         userInfo, instanceUserInfo, siteInfo, groupInfo,
@@ -70,8 +84,8 @@ class GainStatusEvent(BasicAuditEvent):
           SUBSYSTEM)
 
     def __str__(self):
-        r = u'{0} ({1}) gave {2} ({3}) the status of {4} in {5} ({6}) on {7} '\
-            u'({8}).'
+        r = '{0} ({1}) gave {2} ({3}) the status of {4} in {5} ({6}) on {7} '\
+            '({8}).'
         retval = r.format(
                         self.userInfo.name, self.userInfo.id,
                         self.instanceUserInfo.name, self.instanceUserInfo.id,
@@ -83,15 +97,15 @@ class GainStatusEvent(BasicAuditEvent):
 
     @property
     def xhtml(self):
-        cssClass = u'audit-event groupserver-group-member-%s' % \
+        cssClass = 'audit-event groupserver-group-member-%s' % \
           self.code
-        retval = u'<span class="%s">Given the status of %s in %s</span>' % \
+        retval = '<span class="%s">Given the status of %s in %s</span>' % \
           (cssClass, self.instanceDatum, groupInfo_to_anchor(self.groupInfo))
 
         if self.instanceUserInfo.id != self.userInfo.id:
-            retval = u'%s &#8212; %s' % \
+            retval = '%s &#8212; %s' % \
               (retval, userInfo_to_anchor(self.userInfo))
-        retval = u'%s (%s)' % \
+        retval = '%s (%s)' % \
           (retval, munge_date(self.context, self.date))
         return retval
 
@@ -119,16 +133,16 @@ class LoseStatusEvent(BasicAuditEvent):
 
     def __str__(self):
         if self.adminRemoved:
-            retval = u'%s (%s) removed the status of %s from %s (%s) '\
-                u'in %s (%s) on %s (%s).' % \
+            retval = '%s (%s) removed the status of %s from %s (%s) '\
+                'in %s (%s) on %s (%s).' % \
                  (self.userInfo.name, self.userInfo.id,
                   self.instanceDatum,
                   self.instanceUserInfo.name, self.instanceUserInfo.id,
                   self.groupInfo.name, self.groupInfo.id,
                   self.siteInfo.name, self.siteInfo.id)
         else:
-            retval = u'%s (%s) lost the status of %s '\
-                u'in %s (%s) on %s (%s).' % \
+            retval = '%s (%s) lost the status of %s '\
+                'in %s (%s) on %s (%s).' % \
                  (self.instanceUserInfo.name, self.instanceUserInfo.id,
                   self.instanceDatum,
                   self.groupInfo.name, self.groupInfo.id,
@@ -138,16 +152,16 @@ class LoseStatusEvent(BasicAuditEvent):
 
     @property
     def xhtml(self):
-        cssClass = u'audit-event groupserver-group-member-%s' % \
+        cssClass = 'audit-event groupserver-group-member-%s' % \
           self.code
-        retval = u'<span class="%s">Lost the status of %s in %s</span>' % \
+        retval = '<span class="%s">Lost the status of %s in %s</span>' % \
           (cssClass, self.instanceDatum,
            groupInfo_to_anchor(self.groupInfo))
 
         if self.instanceUserInfo.id != self.userInfo.id:
-            retval = u'%s &#8212; %s' % \
+            retval = '%s &#8212; %s' % \
               (retval, userInfo_to_anchor(self.userInfo))
-        retval = u'%s (%s)' % \
+        retval = '%s (%s)' % \
           (retval, munge_date(self.context, self.date))
         return retval
 

@@ -12,6 +12,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from __future__ import unicode_literals
 from zope.component import createObject
 from zope.cachedescriptors.property import Lazy
 from gs.group.member.viewlet import GroupAdminViewlet
@@ -66,12 +67,12 @@ class OptionsMembersListViewlet(MembersListViewlet):
     @Lazy
     def many_link(self):
         # FIXME: Create a new Manage Many Members page
-        m = u'{0.relativeURL}/admingroup/manage_many_members'
+        m = '{0.relativeURL}/admingroup/manage_many_members'
         retval = m.format(self.groupInfo)
         return retval
 
     @Lazy
     def some_link(self):
-        m = u'{0.relativeURL}/managemembers.html'
+        m = '{0.relativeURL}/managemembers.html'
         retval = m.format(self.groupInfo)
         return retval
