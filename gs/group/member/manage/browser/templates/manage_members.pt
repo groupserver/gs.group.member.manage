@@ -65,7 +65,7 @@
                       showPosting python:showPostingIsValid and show=='posting'">
           <li tal:condition="python:showAll or showManagers or showPosting or showModerated or showUnverified or showInvited">
             <span tal:condition="showAll">Listing <strong>all the members</strong></span>
-            <span tal:condition="showManagers">Listing all <strong>managers</strong></span>
+            <span tal:condition="showManagers">Listing all <strong>administrators</strong></span>
             <span tal:condition="showPosting">Listing all <strong>posting</strong></span>
             <span tal:condition="showModerated">Listing all <strong>moderated members</strong></span>
             <span tal:condition="showUnverified">Listing all <strong>members with no verified email addresses</strong></span>
@@ -109,7 +109,7 @@
           <li tal:condition="not:showManagers">
             <a href="#"
                tal:attributes="href string:managemembers.html?showOnly=managers">List only the
-          managers of <span tal:replace="view/groupInfo/name" /></a></li>
+          administrators of <span tal:replace="view/groupInfo/name" /></a></li>
           <li tal:condition="python:showPostingIsValid and not(showPosting)">
             <a href="#"
                tal:attributes="href string:managemembers.html?showOnly=invited">List only the
@@ -167,7 +167,7 @@
                       showPosting python:showPostingIsValid and show=='posting'">
           <li tal:condition="python:showAll or showManagers or showPosting or showModerated or showUnverified or showInvited">
             <span tal:condition="showAll">Listing <strong>all the members</strong></span>
-            <span tal:condition="showManagers">Listing all <strong>managers</strong></span>
+            <span tal:condition="showManagers">Listing all <strong>administrators</strong></span>
             <span tal:condition="showPosting">Listing all <strong>posting</strong></span>
             <span tal:condition="showModerated">Listing all <strong>moderated members</strong></span>
             <span tal:condition="showUnverified">Listing all <strong>members with no verified email addresses</strong></span>
@@ -211,7 +211,7 @@
           <li tal:condition="not:showManagers">
             <a href="#"
                tal:attributes="href string:managemembers.html?showOnly=managers">List only the
-          managers of <span tal:replace="view/groupInfo/name" /></a></li>
+          administrators of <span tal:replace="view/groupInfo/name" /></a></li>
           <li tal:condition="python:showPostingIsValid and not(showPosting)">
             <a href="#"
                tal:attributes="href string:managemembers.html?showOnly=invited">List only the
