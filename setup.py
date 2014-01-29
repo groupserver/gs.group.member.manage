@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-# Copyright © 2013 OnlineGroups.net and Contributors.
+# Copyright © 2014 OnlineGroups.net and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -56,6 +56,8 @@ setup(name='gs.group.member.manage',
         'zope.interface',
         'zope.publisher',
         'zope.schema',
+        'zope.tal',
+        'zope.tales',
         'zope.viewlet',
         'gs.content.form',
         'gs.content.layout',
