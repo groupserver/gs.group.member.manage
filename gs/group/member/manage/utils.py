@@ -201,8 +201,8 @@ def removePtnCoach(groupInfo):
         auditor.info(LOSE, 'Participation Coach')
         retval = ('no longer the Participation Coach', oldPtnCoach.id)
     assert len(retval) == 2
-    assert type(retval[0]) == str
-    assert ((retval[1] is None) or (type(retval[1]) == str))
+    assert type(retval[0]) in (str, unicode)
+    assert ((retval[1] is None) or (type(retval[1]) in (str, unicode)))
     return retval
 
 
