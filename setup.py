@@ -12,17 +12,22 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+import codecs
 import os
 from setuptools import setup, find_packages
 from version import get_version
 
 version = get_version()
 
+with codecs.open('README.txt', encoding='utf-8') as f:
+    long_description = f.read()
+with codecs.open(os.path.join("docs", "HISTORY.txt"), encoding='utf-8') as f:
+    long_description += '\n' + f.read()
+
 setup(name='gs.group.member.manage',
     version=version,
     description="The admin pages related to member management",
-    long_description=open("README.txt").read() + "\n" +
-                    open(os.path.join("docs", "HISTORY.txt")).read(),
+    long_description=long_description,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         "Environment :: Web Environment",
@@ -30,14 +35,16 @@ setup(name='gs.group.member.manage',
         "Intended Audience :: Developers",
         'License :: OSI Approved :: Zope Public License',
         "Natural Language :: English",
-        "Operating System :: POSIX :: Linux"
+        "Operating System :: POSIX :: Linux",
         "Programming Language :: Python",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     keywords='user, group, member, group member, manage, remove, role',
     author='Alice Murphy',
     author_email='alice@onlinegroups.net',
-    url='http://groupserver.org',
+    maintainer='Michael JasonSmith',
+    maintainer_email='mpj17@onlinegroups.net',
+    url='https://source.iopen.net/groupserver/gs.group.member.manage/',
     license='ZPL 2.1',
     packages=find_packages(exclude=['ez_setup']),
     namespace_packages=['gs', 'gs.group', 'gs.group.member'],
