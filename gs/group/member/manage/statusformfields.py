@@ -19,7 +19,7 @@ from zope.interface import implements
 from zope.formlib import form
 from zope.schema import Bool, Choice
 from zope.schema.vocabulary import SimpleTerm, SimpleVocabulary
-from gs.content.form.radio import radio_widget
+from gs.content.form.base import radio_widget
 from Products.GSGroupMember.interfaces import IGSGroupMembershipStatus
 from .interfaces import IGSStatusFormFields, IGSMemberActionsSchema
 
