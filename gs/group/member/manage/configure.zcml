@@ -31,13 +31,13 @@
     permission="zope.Public" />
 
   <utility
-    factory=".audit.StatusAuditEventFactory"
     name="groupserver.GSGroupMemberStatus"
+    factory=".audit.StatusAuditEventFactory"
     permission="zope.Public" />
 
   <browser:page
-    for="Products.XWFChat.interfaces.IGSGroupFolder"
     name="managemembers.html"
+    for="Products.XWFChat.interfaces.IGSGroupFolder"
     class=".form.GSManageGroupMembersForm"
     permission="zope2.ManageUsers"/>
   <interface
@@ -45,10 +45,10 @@
     type="zope.contentprovider.interfaces.ITALNamespaceData"/>
 
   <browser:page
-    for="Products.XWFChat.interfaces.IGSGroupFolder"
     name="bounce_info.html"
-    template="browser/templates/bounceinfo.pt"
+    for="Products.XWFChat.interfaces.IGSGroupFolder"
     class=".bounceinfo.BounceInfo"
+    template="browser/templates/bounceinfo.pt"
     permission="zope2.ManageUsers"/>
 
   <!--The Admin Tab -->
@@ -65,8 +65,8 @@
     name="gs-group-member-manage-options"
     for="gs.group.base.interfaces.IGSGroupMarker"
     manager="gs.group.member.info.interfaces.IGroupMemberAdminLinks"
-    template="browser/templates/admin_link_options.pt"
     class=".adminlist.OptionsMembersListViewlet"
+    template="browser/templates/admin_link_options.pt"
     permission="zope2.ManageUsers"
     weight="30"
     title="Manage Many Members" />
