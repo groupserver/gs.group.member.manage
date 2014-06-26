@@ -36,7 +36,10 @@
          class="gs-content-js-required"
          id="gs-group-member-manage-many">
       <h1>Manage the many members</h1>
-      <p class="muted">I am a page, honest.</p>
+      <p class="muted">
+        Select the members to manage from the list below and
+        click the <samp class="button">Manage</samp> button.
+      </p>
       <tal:block define="widgets view/widgets">
         <tal:block replace="structure provider:groupserver.FormWidgets"/>
       </tal:block>
