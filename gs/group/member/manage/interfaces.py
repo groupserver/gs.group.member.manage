@@ -107,3 +107,12 @@ class IGSMemberActionsSchema(Interface):
     dummy = Bool(title='Dummy',
       description='Is this a dummy value?',
       required=False)
+
+
+class IGSManageManyMembers(Interface):
+    'The Manage Many Members schema'
+    members = List(title='Members to manage',
+                      description='The members of this group to manage.',
+                      value_type=Choice(title='Group members',
+                                  vocabulary='groupserver.ManyGroupMembers'),
+                      required=True)

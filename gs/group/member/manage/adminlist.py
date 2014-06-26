@@ -67,7 +67,7 @@ class OptionsMembersListViewlet(MembersListViewlet):
     @Lazy
     def many_link(self):
         # FIXME: Create a new Manage Many Members page
-        m = '{0.relativeURL}/admingroup/manage_many_members'
+        m = '{0.relativeURL}/manage_many_members.html'
         retval = m.format(self.groupInfo)
         return retval
 

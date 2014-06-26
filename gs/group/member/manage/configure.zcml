@@ -37,7 +37,7 @@
 
   <browser:page
     name="managemembers.html"
-    for="Products.XWFChat.interfaces.IGSGroupFolder"
+    for="gs.group.base.interfaces.IGSGroupMarker"
     class=".form.GSManageGroupMembersForm"
     permission="zope2.ManageUsers"/>
   <interface
@@ -46,10 +46,23 @@
 
   <browser:page
     name="bounce_info.html"
-    for="Products.XWFChat.interfaces.IGSGroupFolder"
+    for="gs.group.base.interfaces.IGSGroupMarker"
     class=".bounceinfo.BounceInfo"
     template="browser/templates/bounceinfo.pt"
     permission="zope2.ManageUsers"/>
+
+  <!--Manage many members-->
+  <browser:page
+    name="manage_many_members.html"
+    for="gs.group.base.interfaces.IGSGroupMarker"
+    class=".many.ManageManyMembers"
+    permission="zope2.ManageUsers"/>
+  <!--    The vocabulary of manay members-->
+  <utility
+    name="groupserver.ManyGroupMembers"
+    provides="zope.schema.interfaces.IVocabularyFactory"
+    component=".memberstomanage.MembersToManage" />
+
 
   <!--The Admin Tab -->
   <browser:viewlet

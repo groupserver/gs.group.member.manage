@@ -1,0 +1,52 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:metal="http://xml.zope.org/namespaces/metal"
+  metal:use-macro="context/@@groupserver_full_layout/page">
+  <head>
+    <title metal:fill-slot="title">
+      Manage many members:
+      <tal:block content="view/groupInfo/name">Group</tal:block>:
+      <tal:block content="view/siteInfo/name">Site</tal:block>
+    </title>
+    <link metal:fill-slot="metadata"
+          rel="up" title="Group" href="/"
+          tal:attributes="href view/groupInfo/relative_url;
+                          title view/groupInfo/name" />
+  </head>
+  <body>
+    <tal:block
+      content="structure provider:groupserver.FormStatusMessage"
+      define="errors view/errors; status view/status; widgets view/widgets"
+      metal:fill-slot="messages">&#160;</tal:block>
+    <ul metal:fill-slot="breadcrumb">
+      <li>
+        <a tal:attributes="title string:${view/siteInfo/name} Homepage"
+           href="/" title="Home">&#8962;</a>
+     </li>
+     <li>
+       <a tal:attributes="href view/groupInfo/relative_url"
+          href="/"><strong tal:content="view/groupInfo/name">Group</strong></a>
+     </li>
+     <li>
+       Manage many members
+     </li>
+    </ul>
+   <form metal:fill-slot="body" enctype="multipart/form-data" method="post"
+         action="." tal:attributes="action request/URL"
+         class="gs-content-js-required"
+         id="gs-group-member-manage-many">
+      <h1>Manage the many members</h1>
+      <p class="muted">I am a page, honest.</p>
+      <tal:block define="widgets view/widgets">
+        <tal:block replace="structure provider:groupserver.FormWidgets"/>
+      </tal:block>
+      <div class="buttons" tal:condition="view/availableActions">
+        <tal:block repeat="action view/actions">
+          <div class="formelementbutton">
+            <span tal:replace="structure action/render">Button</span>
+          </div>
+        </tal:block>
+      </div>
+    </form><!--gs-group-member-manage-many-->
+  </body>
+</html>
