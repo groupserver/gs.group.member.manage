@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+############################################################################
 #
 # Copyright © 2014 OnlineGroups.net and Contributors.
 # All Rights Reserved.
@@ -11,7 +11,7 @@
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
-##############################################################################
+############################################################################
 from __future__ import absolute_import, unicode_literals
 from math import ceil
 from zope.cachedescriptors.property import Lazy
@@ -27,9 +27,10 @@ from Products.GSGroupMember.groupMembersInfo import GSGroupMembersInfo
 from .statusformfields import MAX_POSTING_MEMBERS
 from .actions import GSMemberStatusActions
 from .interfaces import IGSGroupMemberManager, IGSManageMembersForm
-from .utils import addAdmin, removeAdmin, addModerator, removeModerator,\
-    moderate, unmoderate, addPostingMember, removePostingMember, addPtnCoach,\
-    removePtnCoach, withdrawInvitation
+from .utils import (
+    addAdmin, removeAdmin, addModerator, removeModerator, moderate,
+    unmoderate, addPostingMember, removePostingMember, addPtnCoach,
+    removePtnCoach, withdrawInvitation)
 
 MAX_TO_SHOW = 20
 
@@ -49,7 +50,8 @@ class GSGroupMemberManager(object):
         self.summary = ''''''
         self.firstPageLink = self.prevPageLink = self.nextPageLink = None
         self.lastPageLink = None
-        # --=mpj17=-- These are deliberately not @Lazy. See self.make_changes
+        # --=mpj17=-- These are deliberately not @Lazy.
+        # See self.make_changes
         self.__membersInfo = self.__members = None
         self.__membersRequested = self.__membersToShow = None
         self.__memberStatusActions = self.__form_fields = None
@@ -105,10 +107,10 @@ class GSGroupMemberManager(object):
                 self.totalPages = int(ceil(float(numRequested) / MAX_TO_SHOW))
                 self.firstPageLink = (self.page > 1) and 1 or 0
                 self.lastPageLink = ((self.page < self.totalPages)
-                                        and self.totalPages or 0)
+                                     and self.totalPages or 0)
                 self.prevPageLink = (self.page > 1) and (self.page - 1) or 0
                 self.nextPageLink = ((self.page < self.totalPages)
-                                        and (self.page + 1) or 0)
+                                     and (self.page + 1) or 0)
             else:
                 self.__membersToShow = self.membersRequested
         return self.__membersToShow
@@ -190,8 +192,9 @@ class GSGroupMemberManager(object):
             self.toChange['ptnCoachToRemove'] = True
             changes.remove('ptnCoachRemove')
         actions = ['ptnCoach', 'groupAdminAdd', 'groupAdminRemove',
-          'moderatorAdd', 'moderatorRemove', 'moderatedAdd', 'moderatedRemove',
-          'postingMemberAdd', 'postingMemberRemove', 'remove', 'withdraw']
+                   'moderatorAdd', 'moderatorRemove', 'moderatedAdd',
+                   'moderatedRemove', 'postingMemberAdd',
+                   'postingMemberRemove', 'remove', 'withdraw']
         for a in actions:
             aLength = len(a)
             requests = [k.split('-%s' % a)[0] for k in changes
@@ -221,7 +224,8 @@ class GSGroupMemberManager(object):
                     self.toChange[a] = members
 
     def cleanPtnCoach(self):
-        ''' If more than one ptnCoach was specified, then cancel the change.'''
+        ''' If more than one ptnCoach was specified, then cancel the
+        change.'''
         ptnCoachToAdd = self.toChange.get('ptnCoach', [])
         if ptnCoachToAdd and (len(ptnCoachToAdd) > 1):
             self.cancelledChanges['ptnCoach'] = ptnCoachToAdd
@@ -235,7 +239,8 @@ class GSGroupMemberManager(object):
             #    self.toChange['ptnCoachToRemove'] = True
 
     def cleanPosting(self):
-        ''' Check for the number of posting members exceeding the maximum.'''
+        ''' Check for the number of posting members exceeding the
+        maximum.'''
         if self.postingIsSpecial:
             listInfo = GSMailingListInfo(self.groupInfo.groupObj)
             numCurrentPostingMembers = len(listInfo.posting_members)
@@ -244,8 +249,8 @@ class GSGroupMemberManager(object):
             numPostingMembersToAdd = \
                 len(self.toChange.get('postingMemberAdd', []))
             totalPostingMembersToBe = \
-              (numCurrentPostingMembers - numPostingMembersToRemove
-                  + numPostingMembersToAdd)
+                (numCurrentPostingMembers - numPostingMembersToRemove
+                 + numPostingMembersToAdd)
             if totalPostingMembersToBe > MAX_POSTING_MEMBERS:
                 numAddedMembersToCut = \
                     (totalPostingMembersToBe - MAX_POSTING_MEMBERS)
@@ -256,7 +261,8 @@ class GSGroupMemberManager(object):
                 self.toChange['postingMemberAdd'] = membersToAdd[:index]
 
     def cleanModeration(self):
-        ''' Check for members being set as both a moderator and moderated.'''
+        ''' Check for members being set as both a moderator and
+        moderated.'''
         toBeModerated = self.toChange.get('moderatedAdd', [])
         toBeModerators = self.toChange.get('moderatorAdd', [])
         doubleModerated = \
@@ -277,7 +283,7 @@ class GSGroupMemberManager(object):
 
     def organiseChanges(self):
         actions = ['remove', 'postingMemberRemove', 'ptnCoachToRemove',
-                    'ptnCoach']
+                   'ptnCoach']
         for a in actions:
             if self.toChange.get(a, None):
                 self.changesByAction[a] = self.toChange.pop(a)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+############################################################################
 #
 # Copyright © 2014 OnlineGroups.net and Contributors.
 # All Rights Reserved.
@@ -11,13 +11,14 @@
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
-##############################################################################
+############################################################################
 from __future__ import absolute_import, unicode_literals
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import provideAdapter, adapts
 from zope.interface import implements, Interface
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-from zope.contentprovider.interfaces import UpdateNotCalled, IContentProvider
+from zope.contentprovider.interfaces import (
+    UpdateNotCalled, IContentProvider)
 from .interfaces import IGSMemberStatusActionsContentProvider
 
 
@@ -46,5 +47,5 @@ class GSMemberStatusActionsContentProvider(object):
 
 
 provideAdapter(GSMemberStatusActionsContentProvider,
-    provides=IContentProvider,
-    name='groupserver.MemberStatusActions')
+               provides=IContentProvider,
+               name='groupserver.MemberStatusActions')

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+############################################################################
 #
 # Copyright © 2014 OnlineGroups.net and Contributors.
 # All Rights Reserved.
@@ -11,7 +11,7 @@
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
-##############################################################################
+############################################################################
 from __future__ import absolute_import, unicode_literals
 from zope.cachedescriptors.property import Lazy
 from zope.formlib import form
@@ -73,5 +73,5 @@ class GSManageGroupMembersForm(GroupForm):
     @Lazy
     def memberManager(self):
         retval = GSGroupMemberManager(self.groupInfo.groupObj,
-                                        self.page, self.showOnly)
+                                      self.page, self.showOnly)
         return retval
