@@ -104,7 +104,8 @@ class GSGroupMemberManager(object):
                 endIndex = startIndex + MAX_TO_SHOW - 1
                 self.__membersToShow =\
                     self.membersRequested[startIndex:endIndex]
-                self.totalPages = int(ceil(float(numRequested) / MAX_TO_SHOW))
+                n = float(numRequested) / MAX_TO_SHOW
+                self.totalPages = int(ceil(n))
                 self.firstPageLink = (self.page > 1) and 1 or 0
                 self.lastPageLink = ((self.page < self.totalPages)
                                      and self.totalPages or 0)
@@ -123,10 +124,11 @@ class GSGroupMemberManager(object):
             elif len(self.showOnly.split(' ')) > 1:
                 userIds = self.showOnly.split(' ')
                 self.__membersRequested = \
-                  [m for m in self.membersInfo.members if m.id in userIds]
+                    [m for m in self.membersInfo.members if m.id in userIds]
             elif self.showOnly in [m.id for m in self.membersInfo.members]:
-                self.__membersRequested = [m for m in self.membersInfo.members
-                                              if m.id == self.showOnly]
+                self.__membersRequested = \
+                    [m for m in self.membersInfo.members
+                     if m.id == self.showOnly]
             elif self.showOnly == 'posting' and self.postingIsSpecial:
                 self.__membersRequested = self.membersInfo.postingMembers
             elif self.showOnly == 'invited':
@@ -266,7 +268,7 @@ class GSGroupMemberManager(object):
         toBeModerated = self.toChange.get('moderatedAdd', [])
         toBeModerators = self.toChange.get('moderatorAdd', [])
         doubleModerated = \
-          [mId for mId in toBeModerators if mId in toBeModerated]
+            [mId for mId in toBeModerators if mId in toBeModerated]
         if doubleModerated:
             self.cancelledChanges['doubleModeration'] = doubleModerated
         for mId in doubleModerated:
@@ -314,47 +316,48 @@ class GSGroupMemberManager(object):
         if 'ptnCoach' in self.cancelledChanges:
             attemptedChangeIds = self.cancelledChanges['ptnCoach']
             attemptedChangeUsers = \
-              [createObject('groupserver.UserFromId', self.group, a)
-                for a in attemptedChangeIds]
+                [createObject('groupserver.UserFromId', self.group, a)
+                 for a in attemptedChangeIds]
             attemptedNames = [a.name for a in attemptedChangeUsers]
             self.summary += '<p>The Participation Coach was <strong>not '\
-              'changed</strong>, because there can be only one and you '\
-              'specified %d (%s).</p>' %\
-              (len(attemptedChangeIds), comma_comma_and(attemptedNames))
+                'changed</strong>, because there can be only one and you '\
+                'specified %d (%s).</p>' %\
+                (len(attemptedChangeIds), comma_comma_and(attemptedNames))
 
     def summariseDoubleModeration(self):
         if 'doubleModeration' in self.cancelledChanges:
             attemptedChangeIds = self.cancelledChanges['doubleModeration']
             attemptedChangeUsers = \
-              [createObject('groupserver.UserFromId', self.group, a)
-                for a in attemptedChangeIds]
+                [createObject('groupserver.UserFromId', self.group, a)
+                 for a in attemptedChangeIds]
             memberMembers = ((len(attemptedChangeIds) == 1)
-                            and 'member was' or 'members were')
+                             and 'member was' or 'members were')
             self.summary += '<p>The moderation level of the following %s '\
-              '<b>not changed</b>, because members cannot be both ' \
-              'moderated and moderators:</p><ul>' % memberMembers
+                '<b>not changed</b>, because members cannot be both ' \
+                'moderated and moderators:</p><ul>' % memberMembers
             for m in attemptedChangeUsers:
                 self.summary += '<li><a href="%s">%s</a></li>' %\
-                  (m.url, m.name)
+                    (m.url, m.name)
             self.summary += '</ul>'
 
     def summarisePostingMember(self):
         if 'postingMember' in self.cancelledChanges:
             attemptedChangeIds = self.cancelledChanges['postingMember']
             attemptedChangeUsers = \
-              [createObject('groupserver.UserFromId', self.group, a)
-                for a in attemptedChangeIds]
-            indefiniteArticle = ((len(attemptedChangeIds) == 1) and 'a ' or '')
+                [createObject('groupserver.UserFromId', self.group, a)
+                 for a in attemptedChangeIds]
+            indefiniteArticle = \
+                ((len(attemptedChangeIds) == 1) and 'a ' or '')
             memberMembers = ((len(attemptedChangeIds) == 1)
-                            and 'member' or 'members')
+                             and 'member' or 'members')
             self.summary += '<p>The following %s <b>did not become</b> %s'\
-              'posting %s, because otherwise the maximum of %d ' \
-              'posting members would have been exceeded:</p><ul>' %\
-               (memberMembers, indefiniteArticle,
-                memberMembers, MAX_POSTING_MEMBERS)
+                'posting %s, because otherwise the maximum of %d ' \
+                'posting members would have been exceeded:</p><ul>' %\
+                (memberMembers, indefiniteArticle,
+                 memberMembers, MAX_POSTING_MEMBERS)
             for m in attemptedChangeUsers:
                 self.summary += '<li><a href="%s">%s</a></li>' %\
-                  (m.url, m.name)
+                    (m.url, m.name)
             self.summary += '</ul>'
 
     def removeMembers(self):
@@ -433,7 +436,8 @@ class GSGroupMemberManager(object):
             userInfo = createObject('groupserver.UserFromId', self.group,
                                     memberId)
             self.summary += '<p><a href="%s">%s</a> has undergone '\
-              'the following changes:</p><ul>' % (userInfo.url, userInfo.name)
+                'the following changes:</p><ul>' % \
+                (userInfo.url, userInfo.name)
             for change in self.changeLog[memberId]:
                 self.summary += '<li>%s</li>' % change
             self.summary += '</ul>'
