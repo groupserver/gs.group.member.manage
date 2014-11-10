@@ -23,6 +23,7 @@ from Products.XWFCore.XWFUtils import comma_comma_and, sort_by_name
 from Products.GSGroup.mailinglistinfo import GSMailingListInfo
 from gs.content.form.base import radio_widget
 from gs.group.member.leave.leaver import GroupLeaver
+from gs.group.type.announcement.interfaces import IGSAnnouncementGroup
 from Products.GSGroupMember.groupMembersInfo import GSGroupMembersInfo
 from .statusformfields import MAX_POSTING_MEMBERS
 from .actions import GSMemberStatusActions
@@ -78,7 +79,8 @@ class GSGroupMemberManager(object):
 
     @Lazy
     def postingIsSpecial(self):
-        retval = self.groupInfo.group_type == 'announcement'
+        retval = ((IGSAnnouncementGroup.providedBy(self.group)) or
+                  (self.groupInfo.group_type == 'announcement'))
         return retval
 
     @Lazy
