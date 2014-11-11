@@ -31,7 +31,7 @@ class GSStatusFormFields(object):
     implements(IGSStatusFormFields)
 
     def __init__(self, status):
-        if not IGSGroupMembershipStatus.providedBy(status)
+        if not IGSGroupMembershipStatus.providedBy(status):
             m = '%s is not a GSGroupMembershipStatus' % status
             raise TypeError(m)
 
