@@ -1,6 +1,16 @@
 Changelog
 =========
 
+2.8.1 (2014-11-10)
+------------------
+
+* Show the posting-member related functionality when the
+  announcement-group is only marked with the marker-interface
+* Renamed all reStructuredText files as such, and pointing to
+  GitHub_ as the primary repository
+
+.. _GitHub: https://github.com/groupserver/gs.group.member.manage
+
 2.8.0 (2014-06-26)
 ------------------
 

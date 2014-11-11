@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+############################################################################
 #
 # Copyright © 2014 OnlineGroups.net and Contributors.
 # All Rights Reserved.
@@ -11,7 +11,7 @@
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
-##############################################################################
+############################################################################
 import codecs
 import os
 from setuptools import setup, find_packages
@@ -21,10 +21,12 @@ version = get_version()
 
 with codecs.open('README.rst', encoding='utf-8') as f:
     long_description = f.read()
-with codecs.open(os.path.join("docs", "HISTORY.rst"), encoding='utf-8') as f:
+with codecs.open(os.path.join("docs", "HISTORY.rst"),
+                 encoding='utf-8') as f:
     long_description += '\n' + f.read()
 
-setup(name='gs.group.member.manage',
+setup(
+    name='gs.group.member.manage',
     version=version,
     description="The admin pages related to member management",
     long_description=long_description,
@@ -44,7 +46,7 @@ setup(name='gs.group.member.manage',
     author_email='alice@onlinegroups.net',
     maintainer='Michael JasonSmith',
     maintainer_email='mpj17@onlinegroups.net',
-    url='https://source.iopen.net/groupserver/gs.group.member.manage/',
+    url='https://github.com/groupserver/gs.group.member.manage/',
     license='ZPL 2.1',
     packages=find_packages(exclude=['ez_setup']),
     namespace_packages=['gs', 'gs.group', 'gs.group.member'],
@@ -80,6 +82,7 @@ setup(name='gs.group.member.manage',
         'gs.group.member.invite.resend',
         'gs.group.member.leave',
         'gs.group.member.viewlet',
+        'gs.group.type.announcement',
         'gs.profile.email.base',
         'Products.CustomUserFolder',
         'Products.GSAuditTrail',
