@@ -16,6 +16,7 @@ from __future__ import absolute_import, unicode_literals
 from zope.cachedescriptors.property import Lazy
 from zope.component import adapts
 from zope.interface import implements
+from gs.group.type.announcement.interfaces import IGSAnnouncementGroup
 from Products.CustomUserFolder.interfaces import IGSUserInfo
 from Products.GSGroupMember.interfaces import IGSGroupMembersInfo
 from Products.GSGroupMember.groupmembershipstatus import \
@@ -41,10 +42,20 @@ class GSMemberStatusActions(object):
 
     @Lazy
     def status(self):
-        retval = GSGroupMembershipStatus(self.userInfo, self.membersInfo)
+        retval = GSGroupMembershipStatusHack(self.userInfo,
+                                             self.membersInfo)
         return retval
 
     @Lazy
     def form_fields(self):
         retval = GSStatusFormFields(self.status).form_fields
         return retval
+
+
+class GSGroupMembershipStatusHack(GSGroupMembershipStatus):
+
+    def __init__(self, ui, msi):
+        super(GSGroupMembershipStatusHack, self).__init__(ui, msi)
+        pis = ((IGSAnnouncementGroup.providedBy(msi.group))
+               or (msi.groupInfo.group_type == 'announcement'))
+        self.__dict__['postingIsSpecial'] = pis
