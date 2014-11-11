@@ -1,10 +1,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="gs.group.member.manage"
       metal:use-macro="context/@@groupserver_layout/page">
   <head>
     <title metal:fill-slot="title">
-      <span tal:replace="view/label"/> :
+      <span tal:replace="view/label"/>:
       <span tal:replace="view/siteInfo/get_name">A Site</span>
     </title>
     <tal:block metal:fill-slot="metadata">
@@ -18,8 +20,12 @@
                define="errors view/errors; status view/status; widgets view/widgets"
                metal:fill-slot="messages">&#160;</tal:block>
     <ul metal:fill-slot="breadcrumb">
-      <li><a tal:attributes="title string:${view/siteInfo/name} Homepage"
-             href="/" title="Home">&#8962;</a></li>
+      <li>
+        <a href="/" class="icon-alone">
+          <span aria-hidden="true" data-icon="&#x2302;"></span>
+          <span class="screen-reader-text">Site home page</span>
+        </a>
+      </li>
       <li>
         <a class="group"
            tal:attributes="href string:${view/groupInfo/relativeURL}/">
