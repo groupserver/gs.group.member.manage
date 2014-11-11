@@ -79,8 +79,12 @@ class GSGroupMemberManager(object):
 
     @Lazy
     def postingIsSpecial(self):
+        print
+        print self.group
+        print IGSAnnouncementGroup.providedBy(self.group)
         retval = ((IGSAnnouncementGroup.providedBy(self.group)) or
                   (self.groupInfo.group_type == 'announcement'))
+        print retval
         return retval
 
     @Lazy

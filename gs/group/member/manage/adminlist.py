@@ -16,6 +16,7 @@ from __future__ import unicode_literals
 from zope.component import createObject
 from zope.cachedescriptors.property import Lazy
 from gs.group.member.viewlet import GroupAdminViewlet
+from gs.group.type.announcement.interfaces import IGSAnnouncementGroup
 SOME = 127  # TODO: Make SOME an option
 
 
@@ -36,6 +37,12 @@ class MembersListViewlet(GroupAdminViewlet):
         mailingListInfo = createObject('groupserver.MailingListInfo',
                                        self.context)
         retval = mailingListInfo.is_moderated
+        return retval
+
+    @Lazy
+    def isAnnouncement(self):
+        retval = ((IGSAnnouncementGroup.providedBy(self.context)) or
+                  (self.groupInfo.group_type == 'announcement'))
         return retval
 
 
