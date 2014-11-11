@@ -1,6 +1,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
   xmlns:tal="http://xml.zope.org/namespaces/tal"
   xmlns:metal="http://xml.zope.org/namespaces/metal"
+  xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+  i18n:domain="gs.group.member.manage"
   metal:use-macro="context/@@groupserver_full_layout/page">
   <head>
     <title metal:fill-slot="title">
@@ -20,16 +22,18 @@
       metal:fill-slot="messages">&#160;</tal:block>
     <ul metal:fill-slot="breadcrumb">
       <li>
-        <a tal:attributes="title string:${view/siteInfo/name} Homepage"
-           href="/" title="Home">&#8962;</a>
-     </li>
-     <li>
-       <a tal:attributes="href view/groupInfo/relative_url"
-          href="/"><strong tal:content="view/groupInfo/name">Group</strong></a>
-     </li>
-     <li>
-       Manage many members
-     </li>
+        <a href="/" class="icon-alone">
+          <span aria-hidden="true" data-icon="&#x2302;"></span>
+          <span class="screen-reader-text">Site home page</span>
+        </a>
+      </li>
+      <li>
+        <a tal:attributes="href view/groupInfo/relative_url"
+           href="/"><strong tal:content="view/groupInfo/name">Group</strong></a>
+      </li>
+      <li>
+        Manage many members
+      </li>
     </ul>
    <form metal:fill-slot="body" enctype="multipart/form-data" method="post"
          action="." tal:attributes="action request/URL"

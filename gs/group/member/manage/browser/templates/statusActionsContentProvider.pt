@@ -1,12 +1,16 @@
-<tal:block repeat="memberStatusActions options/view/statusActions">
+<tal:block xmlns:tal="http://xml.zope.org/namespaces/tal"
+           xmlns:metal="http://xml.zope.org/namespaces/metal"
+           xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+           i18n:domain="gs.group.member.manage"
+           repeat="memberStatusActions options/view/statusActions">
   <div id="#" class="statusActions"
-    tal:define="view options/view;
-      userInfo memberStatusActions/userInfo;
-      status memberStatusActions/status;
-      fields memberStatusActions/form_fields;
-      isOdd repeat/memberStatusActions/odd"
-    tal:attributes="id string:${userInfo/id}-actions;
-      class python:isOdd and 'statusActions even' or 'statusActions odd'">
+       tal:define="view options/view;
+                   userInfo memberStatusActions/userInfo;
+                   status memberStatusActions/status;
+                   fields memberStatusActions/form_fields;
+                   isOdd repeat/memberStatusActions/odd"
+       tal:attributes="id string:${userInfo/id}-actions;
+                       class python:'statusActions even' if isOdd else 'statusActions odd'">
     <div class="statusText">
       <div
         tal:define="user userInfo/user; size string:20;"
@@ -15,19 +19,19 @@
         <a href="#" class="url"
            tal:attributes="href userInfo/url" >
           <span class="fn" tal:content="userInfo/name">A Member</span>
-        </a> &#8212; <span tal:replace="structure status/status_label"/>
+          </a> &#8212; <span tal:replace="structure status/status_label"/>
       </h4>
-      <tal:block 
+      <tal:block
         define="allWidgets view/widgets;
-          fieldIds python:[ f.__name__ for f in fields ]"
+                fieldIds python:[ f.__name__ for f in fields ]"
         repeat="wId fieldIds">
-        <div 
+        <div
           tal:define="widgets python:[allWidgets[wId]];
-            role python:wId.split('-')[1]"
+                      role python:wId.split('-')[1]"
           tal:attributes="class role">
           <tal:block replace="structure provider:groupserver.FormWidgets"/>
         </div>
       </tal:block>
-    </div>
-  </div>
+    </div><!--statusText-->
+  </div><!--statusActions-->
 </tal:block>

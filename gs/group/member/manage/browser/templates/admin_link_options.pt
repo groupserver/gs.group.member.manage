@@ -1,4 +1,8 @@
-<li id="gs-group-member-manage-admin-link-many">
+<li xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="gs.group.member.manage"
+    id="gs-group-member-manage-admin-link-many">
   <a tal:attributes="href view/link"
      href="#"><strong>Manage</strong> the
      <span tal:condition="view/many">many</span> members</a>
