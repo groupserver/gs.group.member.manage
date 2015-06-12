@@ -80,7 +80,7 @@ setup(
         'gs.group.member.info',
         'gs.group.member.invite.base',
         'gs.group.member.invite.resend',
-        'gs.group.member.leave',
+        'gs.group.member.leave.base',
         'gs.group.member.viewlet',
         'gs.group.type.announcement',
         'gs.profile.email.base',

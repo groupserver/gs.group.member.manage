@@ -22,7 +22,7 @@ from Products.XWFCore.odict import ODict
 from Products.XWFCore.XWFUtils import comma_comma_and, sort_by_name
 from Products.GSGroup.mailinglistinfo import GSMailingListInfo
 from gs.content.form.base import radio_widget
-from gs.group.member.leave.leaver import GroupLeaver
+from gs.group.member.leave.base.leaver import GroupLeaver
 from gs.group.type.announcement.interfaces import IGSAnnouncementGroup
 from Products.GSGroupMember.groupMembersInfo import GSGroupMembersInfo
 from .statusformfields import MAX_POSTING_MEMBERS
