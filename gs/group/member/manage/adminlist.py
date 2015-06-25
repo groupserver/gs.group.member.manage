@@ -50,7 +50,6 @@ class FewMembersListViewlet(MembersListViewlet):
 
     @Lazy
     def show(self):
-        print(self.memberCount)
         retval = self.memberCount < MANY
         return retval
 
