@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# Copyright © 2013 OnlineGroups.net and Contributors.
+# Copyright © 2013, 2015 OnlineGroups.net and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -12,12 +12,12 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ############################################################################
-from __future__ import unicode_literals
+from __future__ import unicode_literals, absolute_import, print_function
 from zope.component import createObject
 from zope.cachedescriptors.property import Lazy
 from gs.group.member.viewlet import GroupAdminViewlet
 from gs.group.type.announcement.interfaces import IGSAnnouncementGroup
-SOME = 127  # TODO: Make SOME an option
+from gs.group.member.manage import MANY
 
 
 class MembersListViewlet(GroupAdminViewlet):
@@ -50,7 +50,8 @@ class FewMembersListViewlet(MembersListViewlet):
 
     @Lazy
     def show(self):
-        retval = self.memberCount < (SOME // 8)
+        print(self.memberCount)
+        retval = self.memberCount < MANY
         return retval
 
 
@@ -58,12 +59,12 @@ class OptionsMembersListViewlet(MembersListViewlet):
 
     @Lazy
     def show(self):
-        retval = self.memberCount >= (SOME // 8)
+        retval = self.memberCount >= MANY
         return retval
 
     @Lazy
     def many(self):
-        retval = self.memberCount >= SOME
+        retval = self.memberCount >= MANY
         return retval
 
     @Lazy
