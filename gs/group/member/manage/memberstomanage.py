@@ -12,7 +12,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import, unicode_literals, print_function
 from operator import attrgetter
 from zope.cachedescriptors.property import Lazy
 from zope.interface import implementer
@@ -33,12 +33,14 @@ class MembersToManage(object):
 
     @Lazy
     def memberIds(self):
-        retval = get_group_userids(self.context, self.context.getId())
+        retval = [uid for uid in
+                  get_group_userids(self.context, self.context.getId())
+                  if uid]
         return retval
 
     def get_email_user(self, userId):
         ui = createObject('groupserver.UserFromId', self.context, userId)
-        retval = EmailUser(self.context, ui)
+        retval = EmailUser(self.context, ui) if not(ui.anonymous) else None
         return retval
 
     @property
@@ -46,7 +48,10 @@ class MembersToManage(object):
         '''Get the members of the the group'''
         for memberId in self.memberIds:
             retval = self.get_email_user(memberId)
-            yield retval
+            if retval is None:
+                continue
+            else:
+                yield retval
 
     @staticmethod
     def get_display_name(emailUser):
