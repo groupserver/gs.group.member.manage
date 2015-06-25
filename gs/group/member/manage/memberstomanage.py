@@ -13,8 +13,9 @@
 #
 ##############################################################################
 from __future__ import absolute_import, unicode_literals
+from operator import attrgetter
 from zope.cachedescriptors.property import Lazy
-from zope.interface import implements
+from zope.interface import implementer
 from zope.component import createObject
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.interfaces import IVocabulary, IVocabularyTokenized
@@ -23,8 +24,8 @@ from gs.group.member.base import get_group_userids
 from gs.profile.email.base.emailuser import EmailUser
 
 
+@implementer(IVocabulary, IVocabularyTokenized)
 class MembersToManage(object):
-    implements(IVocabulary, IVocabularyTokenized)
     __used_for__ = IEnumerableMapping
 
     def __init__(self, context):
@@ -58,10 +59,11 @@ class MembersToManage(object):
 
     def __iter__(self):
         """See zope.schema.interfaces.IIterableVocabulary"""
-        for eu in self.members:
-            uid = eu.userInfo.id
-            term = SimpleTerm(uid, uid, self.get_display_name(eu))
-            yield(term)
+        terms = [SimpleTerm(eu.userInfo.id, eu.userInfo.id, self.get_display_name(eu))
+                 for eu in self.members]
+        terms.sort(key=attrgetter('title'))
+        retval = iter(terms)
+        return retval
 
     def __len__(self):
         """See zope.schema.interfaces.IIterableVocabulary"""
