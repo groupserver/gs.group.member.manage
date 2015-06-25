@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, unicode_literals
+MANY = 48
+#lint:disable
+from . import memberStatusActionsContentProvider
 #lint:enable
-import memberStatusActionsContentProvider
-
+from zope.browserpage import metaconfigure
 from zope.tales.tales import RegistrationError
 from zope.contentprovider import tales
 try:
-    from zope.browserpage import metaconfigure
-except ImportError:
-    from zope.app.pagetemplate import metaconfigure
-try:
-    metaconfigure.registerType('provider',
-      tales.TALESProviderExpression)
+    metaconfigure.registerType('provider', tales.TALESProviderExpression)
 except RegistrationError:
     # Almost certainly registered somewhere else
     pass
-#lint:disable
