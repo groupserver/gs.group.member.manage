@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# Copyright © 2014 OnlineGroups.net and Contributors.
+# Copyright © 2014, 2015 OnlineGroups.net and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -12,11 +12,11 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ############################################################################
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import, unicode_literals, print_function
 from math import ceil
 from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
-from zope.interface import implements
+from zope.interface import implementer
 from zope.formlib import form
 from Products.XWFCore.odict import ODict
 from Products.XWFCore.XWFUtils import comma_comma_and, sort_by_name
@@ -25,6 +25,7 @@ from gs.content.form.base import radio_widget
 from gs.group.member.leave.base.leaver import GroupLeaver
 from gs.group.type.announcement.interfaces import IGSAnnouncementGroup
 from Products.GSGroupMember.groupMembersInfo import GSGroupMembersInfo
+from gs.group.member.manage import MANY
 from .statusformfields import MAX_POSTING_MEMBERS
 from .actions import GSMemberStatusActions
 from .interfaces import IGSGroupMemberManager, IGSManageMembersForm
@@ -33,11 +34,9 @@ from .utils import (
     unmoderate, addPostingMember, removePostingMember, addPtnCoach,
     removePtnCoach, withdrawInvitation)
 
-MAX_TO_SHOW = 20
 
-
+@implementer(IGSGroupMemberManager)
 class GSGroupMemberManager(object):
-    implements(IGSGroupMemberManager)
 
     def __init__(self, group, page, showOnly=None):
         self.group = group
@@ -86,7 +85,7 @@ class GSGroupMemberManager(object):
     @Lazy
     def isLargeGroup(self):
         retval = False
-        if self.membersInfo.fullMemberCount > MAX_TO_SHOW:
+        if self.membersInfo.fullMemberCount >= MANY:
             retval = True
         return retval
 
@@ -100,20 +99,18 @@ class GSGroupMemberManager(object):
     def membersToShow(self):
         if self.__membersToShow is None:
             numRequested = len(self.membersRequested)
-            if numRequested > MAX_TO_SHOW:
+            if numRequested > MANY:
                 currentBatch = self.page - 1
-                startIndex = MAX_TO_SHOW * currentBatch
-                endIndex = startIndex + MAX_TO_SHOW - 1
+                startIndex = MANY * currentBatch
+                endIndex = startIndex + MANY
                 self.__membersToShow =\
                     self.membersRequested[startIndex:endIndex]
-                n = float(numRequested) / MAX_TO_SHOW
+                n = float(numRequested) / MANY
                 self.totalPages = int(ceil(n))
-                self.firstPageLink = (self.page > 1) and 1 or 0
-                self.lastPageLink = ((self.page < self.totalPages)
-                                     and self.totalPages or 0)
-                self.prevPageLink = (self.page > 1) and (self.page - 1) or 0
-                self.nextPageLink = ((self.page < self.totalPages)
-                                     and (self.page + 1) or 0)
+                self.firstPageLink = 1 if (self.page > 1) else 0
+                self.lastPageLink = self.totalPages if (self.page < self.totalPages) else 0
+                self.prevPageLink = (self.page - 1) if (self.page > 1) else 0
+                self.nextPageLink = (self.page + 1) if (self.page < self.totalPages) else 0
             else:
                 self.__membersToShow = self.membersRequested
         return self.__membersToShow
@@ -122,7 +119,8 @@ class GSGroupMemberManager(object):
     def membersRequested(self):
         if self.__membersRequested is None:
             if not self.showOnly:
-                self.__membersRequested = self.membersInfo.members
+                self.__membersRequested = [m for m in self.membersInfo.members
+                                           if not m.anonymous]
             elif len(self.showOnly.split(' ')) > 1:
                 userIds = self.showOnly.split(' ')
                 self.__membersRequested = \
@@ -178,7 +176,7 @@ class GSGroupMemberManager(object):
         SIDE EFFECTS
             Resets the member and form fields caches.
         '''
-        changes = filter(lambda k: data.get(k), data.keys())
+        changes = [k for k in data.keys() if data.get(k)]
         self.marshallChanges(changes)
         self.set_data()
 
@@ -205,7 +203,6 @@ class GSGroupMemberManager(object):
                         if k[-aLength:] == a]
             if requests:
                 self.toChange[a] = requests
-
         self.sanitiseChanges()
         self.organiseChanges()
 
@@ -286,13 +283,13 @@ class GSGroupMemberManager(object):
             self.toChange.pop('moderatorAdd')
 
     def organiseChanges(self):
+        '''Organise self.toChange into self.changesByMember and self.changesByAction'''
         actions = ['remove', 'postingMemberRemove', 'ptnCoachToRemove',
                    'ptnCoach']
         for a in actions:
             if self.toChange.get(a, None):
                 self.changesByAction[a] = self.toChange.pop(a)
-        for k in self.toChange.keys():
-            mIds = self.toChange[k]
+        for k, mIds in self.toChange.items():
             for mId in mIds:
                 if mId not in self.changesByMember:
                     self.changesByMember[mId] = [k]
