@@ -41,7 +41,8 @@ page provides a nice list of members that can be selected and then managed.'''
         retval['members'].custom_widget = multi_check_box_widget
         return retval
 
-    @form.action(label='Manage', failure='handle_manage_action_failure')
+    @form.action(label='Manage', name='manage',
+                 failure='handle_manage_action_failure')
     def handle_manage(self, action, data):
         self.status = 'Should manage {0}'.format(data['members'])
         membersToManage = quote(' '.join(data['members']))

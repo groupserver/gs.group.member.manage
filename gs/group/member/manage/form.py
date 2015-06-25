@@ -57,7 +57,8 @@ class GSManageGroupMembersForm(GroupForm):
             widget._displayItemForMissingValue = False
         assert self.widgets
 
-    @form.action(label='Change', failure='handle_change_action_failure')
+    @form.action(label='Change', name='change',
+                 failure='handle_change_action_failure')
     def handle_change(self, action, data):
         self.status = self.memberManager.make_changes(data)
         # Reset the form_fields cache so that the
