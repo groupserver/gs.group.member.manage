@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2.8.3 (2015-06-30)
+------------------
+
+* Sorting the list of members on the *Manage many members* page
+* Changing the definition of *many*
+* Removing a boundary-error in the batching code
+* Dealing with the removal of odd-members better
+
 2.8.2 (2015-06-15)
 ------------------
 
@@ -9,7 +17,6 @@ Changelog
 
 .. _gs.group.member.leave.base:
    https://github.com/groupserver/gs.group.member.leave.base
-
 
 2.8.1 (2014-11-10)
 ------------------
@@ -132,7 +139,6 @@ Changelog
 * Added batching
 * Formatting improvements
 * Linking to more pages
-
 
 2.0.1 (2010-09-08)
 ------------------
