@@ -1,8 +1,22 @@
 'use strict';
 // Interlocks on the manage members form.
+//
+// Copyright © 2010, 2013, 2016 OnlineGroups.net and Contributors.
+// All Rights Reserved.
+//
+// This software is subject to the provisions of the Zope Public License,
+// Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+// THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+// WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+// FOR A PARTICULAR PURPOSE.
+//
 jQuery.noConflict();
+
 function GSManageMembers() {
+    //
     // Private methods
+    //
     function ptnCoachChange() {
         var updatedWidget = null, allRelatedWidgets = null, checkedValue = null;
         updatedWidget = jQuery(this);
@@ -17,7 +31,7 @@ function GSManageMembers() {
             // Then re-select the one that changed
             updatedWidget.prop('checked', true);
         }
-    }
+    } // ptnCoachChange
 
     function removeMemberChange() {
         var updatedWidget = null, memberId = null, allRelatedWidgets = null,
@@ -44,7 +58,7 @@ function GSManageMembers() {
                 jQuery(allRelatedWidgets[i]).removeAttr('disabled');
             }
         }
-    }
+    } // removeMemberChange
 
     function moderationChange() {
         var updatedWidget = null, memberId = null, moderationAction = null,
@@ -83,9 +97,11 @@ function GSManageMembers() {
                 jQuery(allRelatedWidgets[i]).removeAttr('disabled');
             }
         }
-    }
+    } // moderationChange
 
+    //
     // Public methods and properties
+    //
     return {
         init: function() {
             jQuery('.ptnCoach :radio').change(ptnCoachChange);
@@ -94,7 +110,7 @@ function GSManageMembers() {
             jQuery('.moderatedAdd :checkbox').change(moderationChange);
         }
     };
-}
+} // GSManageMembers
 
 jQuery(window).load(function() {
     var gsmm = null;
