@@ -17,17 +17,12 @@
   <include package="zope.viewlet" file="meta.zcml" />
 
   <browser:resource
-    name="managemembers-20131115.js"
+    name="gs-group-member-manage-20160203.js"
     file="browser/javascript/managemembers.js"
     permission="zope.Public" />
   <browser:resource
-    name="managemembers-20131115-min.js"
+    name="gs-group-member-manage-20160203-min.js"
     file="browser/javascript/managemembers-min.js"
-    permission="zope.Public" />
-
-  <browser:resource
-    name="managemembers-20100806.js"
-    file="browser/javascript/managemembers.js"
     permission="zope.Public" />
 
   <utility
