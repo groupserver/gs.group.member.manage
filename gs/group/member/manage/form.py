@@ -27,7 +27,7 @@ class GSManageGroupMembersForm(GroupForm):
     def __init__(self, group, request):
         super(GSManageGroupMembersForm, self).__init__(group, request)
         self.groupName = self.groupInfo.name
-        self.label = 'Manage the Members of %s' % self.groupName
+        self.label = 'Manage the members of %s' % self.groupName
         self.showOnly = request.form.get('showOnly', '')
         self.page = request.form.get('page', '1')
         self.__form_fields = None
