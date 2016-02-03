@@ -63,7 +63,7 @@ function GSManageMembers() {
                 jQuery('#form\\.' + memberId + '-moderatorAdd'),
                 jQuery('#form\\.' + memberId + '-groupAdminAdd'),
                 jQuery('#form\\.' + memberId + '-postingMemberAdd'),
-                jQuery('input[name='form\\.' + ptnCoachInputName + '']')];
+                jQuery('input[name="form\\.' + ptnCoachInputName + '"]')];
         }
 
         if (checkedValue == true) {
