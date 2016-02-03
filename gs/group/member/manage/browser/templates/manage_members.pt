@@ -6,8 +6,9 @@
       metal:use-macro="context/@@groupserver_layout/page">
   <head>
     <title metal:fill-slot="title">
-      <span tal:replace="view/label"/>:
-      <span tal:replace="view/siteInfo/get_name">A Site</span>
+      Manage members:
+      <span tal:replace="view/groupInfo/name">This group</span>:
+      <span tal:replace="view/siteInfo/name">This Site</span>
     </title>
     <tal:block metal:fill-slot="metadata">
       <link rel="up" href="#" title="The group"
