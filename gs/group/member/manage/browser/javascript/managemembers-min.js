@@ -1,14 +1,4 @@
-jQuery.noConflict();GSManageMembers=function(){function c(){var f=null,d=null,e=null;
-f=jQuery(this);d=jQuery(".ptnCoach :radio");e=f.prop("checked");if(e==true){for(i=0;
-i<d.length;i=i+1){jQuery(d[i]).prop("checked",false)}f.prop("checked",true)}}function b(){var g=null,d=null,e=null,f=null;
-g=jQuery(this);d=g.attr("id").split("-")[0].split(".")[1];e=jQuery("#"+d+"-actions input");
-f=g.prop("checked");if(f==true){for(i=0;i<e.length;i=i+1){jQuery(e[i]).prop("checked",false).attr("disabled","disabled")
-}g.removeAttr("disabled").prop("checked",true)}else{for(i=0;i<e.length;i=i+1){jQuery(e[i]).removeAttr("disabled")
-}}}function a(){var h=null,d=null,g=null,f=null,e=null;h=jQuery(this);d=h.attr("id").split("-")[0].split(".")[1];
-g=h.attr("id").split("-")[1];f=h.prop("checked");if(g=="moderatorAdd"){e=jQuery("#form\\."+d+"-moderatedAdd")
-}else{ptnCoachInputName=d+"-ptnCoach";e=[jQuery("#form\\."+d+"-moderatorAdd"),jQuery("#form\\."+d+"-groupAdminAdd"),jQuery("#form\\."+d+"-postingMemberAdd"),jQuery("input[name='form\\."+ptnCoachInputName+"']")]
-}if(f==true){for(i=0;i<e.length;i=i+1){jQuery(e[i]).prop("checked",false).attr("disabled","disabled")
-}h.removeAttr("disabled").prop("checked",true)}else{for(i=0;i<e.length;i=i+1){jQuery(e[i]).removeAttr("disabled")
-}}}return{init:function(){jQuery(".ptnCoach :radio").change(c);jQuery(".remove :checkbox").change(b);
-jQuery(".moderatorAdd :checkbox").change(a);jQuery(".moderatedAdd :checkbox").change(a)
-}}}();jQuery(window).load(function(){GSManageMembers.init()});
+'use strict';jQuery.noConflict();
+function GSManageMembers(){function d(){var b=null,a=null,c=null,b=jQuery(this),a=jQuery(".ptnCoach :radio"),c=b.prop("checked");if(!0==c){for(i=0;i<a.length;i+=1)jQuery(a[i]).prop("checked",!1);b.prop("checked",!0)}}function f(){var b=null,a=null,c=a=null,b=jQuery(this),a=b.attr("id").split("-")[0].split(".")[1],a=jQuery("#"+a+"-actions input"),c=b.prop("checked");if(!0==c){for(i=0;i<a.length;i+=1)jQuery(a[i]).prop("checked",!1).attr("disabled","disabled");b.removeAttr("disabled").prop("checked",!0)}else for(i=
+0;i<a.length;i+=1)jQuery(a[i]).removeAttr("disabled")}function e(){var b=null,a=null,c=null,d=null,a=null,b=jQuery(this),a=b.attr("id").split("-")[0].split(".")[1],c=b.attr("id").split("-")[1],d=b.prop("checked");"moderatorAdd"==c?a=jQuery("#form\\."+a+"-moderatedAdd"):(ptnCoachInputName=a+"-ptnCoach",a=[jQuery("#form\\."+a+"-moderatorAdd"),jQuery("#form\\."+a+"-groupAdminAdd"),jQuery("#form\\."+a+"-postingMemberAdd"),jQuery('input[name="form\\.'+ptnCoachInputName+'"]')]);if(!0==d){for(i=0;i<a.length;i+=
+1)jQuery(a[i]).prop("checked",!1).attr("disabled","disabled");b.removeAttr("disabled").prop("checked",!0)}else for(i=0;i<a.length;i+=1)jQuery(a[i]).removeAttr("disabled")}return{init:function(){jQuery(".ptnCoach :radio").change(d);jQuery(".remove :checkbox").change(f);jQuery(".moderatorAdd :checkbox").change(e);jQuery(".moderatedAdd :checkbox").change(e)}}}jQuery(window).load(function(){var d=null,d=GSManageMembers();d.init()});
