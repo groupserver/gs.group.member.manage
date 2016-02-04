@@ -22,6 +22,7 @@ from zope.schema.vocabulary import SimpleTerm, SimpleVocabulary
 from gs.content.form.base import radio_widget
 from Products.GSGroupMember.interfaces import IGSGroupMembershipStatus
 from .interfaces import IGSStatusFormFields, IGSMemberActionsSchema
+from . import GSMessageFactory as _
 
 MAX_POSTING_MEMBERS = 5
 
@@ -74,15 +75,17 @@ class GSStatusFormFields(object):
                 or self.status.isPostingMember or self.status.isModerator)
             and not (self.status.isGroupAdmin or self.status.isModerated
                      or self.status.isOddlyConfigured)):
-            t = 'Make %s a Group Administrator' % self.userInfo.name
+            t = _('action-group-admin-make', 'Make ${userName} a Group Administrator',
+                  mapping={'userName': self.userInfo.name})
             retval = Bool(__name__='%s-groupAdminAdd' % self.userInfo.id,
                           title=t, description=t, required=False)
         # AM: Admins shouldn't be able to revoke the group-admin
         #   status of other admins of the same or higher rank.
         #elif self.status.isGroupAdmin and self.adminUserStatus.isSiteAdmin:
         elif self.status.isGroupAdmin:
-            t = 'Remove the Group Administrator privileges from %s' %\
-                self.userInfo.name
+            t = _('action-group-admin-revoke',
+                  'Remove the Group Administrator privileges from ${userName}',
+                  mapping={'userName': self.userInfo.name})
             retval = Bool(__name__='%s-groupAdminRemove' % self.userInfo.id,
                           title=t, description=t, required=False)
         return retval
@@ -95,9 +98,9 @@ class GSStatusFormFields(object):
                  or self.status.isGroupAdmin or self.status.isModerator)
             and not (self.status.isPtnCoach or self.status.isModerated
                      or self.status.isOddlyConfigured)):
-            ptnCoachTerm = SimpleTerm(
-                True, True,
-                'Make %s the Participation Coach' % self.userInfo.name)
+            t = _('action-ptn-coach', 'Make ${userName} the Participation Coach',
+                  mapping={'userName': self.userInfo.name})
+            ptnCoachTerm = SimpleTerm(True, True, t)
             ptnCoachVocab = SimpleVocabulary([ptnCoachTerm])
             n = '%s-ptnCoach' % self.userInfo.id
             retval = form.Fields(Choice(__name__=n,
@@ -113,11 +116,15 @@ class GSStatusFormFields(object):
             and not (self.status.isModerator or self.status.isModerated
                      or self.status.isInvited or self.status.isUnverified
                      or self.status.isOddlyConfigured)):
-            t = 'Make %s a Moderator for this group' % self.userInfo.name
+            t = _('action-moderator-make',
+                  'Make ${userName} a Moderator for this group',
+                  mapping={'userName': self.userInfo.name})
             retval = Bool(__name__='%s-moderatorAdd' % self.userInfo.id,
                           title=t, description=t, required=False)
         elif self.status.groupIsModerated and self.status.isModerator:
-            t = 'Revoke Moderator status from %s' % self.userInfo.name
+            t = _('action-moderator-revoke',
+                  'Revoke Moderator status from ${userName}',
+                  mapping={'userName': self.userInfo.name})
             retval = Bool(__name__='%s-moderatorRemove' % self.userInfo.id,
                           title=t, description=t, required=False)
         return retval
@@ -126,11 +133,15 @@ class GSStatusFormFields(object):
     def moderate(self):
         retval = False
         if self.status.groupIsModerated and self.status.isNormalMember:
-            t = 'Start moderating messages from %s' % self.userInfo.name
+            t = _('action-moderated-make',
+                  'Start moderating messages from ${userName}',
+                  mapping={'userName': self.userInfo.name})
             retval = Bool(__name__='%s-moderatedAdd' % self.userInfo.id,
                           title=t, description=t, required=False)
         elif self.status.groupIsModerated and self.status.isModerated:
-            t = 'Stop moderating messages from %s' % self.userInfo.name
+            t = _('action-moderated-revoke',
+                  'Stop moderating messages from ${userName}',
+                  mapping={'userName': self.userInfo.name})
             retval = Bool(__name__='%s-moderatedRemove' % self.userInfo.id,
                           title=t, description=t, required=False)
         return retval
@@ -142,13 +153,16 @@ class GSStatusFormFields(object):
             (self.status.numPostingMembers < MAX_POSTING_MEMBERS)
             and not (self.status.isPostingMember or self.status.isUnverified
                      or self.status.isOddlyConfigured)):
-            t = 'Make %s a Posting Member' % self.userInfo.name
+            t = _('action-posting-make',
+                  'Make ${userName} a posting member',
+                  mapping={'userName': self.userInfo.name})
             retval = Bool(__name__='%s-postingMemberAdd' % self.userInfo.id,
                           title=t, description=t, required=False)
         elif self.status.postingIsSpecial and self.status.isPostingMember:
             n = '%s-postingMemberRemove' % self.userInfo.id
-            t = 'Revoke the Posting Member privileges from %s' % \
-                self.userInfo.name
+            t = _('action-posting-revoke',
+                  'Revoke posting-member privilages from ${userName}',
+                  mapping={'userName': self.userInfo.name})
             retval = Bool(__name__=n, title=t, description=t,
                           required=False)
         return retval
@@ -163,7 +177,9 @@ class GSStatusFormFields(object):
         #      self.adminUserStatus.isGroupAdmin):
         if ((not self.status.isSiteAdmin) and (not self.status.isGroupAdmin)
                 and (not self.status.isInvited)):
-            t = 'Remove %s from the group' % self.userInfo.name
+            t = _('action-remove',
+                  'Remove ${userName} from the group',
+                  mapping={'userName': self.userInfo.name})
             retval = Bool(__name__='%s-remove' % self.userInfo.id,
                           title=t, description=t, required=False)
         return retval
@@ -172,7 +188,9 @@ class GSStatusFormFields(object):
     def withdraw(self):
         retval = False
         if self.status.isInvited:
-            t = 'Withdraw the invitation sent to %s' % self.userInfo.name
+            t = _('action-withdraw',
+                  'Withdraw the invitation sent to ${userName}',
+                  mapping={'userName': self.userInfo.name})
             retval = Bool(__name__='%s-withdraw' % self.userInfo.id,
                           title=t, description=t, required=False)
         return retval

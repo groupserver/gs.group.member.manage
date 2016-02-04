@@ -1,0 +1,84 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2016-02-04 19:13+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: gs.group.member.manage\n"
+
+#. Default: "Make ${userName} a Group Administrator"
+#: ./statusformfields.py:78
+msgid "action-group-admin-make"
+msgstr ""
+
+#. Default: "Remove the Group Administrator privileges from ${userName}"
+#: ./statusformfields.py:86
+msgid "action-group-admin-revoke"
+msgstr ""
+
+#. Default: "Start moderating messages from ${userName}"
+#: ./statusformfields.py:136
+msgid "action-moderated-make"
+msgstr ""
+
+#. Default: "Stop moderating messages from ${userName}"
+#: ./statusformfields.py:142
+msgid "action-moderated-revoke"
+msgstr ""
+
+#. Default: "Make ${userName} a Moderator for this group"
+#: ./statusformfields.py:119
+msgid "action-moderator-make"
+msgstr ""
+
+#. Default: "Revoke Moderator status from ${userName}"
+#: ./statusformfields.py:125
+msgid "action-moderator-revoke"
+msgstr ""
+
+#. Default: "Make ${userName} a posting member"
+#: ./statusformfields.py:156
+msgid "action-posting-make"
+msgstr ""
+
+#. Default: "Revoke posting-member privilages from ${userName}"
+#: ./statusformfields.py:163
+msgid "action-posting-revoke"
+msgstr ""
+
+#. Default: "Make ${userName} the Participation Coach"
+#: ./statusformfields.py:101
+msgid "action-ptn-coach"
+msgstr ""
+
+#. Default: "Remove ${userName} from the group"
+#: ./statusformfields.py:180
+msgid "action-remove"
+msgstr ""
+
+#. Default: "Withdraw the invitation sent to ${userName}"
+#: ./statusformfields.py:191
+msgid "action-withdraw"
+msgstr ""
+
+#. Default: "Change"
+#: ./form.py:61
+msgid "change"
+msgstr ""
+
+#. Default: "Manage members"
+#: ./form.py:27
+msgid "manage-members"
+msgstr ""
+

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<!-- Copyright © 2013, 2014 OnlineGroups.net and Contributors. -->
+<!-- Copyright © 2013, 2014, 2016 OnlineGroups.net and Contributors. -->
 <!-- All Rights Reserved. -->
 
 <!-- This software is subject to the provisions of the Zope Public -->
@@ -12,9 +12,11 @@
 <!-- FITNESS FOR A PARTICULAR PURPOSE. -->
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="gs.group.member.manage">
 
   <include package="zope.viewlet" file="meta.zcml" />
+  <i18n:registerTranslations directory="locales" />
 
   <browser:resource
     name="gs-group-member-manage-20160203.js"
@@ -35,9 +37,23 @@
     for="gs.group.base.interfaces.IGSGroupMarker"
     class=".form.GSManageGroupMembersForm"
     permission="zope2.ManageUsers"/>
+
+  <!--=mpj17= While viewlets have some ZCML support, the simpler content
+      - providers do not. Odd. -->
   <interface
     interface=".interfaces.IGSMemberStatusActionsContentProvider"
     type="zope.contentprovider.interfaces.ITALNamespaceData"/>
+  <class
+    class=".memberStatusActionsContentProvider.GSMemberStatusActionsContentProvider">
+    <implements interface=".interfaces.IGSMemberStatusActionsContentProvider"/>
+  </class>
+  <adapter
+    for="zope.interface.Interface
+         zope.publisher.interfaces.browser.IDefaultBrowserLayer
+         zope.interface.Interface"
+    factory=".memberStatusActionsContentProvider.GSMemberStatusActionsContentProvider"
+    provides="zope.contentprovider.interfaces.IContentProvider"
+    name="groupserver.MemberStatusActions"/>
 
   <browser:page
     name="bounce_info.html"

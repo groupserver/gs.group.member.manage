@@ -218,7 +218,7 @@ class GSGroupMemberManager(object):
         actions = self.toChange
         f = lambda x: (x != 'remove') and (x != 'ptnCoachToRemove')
         for mId in actions.get('remove', []):
-            for a in filter(f, actions.keys()):
+            for a in filter(f, list(actions.keys())):
                 members = actions.get(a, [])
                 if mId in members:
                     members.remove(mId)
@@ -289,7 +289,7 @@ class GSGroupMemberManager(object):
         for a in actions:
             if self.toChange.get(a, None):
                 self.changesByAction[a] = self.toChange.pop(a)
-        for k, mIds in self.toChange.items():
+        for k, mIds in list(self.toChange.items()):
             for mId in mIds:
                 if mId not in self.changesByMember:
                     self.changesByMember[mId] = [k]

@@ -18,16 +18,17 @@ from zope.formlib import form
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 from gs.group.base import GroupForm
 from .manager import GSGroupMemberManager
+from . import GSMessageFactory as _
 
 
 class GSManageGroupMembersForm(GroupForm):
     pageTemplateFileName = 'browser/templates/manage_members.pt'
     template = ZopeTwoPageTemplateFile(pageTemplateFileName)
+    label = _('manage-members', 'Manage members')
 
     def __init__(self, group, request):
         super(GSManageGroupMembersForm, self).__init__(group, request)
         self.groupName = self.groupInfo.name
-        self.label = 'Manage the members of %s' % self.groupName
         self.showOnly = request.form.get('showOnly', '')
         self.page = request.form.get('page', '1')
         self.__form_fields = None
@@ -57,7 +58,7 @@ class GSManageGroupMembersForm(GroupForm):
             widget._displayItemForMissingValue = False
         assert self.widgets
 
-    @form.action(label='Change', name='change',
+    @form.action(label=_('change', 'Change'), name='change',
                  failure='handle_change_action_failure')
     def handle_change(self, action, data):
         self.status = self.memberManager.make_changes(data)

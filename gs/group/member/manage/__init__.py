@@ -2,7 +2,7 @@
 from __future__ import absolute_import, unicode_literals
 MANY = 48
 #lint:disable
-from . import memberStatusActionsContentProvider
+# from . import memberStatusActionsContentProvider
 #lint:enable
 from zope.browserpage import metaconfigure
 from zope.tales.tales import RegistrationError
@@ -12,3 +12,5 @@ try:
 except RegistrationError:
     # Almost certainly registered somewhere else
     pass
+from zope.i18nmessageid import MessageFactory
+GSMessageFactory = MessageFactory('gs.group.member.manage')
