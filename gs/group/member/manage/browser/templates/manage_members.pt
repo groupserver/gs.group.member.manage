@@ -26,6 +26,12 @@
       #gs-group-member-manage-pager-buttons {
         padding-left: 0.5em; /*0.5u*/
       }
+      #gs-group-member-manage-members .userimage {
+        overflow: hidden;
+        width: 1.25em;
+        height: 1.25em;
+        padding-right: 0.625em;
+      }
     </style>
   </head>
   <body>
@@ -181,10 +187,11 @@
                tal:attributes="value view/showOnly"/>
         <input type="hidden" class="hidden" name="page" value=""
                tal:attributes="value view/page"/>
-        <tal:block define="statusActions memberManager/memberStatusActions;
+        <div id="gs-group-member-manage-members"
+             tal:define="statusActions memberManager/memberStatusActions;
                            widgets view/widgets">
           <div tal:replace="structure provider:groupserver.MemberStatusActions"/>
-        </tal:block>
+        </div><!--gs-group-member-manage-members-->
         <div class="statusActions"
              tal:define="hasPtnCoachRemove python:view.widgets.get('ptnCoachRemove')"
              tal:condition="python:hasPtnCoachRemove and not(memberManager.postingIsSpecial)"
