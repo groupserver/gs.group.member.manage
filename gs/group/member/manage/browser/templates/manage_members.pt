@@ -96,8 +96,9 @@
                       showInvitedIsValid view/memberManager/membersInfo/invitedMembers;
                       showInvited python:show=='invited';
                       showPostingIsValid view/memberManager/postingIsSpecial;
-                      showPosting python:showPostingIsValid and show=='posting'">
-          <h2 tal:condition="python:showAll or showManagers or showPosting or showModerated or showUnverified or showInvited">
+                      showPosting python:showPostingIsValid and show=='posting';
+                      showOther python:not(showAll or showManagers or showModerated or showUnverified or showInvited or showPosting);">
+          <h2>
             <span tal:condition="showAll">
               Showing <b>all the members</b>
             </span>
@@ -115,6 +116,9 @@
             </span>
             <span tal:condition="showInvited">
               Showing all <b>invited members</b>
+            </span>
+            <span tal:condition="showOther">
+              Showing <b>some</b> members
             </span>
             <span id="gs-group-member-manage-pager"
                   tal:condition="view/memberManager/totalPages">
