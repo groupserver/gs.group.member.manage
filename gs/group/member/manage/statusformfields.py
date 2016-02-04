@@ -71,7 +71,7 @@ class GSStatusFormFields(object):
         retval = False
         if ((self.status.isSiteAdmin
                 or self.status.isNormalMember or self.status.isPtnCoach
-                or self.status.isModerator)
+                or self.status.isPostingMember or self.status.isModerator)
             and not (self.status.isGroupAdmin or self.status.isModerated
                      or self.status.isOddlyConfigured)):
             t = 'Make %s a Group Administrator' % self.userInfo.name
