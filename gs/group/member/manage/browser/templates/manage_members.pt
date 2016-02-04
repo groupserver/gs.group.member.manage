@@ -20,6 +20,12 @@
         padding-top: 5px;
         float: right;
       }
+      #gs-group-member-manage-pager {
+        padding-left: 1em; /*1u*/
+      }
+      #gs-group-member-manage-pager-buttons {
+        padding-left: 0.5em; /*0.5u*/
+      }
     </style>
   </head>
   <body>
@@ -82,8 +88,7 @@
                       showInvited python:show=='invited';
                       showPostingIsValid view/memberManager/postingIsSpecial;
                       showPosting python:showPostingIsValid and show=='posting'">
-          <p tal:condition="python:showAll or showManagers or showPosting or showModerated or showUnverified or showInvited"
-             tal:define="baseURL python:view.showOnly and 'managemembers.html?showOnly=%s&amp;' % view.showOnly or 'managemembers.html?'">
+          <h2 tal:condition="python:showAll or showManagers or showPosting or showModerated or showUnverified or showInvited">
             <span tal:condition="showAll">
               Showing <b>all the members</b>
             </span>
@@ -102,38 +107,41 @@
             <span tal:condition="showInvited">
               Showing all <b>invited members</b>
             </span>
-            <tal:block condition="view/memberManager/totalPages">
-              (Page
-              <b tal:content="view/memberManager/page"/> of
-              <b tal:content="view/memberManager/totalPages"/>)
-              <span>
+            <span id="gs-group-member-manage-pager"
+                  tal:condition="view/memberManager/totalPages">
+              <span id="gs-group-member-manage-pager-pages" class="muted">
+                (Page
+                <b tal:content="view/memberManager/page"/> of
+                <b tal:content="view/memberManager/totalPages"/>)</span>
+                <span id="gs-group-member-manage-pager-buttons"
+                    tal:define="baseURL python:view.showOnly and 'managemembers.html?showOnly=%s&amp;' % view.showOnly or 'managemembers.html?'">
                 <a tal:attributes="href string:${baseURL}page=${view/memberManager/firstPageLink}"
                    tal:condition="view/memberManager/firstPageLink"
-                   href="#" class="first btn">First</a>
+                   href="#" class="first btn btn-small">First</a>
                 <span tal:condition="not:view/memberManager/firstPageLink"
-                   class="first btn disabled">First</span>
-              </span>
-              <a href="#" class="previous btn"
-                 tal:attributes="href string:${baseURL}page=${view/memberManager/prevPageLink}"
-                 tal:condition="view/memberManager/prevPageLink"
-                 data-icon="&#x25c3;">Prev</a>
-              <span href="#" class="previous btn disabled"
-                   tal:condition="not:view/memberManager/prevPageLink"
-                   data-icon="&#x25c3;">Prev</span>
-              <a tal:attributes="href string:${baseURL}page=${view/memberManager/nextPageLink}"
-                 tal:condition="view/memberManager/nextPageLink"
-                 href="#" class="next btn"
-                 data-icon-after="&#x25b9;">Next</a>
-              <span tal:condition="not:view/memberManager/nextPageLink"
-                    class="next btn disabled"
-                    data-icon-after="&#x25b9;">Next</span>
-              <a tal:attributes="href string:${baseURL}page=${view/memberManager/lastPageLink}"
-                 tal:condition="view/memberManager/lastPageLink"
-                 href="#" class="last btn">Last</a>
-              <span tal:condition="not:view/memberManager/lastPageLink"
-                    class="last btn disabled">Last</span>
-            </tal:block>
-          </p>
+                      class="first btn btn-small disabled">First</span>
+                <a href="#" class="previous btn btn-small"
+                   tal:attributes="href string:${baseURL}page=${view/memberManager/prevPageLink}"
+                   tal:condition="view/memberManager/prevPageLink"
+                   data-icon="&#x25c3;">Prev</a>
+                <span href="#" class="previous btn btn-small disabled"
+                      tal:condition="not:view/memberManager/prevPageLink"
+                      data-icon="&#x25c3;">Prev</span>
+                <a tal:attributes="href string:${baseURL}page=${view/memberManager/nextPageLink}"
+                   tal:condition="view/memberManager/nextPageLink"
+                   href="#" class="next btn btn-small"
+                   data-icon-after="&#x25b9;">Next</a>
+                <span tal:condition="not:view/memberManager/nextPageLink"
+                      class="next btn btn-small disabled"
+                      data-icon-after="&#x25b9;">Next</span>
+                <a tal:attributes="href string:${baseURL}page=${view/memberManager/lastPageLink}"
+                   tal:condition="view/memberManager/lastPageLink"
+                   href="#" class="last btn btn-small">Last</a>
+                <span tal:condition="not:view/memberManager/lastPageLink"
+                      class="last btn btn-small disabled">Last</span>
+              </span><!--gs-group-member-manage-pager-buttons-->
+            </span><!--gs-group-member-manage-pager-->
+          </h2>
           <ul>
             <li tal:condition="not:showAll">
               <a href="#"
