@@ -15,6 +15,12 @@
             tal:attributes="href view/groupInfo/relative_url;
                             title view/groupInfo/name"/>
     </tal:block>
+    <style metal:fill-slot="style">
+      #gs-group-member-manage-alternate-actions {
+        padding-top: 5px;
+        float: right;
+      }
+    </style>
   </head>
   <body>
     <tal:block content="structure provider:groupserver.FormStatusMessage"
@@ -37,9 +43,13 @@
     </ul>
     <div metal:fill-slot="body" id="gs-group-member-manage"
          tal:define="memberManager view/memberManager">
-      <h1 tal:content="view/label">
-        Manage members
-      </h1>
+        <div id="gs-group-member-manage-alternate-actions" class="btn-group">
+          <a href="admin_join.html" class="btn"
+             data-icon="&#10010;"><b>Invite</b></a>
+          <a href="members.html" class="btn"
+             data-icon="&#xe00b;">Log</a>
+        </div><!--gs-group-member-manage-alternate-actions-->
+      <h1>Manage the members</h1>
       <form enctype="multipart/form-data"  method="post" action="."
             tal:attributes="action request/URL" id="manage-members">
         <p class="muted intro"
@@ -59,13 +69,7 @@
                     tal:content="view/groupInfo/name">this group</span>.
             </tal:block>
           </span>
-        </p>
-        <ul class="inline-list">
-          <li><a href="admin_join.html" class="btn"
-                 data-icon="&#10010;"><b>Invite</b></a></li>
-          <li><a href="members.html" class="btn"
-                 data-icon="&#xe00b;">Log</a></li>
-        </ul>
+        </p><!--intro-->
         <div
           id="gs-group-member-manage-restrict"
           tal:define="show python:view.showOnly or 'all';
