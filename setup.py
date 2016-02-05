@@ -65,6 +65,8 @@ setup(
         'zope.component',
         'zope.contentprovider',
         'zope.formlib',
+        'zope.i18n[compile]',
+        'zope.i18nmessageid',
         'zope.interface',
         'zope.publisher',
         'zope.schema',
