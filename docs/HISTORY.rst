@@ -1,6 +1,28 @@
 Changelog
 =========
 
+2.9.0 (2016-02-05)
+------------------
+
+* Updating the look of the *Manage members* page
+
+  + The links to the Membership log and the Invite page are
+    separated out
+  + The description of what is being shown is an ``<h2>``
+  + The roles of the members are muted and on their own line
+  + The pager uses the standard GroupServer arrow icons
+
+* Allowing posting members to become group administrators
+* Adding i18n support
+* Adding the product to to Transifex_
+* Switching the JavaScript to ``strict`` mode
+* Ensuring the JavaScript passes the `Google Closure Linter`_
+
+.. _Transifex:
+   https://www.transifex.com/projects/p/gs-group-member-manage/
+.. _Google Closure Linter:
+   https://developers.google.com/closure/utilities/
+
 2.8.3 (2015-06-30)
 ------------------
 
@@ -154,4 +176,4 @@ Changelog
 * New product created
 * Code moved from ``Products.GSGroupMember``
 
-..  LocalWords:  Changelog
+..  LocalWords:  Changelog Transifex
