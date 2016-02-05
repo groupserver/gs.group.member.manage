@@ -5,10 +5,13 @@
       i18n:domain="gs.group.member.manage"
       metal:use-macro="context/@@groupserver_layout/page">
   <head>
-    <title metal:fill-slot="title">
+    <title metal:fill-slot="title"
+           i18n:translate="manage-members-title">
       Manage members:
-      <span tal:replace="view/groupInfo/name">This group</span>:
-      <span tal:replace="view/siteInfo/name">This Site</span>
+      <tal:block i18n:name="groupName"
+                 replace="view/groupInfo/name">This group</tal:block>:
+      <tal:block i18n:name="siteName"
+                 replace="view/siteInfo/name">This Site</tal:block>
     </title>
     <tal:block metal:fill-slot="metadata">
       <link rel="up" href="#" title="The group"
@@ -64,7 +67,8 @@
       <li>
         <a href="/" class="icon-alone">
           <span aria-hidden="true" data-icon="&#x2302;"></span>
-          <span class="screen-reader-text">Site home page</span>
+          <span class="screen-reader-text"
+                i18n:translate="site-home">Site home page</span>
         </a>
       </li>
       <li>
@@ -73,17 +77,19 @@
           <b
             tal:content="view/groupInfo/name">This group</b></a>
       </li>
-      <li>Manage members</li>
+      <li i18n:translate="manage-members">Manage members</li>
     </ul>
     <div metal:fill-slot="body" id="gs-group-member-manage"
          tal:define="memberManager view/memberManager">
         <div id="gs-group-member-manage-alternate-actions" class="btn-group">
           <a href="admin_join.html" class="btn"
-             data-icon="&#10010;"><b>Invite</b></a>
+             data-icon="&#10010;"
+             i18n:translate="manage-invite-button">Invite</a>
           <a href="members.html" class="btn"
-             data-icon="&#xe00b;">Log</a>
+             data-icon="&#xe00b;"
+             i18n:translate="manage-view-log-button">Log</a>
         </div><!--gs-group-member-manage-alternate-actions-->
-      <h1>Manage the members</h1>
+      <h1 i18n:translate="manage-members">Manage members</h1>
       <form enctype="multipart/form-data"  method="post" action="."
             tal:attributes="action request/URL" id="manage-members">
         <p class="muted intro"
@@ -91,15 +97,20 @@
                       fullMemberCount membersInfo/fullMemberCount;
                       invitedMemberCount membersInfo/invitedMemberCount">
           <span id="gs-group-member-manage-count">
-            <tal:block condition="python:fullMemberCount==1">
+            <tal:block condition="python:fullMemberCount==1"
+                       i18n:translate="manage-member-count-1">
               There is one member of
-              <span class="group"
+              <span class="group" i18n:name="groupName"
                     tal:content="view/groupInfo/name">this group</span>.
             </tal:block>
-            <tal:block condition="python:fullMemberCount!=1">
-              There are <span tal:content="fullMemberCount">n</span>
+            <tal:block
+              condition="python:fullMemberCount!=1"
+              i18n:translate="manage-member-count-n">
+              There are
+              <span i18n:name="n"
+                    tal:content="fullMemberCount">n</span>
               members of
-              <span class="group"
+              <span class="group" i18n:name="groupName"
                     tal:content="view/groupInfo/name">this group</span>.
             </tal:block>
           </span>
@@ -118,93 +129,114 @@
                       showPosting python:showPostingIsValid and show=='posting';
                       showOther python:not(showAll or showManagers or showModerated or showUnverified or showInvited or showPosting);">
           <h2>
-            <span tal:condition="showAll">
+            <span tal:condition="showAll"
+                  i18n:translate="manage-showing-all">
               Showing <b>all the members</b>
             </span>
-            <span tal:condition="showManagers">
+            <span tal:condition="showManagers"
+                  i18n:translate="manage-showing-admin">
               Showing all <b>administrators</b>
             </span>
-            <span tal:condition="showPosting">
+            <span tal:condition="showPosting"
+                  i18n:translate="manage-showing-posting-members">
               Showing all <b>posting members</b>
             </span>
-            <span tal:condition="showModerated">
+            <span tal:condition="showModerated"
+                  i18n:translate="manage-showing-moderated">
               Showing all <b>moderated members</b>
             </span>
-            <span tal:condition="showUnverified">
+            <span tal:condition="showUnverified"
+                  i18n:translate="manage-showing-unverified">
               Showing all members that <b>lack a verified email addresses</b>
             </span>
-            <span tal:condition="showInvited">
+            <span tal:condition="showInvited"
+                  i18n:translate="manage-showing-invited">
               Showing all <b>invited members</b>
             </span>
-            <span tal:condition="showOther">
+            <span tal:condition="showOther"
+                  i18n:translate="manage-showing-other">
               Showing <b>some</b> members
             </span>
             <span id="gs-group-member-manage-pager"
                   tal:condition="view/memberManager/totalPages">
-              <span id="gs-group-member-manage-pager-pages" class="muted">
+              <span id="gs-group-member-manage-pager-pages" class="muted"
+                    i18n:translate="manage-pager-page">
                 (Page
-                <b tal:content="view/memberManager/page"/> of
-                <b tal:content="view/memberManager/totalPages"/>)</span>
+                <b tal:content="view/memberManager/page"
+                   i18n:name="n">n</b> of
+                <b tal:content="view/memberManager/totalPages"
+                   i18n:name="m">m</b>)</span>
                 <span id="gs-group-member-manage-pager-buttons"
                     tal:define="baseURL python:view.showOnly and 'managemembers.html?showOnly=%s&amp;' % view.showOnly or 'managemembers.html?'">
                 <a tal:attributes="href string:${baseURL}page=${view/memberManager/firstPageLink}"
                    tal:condition="view/memberManager/firstPageLink"
-                   href="#" class="first btn btn-small">First</a>
+                   href="#" class="first btn btn-small"
+                   i18n:translate="manage-pager-first">First</a>
                 <span tal:condition="not:view/memberManager/firstPageLink"
-                      class="first btn btn-small disabled">First</span>
+                      class="first btn btn-small disabled"
+                      i18n:translate="manage-pager-first">First</span>
                 <a href="#" class="previous btn btn-small"
                    tal:attributes="href string:${baseURL}page=${view/memberManager/prevPageLink}"
                    tal:condition="view/memberManager/prevPageLink"
-                   data-icon="&#x25c3;">Prev</a>
+                   data-icon="&#x25c3;"
+                   i18n:translate="manage-pager-prev">Prev</a>
                 <span href="#" class="previous btn btn-small disabled"
                       tal:condition="not:view/memberManager/prevPageLink"
-                      data-icon="&#x25c3;">Prev</span>
+                      data-icon="&#x25c3;"
+                      i18n:translate="manage-pager-prev">Prev</span>
                 <a tal:attributes="href string:${baseURL}page=${view/memberManager/nextPageLink}"
                    tal:condition="view/memberManager/nextPageLink"
                    href="#" class="next btn btn-small"
-                   data-icon-after="&#x25b9;">Next</a>
+                   data-icon-after="&#x25b9;"
+                   i18n:translate="manage-pager-next">Next</a>
                 <span tal:condition="not:view/memberManager/nextPageLink"
                       class="next btn btn-small disabled"
-                      data-icon-after="&#x25b9;">Next</span>
+                      data-icon-after="&#x25b9;"
+                  i18n:translate="manage-pager-next">Next</span>
                 <a tal:attributes="href string:${baseURL}page=${view/memberManager/lastPageLink}"
                    tal:condition="view/memberManager/lastPageLink"
-                   href="#" class="last btn btn-small">Last</a>
+                   href="#" class="last btn btn-small"
+                   i18n:translate="manage-pager-last">Last</a>
                 <span tal:condition="not:view/memberManager/lastPageLink"
-                      class="last btn btn-small disabled">Last</span>
+                      class="last btn btn-small disabled"
+                      i18n:translate="manage-pager-last">Last</span>
               </span><!--gs-group-member-manage-pager-buttons-->
             </span><!--gs-group-member-manage-pager-->
           </h2>
           <ul>
             <li tal:condition="not:showAll">
               <a href="#"
-                 tal:attributes="href string:managemembers.html">Show
-              <b>all</b> the members of
-              <span class="group"
+                 tal:attributes="href string:managemembers.html"
+                 i18n:translate="manage-show-all">Show <b>all</b> the members of
+              <span class="group" i18n:name="groupName"
                     tal:content="view/groupInfo/name">this group</span></a>
             </li>
             <li tal:condition="not:showManagers">
-              <a href="#"
+              <a href="#" i18n:translate="manage-show-admin"
                  tal:attributes="href string:managemembers.html?showOnly=managers">Show
               only the <b>administrators</b></a>
             </li>
             <li tal:condition="python:showInvitedIsValid and not(showInvited)">
               <a href="#"
-                 tal:attributes="href string:managemembers.html?showOnly=invited">Show
-              only the <b>invited members</b></a>
+                 tal:attributes="href string:managemembers.html?showOnly=invited"
+                 i18n:translate="manage-show-invited">Show only the <b>invited members</b></a>
             </li>
             <li tal:condition="python:showModeratedIsValid and not(showModerated)">
               <a href="#"
-                 tal:attributes="href string:managemembers.html?showOnly=moderated">Show
-              only the <b>moderated</b> members</a>
+                 tal:attributes="href string:managemembers.html?showOnly=moderated"
+                 i18n:translate="manage-show-moderated">Show only the
+              <b>moderated</b> members</a>
             </li>
             <li tal:condition="not:showUnverified">
               <a href="#"
-                 tal:attributes="href string:managemembers.html?showOnly=unverified">Show
+                 tal:attributes="href string:managemembers.html?showOnly=unverified"
+                 i18n:translate="manage-show-unverified">Show
               only the members that lack a verified email addresses</a>
             </li>
             <li tal:condition="python:showPostingIsValid and not(showPosting)">
               <a href="#"
-                 tal:attributes="href string:managemembers.html?showOnly=posting">Show
+                 tal:attributes="href string:managemembers.html?showOnly=posting"
+                 i18n:translate="manage-show-posting">Show
               only the <b>posting</b> members</a>
             </li>
           </ul>
@@ -227,7 +259,8 @@
             <div tal:replace="structure provider:groupserver.FormWidgets"/>
           </div>
         </div>
-        <p tal:condition="not:view/form_fields">
+        <p tal:condition="not:view/form_fields"
+           i18n:translate="manage-no-members">
           There are no members to display.
         </p>
         <div class="buttons" tal:condition="python:view.availableActions and view.form_fields">

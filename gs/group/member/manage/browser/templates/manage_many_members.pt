@@ -5,10 +5,13 @@
   i18n:domain="gs.group.member.manage"
   metal:use-macro="context/@@groupserver_full_layout/page">
   <head>
-    <title metal:fill-slot="title">
+    <title metal:fill-slot="title"
+           i18n:translate="manage-many-title">
       Manage many members:
-      <tal:block content="view/groupInfo/name">Group</tal:block>:
-      <tal:block content="view/siteInfo/name">Site</tal:block>
+      <tal:block i18n:name="groupName"
+                 content="view/groupInfo/name">Group</tal:block>:
+      <tal:block i18n:name="siteName"
+                 content="view/siteInfo/name">Site</tal:block>
     </title>
     <link metal:fill-slot="metadata"
           rel="up" title="Group" href="/"
@@ -24,14 +27,15 @@
       <li>
         <a href="/" class="icon-alone">
           <span aria-hidden="true" data-icon="&#x2302;"></span>
-          <span class="screen-reader-text">Site home page</span>
+          <span class="screen-reader-text"
+                i18n:translate="site-home">Site home page</span>
         </a>
       </li>
       <li>
         <a tal:attributes="href view/groupInfo/relative_url"
            href="/"><strong tal:content="view/groupInfo/name">Group</strong></a>
       </li>
-      <li>
+      <li i18n:translate="manage-many-members">
         Manage many members
       </li>
     </ul>
@@ -39,8 +43,8 @@
          action="." tal:attributes="action request/URL"
          class="gs-content-js-required"
          id="gs-group-member-manage-many">
-      <h1>Manage the many members</h1>
-      <p class="muted">
+      <h1 i18n:translate="manage-many-members">Manage many members</h1>
+      <p class="muted" i18n:translate="manage-many-intro">
         Select the members to manage from the list below and
         click the <samp class="button">Manage</samp> button.
       </p>

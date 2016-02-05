@@ -1,6 +1,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
   xmlns:metal="http://xml.zope.org/namespaces/metal"
-  xmlns:tal="http://xml.zope.org/namespaces/tal">
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="gs.group.member.manage">
   <tal:block metal:use-macro="context/@@groupserver_layout/page">
     <head>
       <title metal:fill-slot="title">
@@ -11,48 +13,72 @@
     </head>
     <body>
       <div metal:fill-slot="body">
-        <h1 tal:content="view/label"><span tal:replace="view/userInfo/name"/></h1>
+        <h1 tal:content="view/label">Bounce info</h1>
         <!--Summarise what has gone wrong -->
-        <div id="summary">
-          <h4>What's the trouble?</h4>
-          <p>
-            The <span class="group" tal:content="view/groupInfo/name"/> member
-            <span tal:replace="view/userInfo/name"/> has no verified email
-            addresses registered. Verified addresses are those which have been
-            verified as belonging to the group member and accept incoming messages.
+        <section id="summary">
+          <h2 i18n:translate="bounce-summary-h">What is the trouble?</h2>
+          <p i18n:translate="bounce-summary-msg">
+            The member of
+            <span class="group" i18n:name="groupName"
+                  tal:content="view/groupInfo/name">this group</span>,
+            <span class="fn" i18n:name="userName"
+                  tal:replace="view/userInfo/name">user</span>,
+            has no <i class="wordasword">verified</i> email addresses.
+            Verified addresses are those which have been checked
+            to ensure they belonging to the group member and
+            accept incoming messages.
             Without at least one verified email address,
-            <span tal:replace="view/userInfo/name"/> cannot receive messages
-            from the group.
+             <span tal:replace="view/userInfo/name"
+                  i18n:name="userName">user</span>
+            cannot receive messages from the group.
           </p>
-        </div>
+        </section>
         <!-- Tell the admin what they can do -->
-        <div id="explanation">
-          <h4>What can be done?</h4>
-          <p>
-            If you have the means to contact <span tal:replace="view/userInfo/name"/>
-            some other way, please ask them to add a new email address to their profile.
+        <section id="explanation">
+          <h2 i18n:translate="bounce-todo-h">What can be done?</h2>
+          <p i18n:translate="bounce-todo-msg">
+            If you have the means to contact
+            <span i18n:name="userName"
+                  tal:replace="view/userInfo/name">user</span>
+            some other way, please ask them to log in and either
+            add a new email address to their profile, or verify
+            their old address.
           </p>
-        </div>
+        </section>
         <!-- Give an explanation about what went wrong -->
-        <div id="explanation">
-          <h4>What went wrong?</h4>
-          <p>
-            It is likely that <span tal:replace="view/userInfo/name"/>'s email
-            address was consistently rejecting messages, and was reset to
-            "unverified" as a result. It is also possible that
-            <span tal:replace="view/userInfo/name"/> has never verified an address.
+        <section id="explanation">
+          <h2 i18n:translate="bounce-what-h">What went wrong?</h2>
+          <p i18n:translate="bounce-what-message">
+            It is likely that the email address of
+            <span i18n:name="user"
+                  tal:replace="view/userInfo/name">user</span>
+            was consistently rejecting messages, and was set to
+            <i class="wordasword">unverified</i> as a result.
+            It is also possible that
+            <span i18n:name="user"
+                  tal:replace="view/userInfo/name">user</span>
+            has never verified an address.
           </p>
-          <ul tal:repeat="address view/emailAddresses">
-            <label>Details for <code class="email" tal:content="address"/></label>
-            <li tal:condition="not:view/bounceHistory/?address">
+        </section>
+        <section>
+          <h2 i18n:translate="bounce-details-h">
+            Details for
+            <code class="email" i18n:name="emailAddress"
+                  tal:content="address">email@address</code>
+          </h2>
+          <ul>
+            <li tal:condition="not:view/bounceHistory/?address"
+                i18n:translate="bounce-details-absent">
               Sorry, but unfortunately no details are available
-              for <code class="email" tal:content="address"/>.
+              for
+              <code class="email" i18n:name="emailAddress"
+                    tal:content="address">email@address</code>.
             </li>
             <li tal:repeat="event view/bounceHistory/?address">
               <span tal:replace="structure event"/>
             </li>
           </ul>
-        </div>
+        </section>
       </div>
     </body>
   </tal:block>

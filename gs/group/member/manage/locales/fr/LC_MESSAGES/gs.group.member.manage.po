@@ -1,11 +1,12 @@
 # 
 # Translators:
+# Michael JasonSmith <mpj17@onlinegroups.net>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: gs.group.member.manage\n"
-"POT-Creation-Date: 2016-02-05 17:26+0000\n"
-"PO-Revision-Date: 2016-02-05 17:51+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2016-02-05 18:53+0000\n"
+"PO-Revision-Date: 2016-02-05 19:00+0000\n"
+"Last-Translator: Michael JasonSmith <mpj17@onlinegroups.net>\n"
 "Language-Team: French (http://www.transifex.com/groupserver/gs-group-member-manage/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -77,6 +78,56 @@ msgstr ""
 msgid "bounce-delivery-failed"
 msgstr ""
 
+#. Default: "Sorry, but unfortunately no details are available for
+#. ${emailAddress}."
+#: ./browser/templates/bounceinfo.pt:74
+msgid "bounce-details-absent"
+msgstr ""
+
+#. Default: "Details for ${emailAddress}"
+#: ./browser/templates/bounceinfo.pt:66
+msgid "bounce-details-h"
+msgstr ""
+
+#. Default: "What is the trouble?"
+#: ./browser/templates/bounceinfo.pt:19
+msgid "bounce-summary-h"
+msgstr ""
+
+#. Default: "The member of ${groupName}, ${userName}, has no <i
+#. class=\"wordasword\">verified</i> email addresses. Verified addresses are
+#. those which have been checked to ensure they belonging to the group member
+#. and accept incoming messages. Without at least one verified email address,
+#. ${userName} cannot receive messages from the group."
+#: ./browser/templates/bounceinfo.pt:31
+msgid "bounce-summary-msg"
+msgstr ""
+
+#. Default: "What can be done?"
+#: ./browser/templates/bounceinfo.pt:38
+msgid "bounce-todo-h"
+msgstr ""
+
+#. Default: "If you have the means to contact ${userName} some other way,
+#. please ask them to log in and either add a new email address to their
+#. profile, or verify their old address."
+#: ./browser/templates/bounceinfo.pt:41
+msgid "bounce-todo-msg"
+msgstr ""
+
+#. Default: "What went wrong?"
+#: ./browser/templates/bounceinfo.pt:50
+msgid "bounce-what-h"
+msgstr ""
+
+#. Default: "It is likely that the email address of ${user} was consistently
+#. rejecting messages, and was set to <i class=\"wordasword\">unverified</i>
+#. as a result. It is also possible that ${user} has never verified an
+#. address."
+#: ./browser/templates/bounceinfo.pt:58
+msgid "bounce-what-message"
+msgstr ""
+
 #. Default: "Email Addresses of ${userName}"
 #: ./bounceinfo.py:32
 msgid "bouncing-title"
@@ -85,51 +136,254 @@ msgstr ""
 #. Default: "Change"
 #: ./form.py:61
 msgid "change"
-msgstr ""
+msgstr "Changer"
 
 #. Default: "<p>The moderation level of ${userName} is <b>unchanged</b>,
 #. because a group member cannot be both moderated and a moderator.</p>"
-#: ./manager.py:334
+#: ./manager.py:335
 msgid "change-cancelled-double-moderation-1"
 msgstr ""
 
 #. Default: "<p>The moderation level of the following members are
 #. <b>unchanged</b>, because a group member cannot be both moderated and a
 #. moderator:</p>${userNames}"
-#: ./manager.py:342
+#: ./manager.py:343
 msgid "change-cancelled-double-moderation-m"
 msgstr ""
 
 #. Default: "<p>The member ${userName} <b>remains a non-posting member,</b>
 #. because otherwise the maximum of ${n} posting members would have been
 #. exceeded.</p>"
-#: ./manager.py:355
+#: ./manager.py:356
 msgid "change-cancelled-posting-1"
 msgstr ""
 
 #. Default: "<p>The following members <b>remain non-posting members,</b>
 #. because otherwise the maximum of ${n} posting members would have been
 #. exceeded:</p>${userNames}"
-#: ./manager.py:364
+#: ./manager.py:365
 msgid "change-cancelled-posting-n"
 msgstr ""
 
 #. Default: "<p>The Participation Coach was <b>unchanged</b>, because there
 #. can be only one and you specified ${n}:</p> ${userNames}"
-#: ./manager.py:321
+#: ./manager.py:322
 msgid "change-cancelled-ptn-coach"
 msgstr ""
 
 #. Default: "<p>${userName} has undergone the following
 #. changes:</p>${changes}"
-#: ./manager.py:451
+#: ./manager.py:452
 msgid "change-summary"
 msgstr ""
 
+#. Default: "Invite"
+#: ./browser/templates/manage_members.pt:85
+msgid "manage-invite-button"
+msgstr ""
+
+#. Default: "The administrators"
+#: ./browser/templates/admin_link_options.pt:39
+msgid "manage-link-admin"
+msgstr ""
+
+#. Default: "<b>Manage</b> the members"
+#: ./browser/templates/admin_link_few.pt:5
+msgid "manage-link-few"
+msgstr ""
+
+#. Default: "<i>Invited</i> members"
+#: ./browser/templates/admin_link_options.pt:22
+msgid "manage-link-invited"
+msgstr ""
+
+#. Default: "<b>Manage</b> the members"
+#: ./browser/templates/admin_link_options.pt:10
+msgid "manage-link-manage"
+msgstr ""
+
+#. Default: "<b>Manage</b> the many members"
+#: ./browser/templates/admin_link_options.pt:6
+msgid "manage-link-many"
+msgstr ""
+
+#. Default: "<i>Moderated</i> members"
+#: ./browser/templates/admin_link_options.pt:17
+msgid "manage-link-moderated"
+msgstr ""
+
+#. Default: "<b>Manage</b> the member"
+#: ./browser/templates/admin_link_few.pt:9
+msgid "manage-link-one"
+msgstr ""
+
+#. Default: "Posting members"
+#: ./browser/templates/admin_link_options.pt:34
+msgid "manage-link-posting"
+msgstr ""
+
+#. Default: "Members with no <i>verified</i> email addresses"
+#: ./browser/templates/admin_link_options.pt:27
+msgid "manage-link-unverified"
+msgstr ""
+
+#. Default: "Select the members to manage from the list below and click the
+#. <samp class=\"button\">Manage</samp> button."
+#: ./browser/templates/manage_many_members.pt:47
+msgid "manage-many-intro"
+msgstr ""
+
+#. Default: "Manage many members"
+#: ./browser/templates/manage_many_members.pt:38
+msgid "manage-many-members"
+msgstr ""
+
+#. Default: "Manage many members: ${groupName}: ${siteName}"
+#: ./browser/templates/manage_many_members.pt:13
+msgid "manage-many-title"
+msgstr ""
+
+#. Default: "There is one member of ${groupName}."
+#: ./browser/templates/manage_members.pt:103
+msgid "manage-member-count-1"
+msgstr ""
+
+#. Default: "There are ${n} members of ${groupName}."
+#: ./browser/templates/manage_members.pt:113
+msgid "manage-member-count-n"
+msgstr ""
+
 #. Default: "Manage members"
-#: ./form.py:27
+#: ./browser/templates/manage_members.pt:80 ./form.py:27
 msgid "manage-members"
 msgstr ""
+
+#. Default: "Manage members: ${groupName}: ${siteName}"
+#: ./browser/templates/manage_members.pt:13
+msgid "manage-members-title"
+msgstr ""
+
+#. Default: "There are no members to display."
+#: ./browser/templates/manage_members.pt:262
+msgid "manage-no-members"
+msgstr ""
+
+#. Default: "First"
+#: ./browser/templates/manage_members.pt:171
+msgid "manage-pager-first"
+msgstr "Premier "
+
+#. Default: "Last"
+#: ./browser/templates/manage_members.pt:196
+msgid "manage-pager-last"
+msgstr "Dernier"
+
+#. Default: "Next"
+#: ./browser/templates/manage_members.pt:187
+msgid "manage-pager-next"
+msgstr "Suivant"
+
+#. Default: "(Page ${n} of ${m})"
+#: ./browser/templates/manage_members.pt:167
+msgid "manage-pager-page"
+msgstr ""
+
+#. Default: "Prev"
+#: ./browser/templates/manage_members.pt:178
+msgid "manage-pager-prev"
+msgstr "Précédent"
+
+#. Default: "Show only the <b>administrators</b>"
+#: ./browser/templates/manage_members.pt:215
+msgid "manage-show-admin"
+msgstr ""
+
+#. Default: "Show <b>all</b> the members of ${groupName}"
+#: ./browser/templates/manage_members.pt:211
+msgid "manage-show-all"
+msgstr ""
+
+#. Default: "Show only the <b>invited members</b>"
+#: ./browser/templates/manage_members.pt:220
+msgid "manage-show-invited"
+msgstr ""
+
+#. Default: "Show only the <b>moderated</b> members"
+#: ./browser/templates/manage_members.pt:225
+msgid "manage-show-moderated"
+msgstr ""
+
+#. Default: "Show only the <b>posting</b> members"
+#: ./browser/templates/manage_members.pt:237
+msgid "manage-show-posting"
+msgstr ""
+
+#. Default: "Show only the members that lack a verified email addresses"
+#: ./browser/templates/manage_members.pt:231
+msgid "manage-show-unverified"
+msgstr ""
+
+#. Default: "Showing all <b>administrators</b>"
+#: ./browser/templates/manage_members.pt:136
+msgid "manage-showing-admin"
+msgstr ""
+
+#. Default: "Showing <b>all the members</b>"
+#: ./browser/templates/manage_members.pt:132
+msgid "manage-showing-all"
+msgstr ""
+
+#. Default: "Showing all <b>invited members</b>"
+#: ./browser/templates/manage_members.pt:152
+msgid "manage-showing-invited"
+msgstr ""
+
+#. Default: "Showing all <b>moderated members</b>"
+#: ./browser/templates/manage_members.pt:144
+msgid "manage-showing-moderated"
+msgstr ""
+
+#. Default: "Showing <b>some</b> members"
+#: ./browser/templates/manage_members.pt:156
+msgid "manage-showing-other"
+msgstr ""
+
+#. Default: "Showing all <b>posting members</b>"
+#: ./browser/templates/manage_members.pt:140
+msgid "manage-showing-posting-members"
+msgstr ""
+
+#. Default: "Showing all members that <b>lack a verified email addresses</b>"
+#: ./browser/templates/manage_members.pt:148
+msgid "manage-showing-unverified"
+msgstr ""
+
+#. Default: "Log"
+#: ./browser/templates/manage_members.pt:88
+msgid "manage-view-log-button"
+msgstr ""
+
+#. Default: "<b>Resend</b> Invitation…"
+#: ./browser/templates/statusActionsContentProvider.pt:33
+msgid "member-resend-link"
+msgstr ""
+
+#. Default: "More…"
+#: ./browser/templates/statusActionsContentProvider.pt:42
+msgid "member-unverified-link"
+msgstr ""
+
+#. Default: "No verified email address, probably due to repeated delivery
+#. failures."
+#: ./browser/templates/statusActionsContentProvider.pt:38
+msgid "member-unverified-message"
+msgstr ""
+
+#. Default: "Site home page"
+#: ./browser/templates/manage_many_members.pt:30
+#: ./browser/templates/manage_members.pt:70
+msgid "site-home"
+msgstr "La page d'accueil du site"
 
 #. Default: "Blocked Member"
 #: ./memberStatusActionsContentProvider.py:59

@@ -31,13 +31,17 @@
           tal:condition="python:status.isInvited or status.isUnverified">
         <li tal:condition="status/isInvited">
           <a tal:attributes="href string:resend_invitation.html?form.userId=${userInfo/id}"
+             i18n:translate="member-resend-link"
              href="#"><b>Resend</b> Invitation&#8230;</a>
         </li>
         <li tal:condition="python:status.isUnverified and not status.isUnverified">
-          No verified email address, probably due to repeated
-          delivery failures.
+          <tal:block i18n:translate="member-unverified-message">
+            No verified email address, probably due to repeated
+            delivery failures.
+          </tal:block>
           <a title="More information on the bouncing addresses"
              tal:attributes="href string:bounce_info.html?userId=${userInfo/id}"
+             i18n:translate="member-unverified-link"
              href="#">More&#8230;</a>
         </li>
       </ul><!--gs-group-member-manage-members-member-links-->

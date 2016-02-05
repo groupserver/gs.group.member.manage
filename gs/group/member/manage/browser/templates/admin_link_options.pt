@@ -3,31 +3,42 @@
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     i18n:domain="gs.group.member.manage"
     id="gs-group-member-manage-admin-link-many">
-  <a tal:attributes="href view/link"
-     href="#"><strong>Manage</strong> the
-     <span tal:condition="view/many">many</span> members</a>
+  <a tal:condition="view/many"
+     tal:attributes="href view/link"
+     href="#"
+     i18n:translate="manage-link-many"><b>Manage</b> the many members</a>
+  <a tal:condition="not:view/many"
+     tal:attributes="href view/link"
+     href="#"
+     i18n:translate="manage-link-manage"><b>Manage</b> the members</a>
   <ul>
     <li id="gs-group-member-manage-admin-links-moderated"
         tal:condition="view/isModerated">
       <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html?showOnly=moderated;"
-         href="#"><em>Moderated</em> members</a>
+         i18n:translate="manage-link-moderated"
+         href="#"><i>Moderated</i> members</a>
     </li>
     <li id="gs-group-member-manage-admin-links-invited">
       <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html?showOnly=invited"
-         href="#"><em>Invited</em> members</a>
+         i18n:translate="manage-link-invited"
+         href="#"><i>Invited</i> members</a>
     </li>
     <li id="gs-group-member-manage-admin-links-not-verified">
       <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html?showOnly=unverified"
-         href="#">Members with no <em>verified</em> email addresses</a>
+         href="#"
+         i18n:translate="manage-link-unverified">Members with no
+      <i>verified</i> email addresses</a>
     </li>
     <li id="gs-group-member-manage-admin-links-annoucement"
         tal:condition="view/isAnnouncement">
       <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html?showOnly=posting"
-         href="#">Posting members</a>
+         href="#"
+         i18n:translate="manage-link-posting">Posting members</a>
     </li>
     <li id="gs-group-member-manage-admin-links-managers">
       <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html?showOnly=managers"
-         href="#">The administrators</a>
+         href="#"
+         i18n:translate="manage-link-admin">The administrators</a>
     </li>
   </ul>
 </li>

@@ -1,5 +1,13 @@
-<li id="gs-group-member-manage-admin-link-few">
+<li xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="gs.group.member.manage"
+    id="gs-group-member-manage-admin-link-few">
   <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html"
-     href="managemembers.html"><strong>Manage</strong> the
-      member<span tal:condition="python:view.memberCount!=1">s</span></a>
+     href="managemembers.html"
+     tal:condition="python:view.memberCount!=1"
+     i18n:translate="manage-link-few"><b>Manage</b> the members</a>
+  <a tal:attributes="href string:${view/groupInfo/relative_url}/managemembers.html"
+     href="managemembers.html"
+     tal:condition="python:view.memberCount==1"
+     i18n:translate="manage-link-one"><b>Manage</b> the member</a>
 </li>
