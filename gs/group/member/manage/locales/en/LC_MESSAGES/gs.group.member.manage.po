@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-02-04 19:13+0000\n"
-"PO-Revision-Date: 2016-02-04 11:21-0800\n"
+"POT-Creation-Date: 2016-02-05 17:26+0000\n"
+"PO-Revision-Date: 2016-02-05 09:31-0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -69,13 +69,113 @@ msgstr "Remove ${userName} from the group"
 msgid "action-withdraw"
 msgstr "Withdraw the invitation sent to ${userName}"
 
+#. Default: "Email delivery failed (${date})"
+#: ./bounceinfo.py:64
+msgid "bounce-delivery-failed"
+msgstr "Email delivery failed (${date})"
+
+#. Default: "Email Addresses of ${userName}"
+#: ./bounceinfo.py:32
+msgid "bouncing-title"
+msgstr "Email Addresses of ${userName}"
+
 #. Default: "Change"
 #: ./form.py:61
 msgid "change"
 msgstr "Change"
 
+#. Default: "<p>The moderation level of ${userName} is <b>unchanged</b>, because a group member cannot be both moderated and a moderator.</p>"
+#: ./manager.py:334
+msgid "change-cancelled-double-moderation-1"
+msgstr "<p>The moderation level of ${userName} is <b>unchanged</b>, because a group member cannot be both moderated and a moderator.</p>"
+
+#. Default: "<p>The moderation level of the following members are <b>unchanged</b>, because a group member cannot be both moderated and a moderator:</p>${userNames}"
+#: ./manager.py:342
+msgid "change-cancelled-double-moderation-m"
+msgstr "<p>The moderation level of the following members are <b>unchanged</b>, because a group member cannot be both moderated and a moderator:</p>${userNames}"
+
+#. Default: "<p>The member ${userName} <b>remains a non-posting member,</b> because otherwise the maximum of ${n} posting members would have been exceeded.</p>"
+#: ./manager.py:355
+msgid "change-cancelled-posting-1"
+msgstr "<p>The member ${userName} <b>remains a non-posting member,</b> because otherwise the maximum of ${n} posting members would have been exceeded.</p>"
+
+#. Default: "<p>The following members <b>remain non-posting members,</b> because otherwise the maximum of ${n} posting members would have been exceeded:</p>${userNames}"
+#: ./manager.py:364
+msgid "change-cancelled-posting-n"
+msgstr "<p>The following members <b>remain non-posting members,</b> because otherwise the maximum of ${n} posting members would have been exceeded:</p>${userNames}"
+
+#. Default: "<p>The Participation Coach was <b>unchanged</b>, because there can be only one and you specified ${n}:</p> ${userNames}"
+#: ./manager.py:321
+msgid "change-cancelled-ptn-coach"
+msgstr "<p>The Participation coach was <b>unchanged</b>, because there can be only one and you specified ${n}:</p> ${userNames}"
+
+#. Default: "<p>${userName} has undergone the following changes:</p>${changes}"
+#: ./manager.py:451
+msgid "change-summary"
+msgstr "<p>${userName} has undergone the following changes:</p>${changes}"
+
 #. Default: "Manage members"
 #: ./form.py:27
 msgid "manage-members"
 msgstr "Manage members"
+
+#. Default: "Blocked Member"
+#: ./memberStatusActionsContentProvider.py:59
+msgid "status-blocked"
+msgstr "Blocked member"
+
+#. Default: "Invited Member (despite already being in the group)"
+#: ./memberStatusActionsContentProvider.py:61
+msgid "status-confused"
+msgstr "Invited member (despite already being in the group)"
+
+#. Default: "Group Administrator"
+#: ./memberStatusActionsContentProvider.py:49
+msgid "status-group-admin"
+msgstr "Group administrator"
+
+#. Default: "Invited Member"
+#: ./memberStatusActionsContentProvider.py:64
+msgid "status-invited"
+msgstr "Invited member"
+
+#. Default: "Moderated Member"
+#: ./memberStatusActionsContentProvider.py:57
+msgid "status-moderated"
+msgstr "Moderated member"
+
+#. Default: "Moderator"
+#: ./memberStatusActionsContentProvider.py:55
+msgid "status-moderator"
+msgstr "Moderator"
+
+#. Default: "Normal Member"
+#: ./memberStatusActionsContentProvider.py:71
+msgid "status-normal"
+msgstr "Normal member"
+
+#. Default: "Oddly Configured Member"
+#: ./memberStatusActionsContentProvider.py:73
+msgid "status-odd"
+msgstr "Oddly configured member"
+
+#. Default: "Posting Member"
+#: ./memberStatusActionsContentProvider.py:53
+msgid "status-posting-member"
+msgstr "Posting member"
+
+#. Default: "Participation Coach"
+#: ./memberStatusActionsContentProvider.py:51
+msgid "status-ptn-coach"
+msgstr "Participation coach"
+
+#. Default: "Site Administrator"
+#: ./memberStatusActionsContentProvider.py:47
+msgid "status-site-admin"
+msgstr "Site administrator"
+
+#. Default: "Lacks a verified email addresses"
+#: ./memberStatusActionsContentProvider.py:67
+msgid "status-unverified"
+msgstr "Lacks a verified email address"
 

@@ -16,23 +16,24 @@ from __future__ import absolute_import, unicode_literals, print_function
 from math import ceil
 from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
+from zope.i18n import translate
 from zope.interface import implementer
 from zope.formlib import form
 from Products.XWFCore.odict import ODict
-from Products.XWFCore.XWFUtils import comma_comma_and, sort_by_name
+from Products.XWFCore.XWFUtils import sort_by_name
 from Products.GSGroup.mailinglistinfo import GSMailingListInfo
 from gs.content.form.base import radio_widget
 from gs.group.member.leave.base.leaver import GroupLeaver
 from gs.group.type.announcement.interfaces import IGSAnnouncementGroup
 from Products.GSGroupMember.groupMembersInfo import GSGroupMembersInfo
 from gs.group.member.manage import MANY
-from .statusformfields import MAX_POSTING_MEMBERS
 from .actions import GSMemberStatusActions
+from .statusformfields import MAX_POSTING_MEMBERS
 from .interfaces import IGSGroupMemberManager, IGSManageMembersForm
 from .utils import (
-    addAdmin, removeAdmin, addModerator, removeModerator, moderate,
-    unmoderate, addPostingMember, removePostingMember, addPtnCoach,
-    removePtnCoach, withdrawInvitation)
+    addAdmin, removeAdmin, addModerator, removeModerator, moderate, unmoderate, addPostingMember,
+    removePostingMember, addPtnCoach, removePtnCoach, withdrawInvitation)
+from . import GSMessageFactory as _
 
 
 @implementer(IGSGroupMemberManager)
@@ -176,7 +177,7 @@ class GSGroupMemberManager(object):
         SIDE EFFECTS
             Resets the member and form fields caches.
         '''
-        changes = [k for k in data.keys() if data.get(k)]
+        changes = [k for k in list(data.keys()) if data.get(k)]
         self.marshallChanges(changes)
         self.set_data()
 
@@ -193,10 +194,10 @@ class GSGroupMemberManager(object):
         if 'ptnCoachRemove' in changes:
             self.toChange['ptnCoachToRemove'] = True
             changes.remove('ptnCoachRemove')
-        actions = ['ptnCoach', 'groupAdminAdd', 'groupAdminRemove',
-                   'moderatorAdd', 'moderatorRemove', 'moderatedAdd',
-                   'moderatedRemove', 'postingMemberAdd',
-                   'postingMemberRemove', 'remove', 'withdraw']
+        actions = [
+            'ptnCoach', 'groupAdminAdd', 'groupAdminRemove', 'moderatorAdd', 'moderatorRemove',
+            'moderatedAdd', 'moderatedRemove', 'postingMemberAdd', 'postingMemberRemove', 'remove',
+            'withdraw']
         for a in actions:
             aLength = len(a)
             requests = [k.split('-%s' % a)[0] for k in changes
@@ -284,8 +285,7 @@ class GSGroupMemberManager(object):
 
     def organiseChanges(self):
         '''Organise self.toChange into self.changesByMember and self.changesByAction'''
-        actions = ['remove', 'postingMemberRemove', 'ptnCoachToRemove',
-                   'ptnCoach']
+        actions = ['remove', 'postingMemberRemove', 'ptnCoachToRemove', 'ptnCoach']
         for a in actions:
             if self.toChange.get(a, None):
                 self.changesByAction[a] = self.toChange.pop(a)
@@ -314,50 +314,61 @@ class GSGroupMemberManager(object):
     def summariseCancelledPtnCoach(self):
         if 'ptnCoach' in self.cancelledChanges:
             attemptedChangeIds = self.cancelledChanges['ptnCoach']
-            attemptedChangeUsers = \
-                [createObject('groupserver.UserFromId', self.group, a)
-                 for a in attemptedChangeIds]
-            attemptedNames = [a.name for a in attemptedChangeUsers]
-            self.summary += '<p>The Participation Coach was <strong>not '\
-                'changed</strong>, because there can be only one and you '\
-                'specified %d (%s).</p>' %\
-                (len(attemptedChangeIds), comma_comma_and(attemptedNames))
+            attemptedChangeUsers = [createObject('groupserver.UserFromId', self.group, a)
+                                    for a in attemptedChangeIds]
+            items = ['<li><a href="%s">%s</a></li>' % (m.url, m.name)
+                     for m in attemptedChangeUsers]
+            names = '<ul>\n{0}</ul>'.format('\n'.join(items))
+            s = _('change-cancelled-ptn-coach',
+                  '<p>The Participation Coach was <b>unchanged</b>, because there can be only one '
+                  'and you specified ${n}:</p> ${userNames}',
+                  mapping={'n': len(attemptedChangeIds),
+                           'userNames': names})
+            self.summary += translate(s)
 
     def summariseDoubleModeration(self):
         if 'doubleModeration' in self.cancelledChanges:
             attemptedChangeIds = self.cancelledChanges['doubleModeration']
-            attemptedChangeUsers = \
-                [createObject('groupserver.UserFromId', self.group, a)
-                 for a in attemptedChangeIds]
-            memberMembers = ((len(attemptedChangeIds) == 1)
-                             and 'member was' or 'members were')
-            self.summary += '<p>The moderation level of the following %s '\
-                '<b>not changed</b>, because members cannot be both ' \
-                'moderated and moderators:</p><ul>' % memberMembers
-            for m in attemptedChangeUsers:
-                self.summary += '<li><a href="%s">%s</a></li>' %\
-                    (m.url, m.name)
-            self.summary += '</ul>'
+            attemptedChangeUsers = [createObject('groupserver.UserFromId', self.group, a)
+                                    for a in attemptedChangeIds]
+            if (len(attemptedChangeIds) == 1):
+                s = _('change-cancelled-double-moderation-1',
+                      '<p>The moderation level of ${userName} is <b>unchanged</b>, '
+                      'because a group member cannot be both moderated and a moderator.</p>',
+                      mapping={'userName': attemptedChangeUsers[0].name})
+            else:  # > 1
+                items = ['<li><a href="%s">%s</a></li>' % (m.url, m.name)
+                         for m in attemptedChangeUsers]
+                names = '<ul>\n{0}</ul>'.format('\n'.join(items))
+                s = _('change-cancelled-double-moderation-m',
+                      '<p>The moderation level of the following members are <b>unchanged</b>, '
+                      'because a group member cannot be both moderated and a moderator:</p>'
+                      '${userNames}',
+                      mapping={'userNames': names})
+            self.summary += translate(s)
 
     def summarisePostingMember(self):
         if 'postingMember' in self.cancelledChanges:
             attemptedChangeIds = self.cancelledChanges['postingMember']
-            attemptedChangeUsers = \
-                [createObject('groupserver.UserFromId', self.group, a)
-                 for a in attemptedChangeIds]
-            indefiniteArticle = \
-                ((len(attemptedChangeIds) == 1) and 'a ' or '')
-            memberMembers = ((len(attemptedChangeIds) == 1)
-                             and 'member' or 'members')
-            self.summary += '<p>The following %s <b>did not become</b> %s'\
-                'posting %s, because otherwise the maximum of %d ' \
-                'posting members would have been exceeded:</p><ul>' %\
-                (memberMembers, indefiniteArticle,
-                 memberMembers, MAX_POSTING_MEMBERS)
-            for m in attemptedChangeUsers:
-                self.summary += '<li><a href="%s">%s</a></li>' %\
-                    (m.url, m.name)
-            self.summary += '</ul>'
+            attemptedChangeUsers = [createObject('groupserver.UserFromId', self.group, a)
+                                    for a in attemptedChangeIds]
+            if (len(attemptedChangeIds) == 1):
+                s = _('change-cancelled-posting-1',
+                      '<p>The member ${userName} <b>remains a non-posting member,</b> because '
+                      'otherwise the maximum of ${n} posting members would have been exceeded.</p>',
+                      mapping={'n': MAX_POSTING_MEMBERS,
+                               'userName': attemptedChangeUsers[0].name})
+            else:  # > 1
+                items = ['<li><a href="%s">%s</a></li>' % (m.url, m.name)
+                         for m in attemptedChangeUsers]
+                names = '<ul>\n{0}</ul>'.format('\n'.join(items))
+                s = _('change-cancelled-posting-n',
+                      '<p>The following members <b>remain non-posting members,</b> because '
+                      'otherwise the maximum of ${n} posting members would have been exceeded:</p>'
+                      '${userNames}',
+                      mapping={'n': MAX_POSTING_MEMBERS,
+                               'userNames': names})
+            self.summary += translate(s)
 
     def removeMembers(self):
         ''' Remove all the members to be removed.'''
@@ -399,7 +410,7 @@ class GSGroupMemberManager(object):
                 self.changeLog[ptnCoachToAdd].append(change)
 
     def makeChangesByMember(self):
-        for memberId in self.changesByMember.keys():
+        for memberId in list(self.changesByMember.keys()):
             userInfo = createObject('groupserver.UserFromId', self.group,
                                     memberId)
             actions = self.changesByMember[memberId]
@@ -431,12 +442,14 @@ class GSGroupMemberManager(object):
                 self.changeLog[memberId].append(apm)
 
     def finishSummary(self):
-        for memberId in self.changeLog.keys():
+        for memberId in list(self.changeLog.keys()):
             userInfo = createObject('groupserver.UserFromId', self.group,
                                     memberId)
-            self.summary += '<p><a href="%s">%s</a> has undergone '\
-                'the following changes:</p><ul>' % \
-                (userInfo.url, userInfo.name)
-            for change in self.changeLog[memberId]:
-                self.summary += '<li>%s</li>' % change
-            self.summary += '</ul>'
+            userName = '<a href="%s">%s</a>' % (userInfo.url, userInfo.name)
+            c = '\n'.join(['<li>%s</li>' % change
+                           for change in self.changeLog[memberId]])
+            changes = '<ul>\n{0}</ul>'.format(c)
+            s = _('change-summary',
+                  '<p>${userName} has undergone the following changes:</p>${changes}',
+                  mapping={'userName': userName, 'changes': changes})
+            self.summary += translate(s)
