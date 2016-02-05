@@ -16,18 +16,18 @@
         <div id="summary">
           <h4>What's the trouble?</h4>
           <p>
-            The <span class="group" tal:content="view/groupInfo/name"/> member 
-            <span tal:replace="view/userInfo/name"/> has no verified email 
-            addresses registered. Verified addresses are those which have been 
-            verified as belonging to the group member and accept incoming messages. 
-            Without at least one verified email address, 
-            <span tal:replace="view/userInfo/name"/> cannot receive messages 
+            The <span class="group" tal:content="view/groupInfo/name"/> member
+            <span tal:replace="view/userInfo/name"/> has no verified email
+            addresses registered. Verified addresses are those which have been
+            verified as belonging to the group member and accept incoming messages.
+            Without at least one verified email address,
+            <span tal:replace="view/userInfo/name"/> cannot receive messages
             from the group.
           </p>
         </div>
         <!-- Tell the admin what they can do -->
         <div id="explanation">
-          <h4>What can be done?</h4>  
+          <h4>What can be done?</h4>
           <p>
             If you have the means to contact <span tal:replace="view/userInfo/name"/>
             some other way, please ask them to add a new email address to their profile.
@@ -37,15 +37,15 @@
         <div id="explanation">
           <h4>What went wrong?</h4>
           <p>
-            It is likely that <span tal:replace="view/userInfo/name"/>'s email 
-            address was consistently rejecting messages, and was reset to  
+            It is likely that <span tal:replace="view/userInfo/name"/>'s email
+            address was consistently rejecting messages, and was reset to
             "unverified" as a result. It is also possible that
             <span tal:replace="view/userInfo/name"/> has never verified an address.
           </p>
           <ul tal:repeat="address view/emailAddresses">
             <label>Details for <code class="email" tal:content="address"/></label>
             <li tal:condition="not:view/bounceHistory/?address">
-              Sorry, but unfortunately no details are available 
+              Sorry, but unfortunately no details are available
               for <code class="email" tal:content="address"/>.
             </li>
             <li tal:repeat="event view/bounceHistory/?address">
@@ -57,5 +57,3 @@
     </body>
   </tal:block>
 </html>
-
-
