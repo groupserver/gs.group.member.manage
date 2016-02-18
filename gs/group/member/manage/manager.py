@@ -14,31 +14,28 @@
 ############################################################################
 from __future__ import absolute_import, unicode_literals, print_function
 from math import ceil
+from operator import attrgetter
 from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
 from zope.i18n import translate
-from zope.interface import implementer
 from zope.formlib import form
 from Products.XWFCore.odict import ODict
-from Products.XWFCore.XWFUtils import sort_by_name
 from Products.GSGroup.mailinglistinfo import GSMailingListInfo
 from gs.content.form.base import radio_widget
+from gs.group.member.base.info import GroupMembersInfo
 from gs.group.member.leave.base.leaver import GroupLeaver
 from gs.group.type.announcement.interfaces import IGSAnnouncementGroup
-from Products.GSGroupMember.groupMembersInfo import GSGroupMembersInfo
 from gs.group.member.manage import MANY
 from .actions import GSMemberStatusActions
 from .statusformfields import MAX_POSTING_MEMBERS
-from .interfaces import IGSGroupMemberManager, IGSManageMembersForm
+from .interfaces import IGSManageMembersForm
 from .utils import (
     addAdmin, removeAdmin, addModerator, removeModerator, moderate, unmoderate, addPostingMember,
     removePostingMember, addPtnCoach, removePtnCoach, withdrawInvitation)
 from . import GSMessageFactory as _
 
 
-@implementer(IGSGroupMemberManager)
 class GSGroupMemberManager(object):
-
     def __init__(self, group, page, showOnly=None):
         self.group = group
         self.showOnly = showOnly
@@ -86,14 +83,14 @@ class GSGroupMemberManager(object):
     @Lazy
     def isLargeGroup(self):
         retval = False
-        if self.membersInfo.fullMemberCount >= MANY:
+        if (len(self.membersInfo.fullMembers) >= MANY):
             retval = True
         return retval
 
     @property
     def membersInfo(self):
         if self.__membersInfo is None:
-            self.__membersInfo = GSGroupMembersInfo(self.group)
+            self.__membersInfo = GroupMembersInfo(self.group)
         return self.__membersInfo
 
     @property
@@ -120,12 +117,12 @@ class GSGroupMemberManager(object):
     def membersRequested(self):
         if self.__membersRequested is None:
             if not self.showOnly:
-                self.__membersRequested = [m for m in self.membersInfo.members
-                                           if not m.anonymous]
+                self.__membersRequested = self.membersInfo.members
             elif len(self.showOnly.split(' ')) > 1:
-                userIds = self.showOnly.split(' ')
-                self.__membersRequested = \
-                    [m for m in self.membersInfo.members if m.id in userIds]
+                userIds = set(self.showOnly.split(' '))
+                toDisplay = userIds.intersection(self.membersInfo.members.allMemberIds)
+                self.__membersRequested = [createObject('groupserver.UserFromId', self.group, uId)
+                                           for uId in toDisplay]
             elif self.showOnly in [m.id for m in self.membersInfo.members]:
                 self.__membersRequested = \
                     [m for m in self.membersInfo.members
@@ -142,15 +139,15 @@ class GSGroupMemberManager(object):
                 self.__membersRequested = self.membersInfo.unverifiedMembers
             else:
                 self.__membersRequested = []
-            self.__membersRequested.sort(sort_by_name)
-        return self.__membersRequested
+        retval = list(self.__membersRequested)
+        retval.sort(key=attrgetter('name'))
+        return retval
 
     @property
     def memberStatusActions(self):
         if self.__memberStatusActions is None:
-            self.__memberStatusActions = \
-                [GSMemberStatusActions(m, self.membersInfo)
-                    for m in self.membersToShow]
+            self.__memberStatusActions = [GSMemberStatusActions(m, self.membersInfo)
+                                          for m in self.membersToShow]
         return self.__memberStatusActions
 
     @property

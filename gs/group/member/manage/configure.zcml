@@ -18,19 +18,23 @@
   <include package="zope.viewlet" file="meta.zcml" />
   <i18n:registerTranslations directory="locales" />
 
-  <browser:resource
-    name="gs-group-member-manage-20160203.js"
-    file="browser/javascript/managemembers.js"
-    permission="zope.Public" />
-  <browser:resource
-    name="gs-group-member-manage-20160203-min.js"
-    file="browser/javascript/managemembers-min.js"
-    permission="zope.Public" />
+  <!--Some ZCA config-->
+  <class class=".actions.GSMemberStatusActions">
+    <implements interface=".interfaces.IGSMemberStatusActions"/>
+  </class>
+  <adapter
+    for="Products.CustomUserFolder.interfaces.IGSUserInfo
+         gs.group.member.base.interfaces.IGroupMembersInfo"
+    provides=".interfaces.IGSMemberStatusActions"
+    factory=".actions.GSMemberStatusActions" />
 
-  <utility
-    name="groupserver.GSGroupMemberStatus"
-    factory=".audit.StatusAuditEventFactory"
-    permission="zope.Public" />
+    <class class=".manager.GSGroupMemberManager">
+      <implements interface=".interfaces.IGSGroupMemberManager"/>
+    </class>
+
+  <!--=========-->
+  <!--The pages-->
+  <!--=========-->
 
   <browser:page
     name="managemembers.html"
@@ -94,4 +98,21 @@
     permission="zope2.ManageUsers"
     weight="30"
     title="Manage Many Members" />
+
+  <!--Registering the auditor-->
+  <utility
+    name="groupserver.GSGroupMemberStatus"
+    factory=".audit.StatusAuditEventFactory"
+    permission="zope.Public" />
+
+  <!--The JavaScript resources-->
+  <browser:resource
+    name="gs-group-member-manage-20160203.js"
+    file="browser/javascript/managemembers.js"
+    permission="zope.Public" />
+  <browser:resource
+    name="gs-group-member-manage-20160203-min.js"
+    file="browser/javascript/managemembers-min.js"
+    permission="zope.Public" />
+
 </configure>

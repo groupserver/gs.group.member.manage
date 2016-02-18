@@ -94,8 +94,8 @@
             tal:attributes="action request/URL" id="manage-members">
         <p class="muted intro"
           tal:define="membersInfo memberManager/membersInfo;
-                      fullMemberCount membersInfo/fullMemberCount;
-                      invitedMemberCount membersInfo/invitedMemberCount">
+                      fullMemberCount python:len(membersInfo.fullMembers);
+                      invitedMemberCount python:len(membersInfo.invitedMembers)">
           <span id="gs-group-member-manage-count">
             <tal:block condition="python:fullMemberCount==1"
                        i18n:translate="manage-member-count-1">
@@ -227,7 +227,7 @@
                  i18n:translate="manage-show-moderated">Show only the
               <b>moderated</b> members</a>
             </li>
-            <li tal:condition="not:showUnverified">
+            <li tal:condition="python:not(showUnverified) and memberManager.membersInfo.unverifiedMembers">
               <a href="#"
                  tal:attributes="href string:managemembers.html?showOnly=unverified"
                  i18n:translate="manage-show-unverified">Show
