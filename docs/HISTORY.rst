@@ -1,6 +1,22 @@
 Changelog
 =========
 
+2.9.1 (2016-02-18)
+------------------
+
+* Using the ``MembersInfo`` class from `gs.group.member.base`_
+
+  + Listing the *site administrators* as well as the *group
+    administrators* when showing only the administrators
+
+* Hiding the link to *Show members that lack a verified email
+  address* when everyone has a verified address
+
+* Using the ZCML to define what is used by the ZCA
+
+.. _gs.group.member.base:
+   https://github.com/groupserver/gs.group.member.base
+
 2.9.0 (2016-02-05)
 ------------------
 
