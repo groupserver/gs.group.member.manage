@@ -18,7 +18,7 @@ from datetime import datetime
 from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
 from zope.component.interfaces import IFactory
-from zope.interface import implements, implementedBy
+from zope.interface import implementer, implementedBy
 from Products.XWFCore.XWFUtils import munge_date
 from Products.CustomUserFolder.userinfo import userInfo_to_anchor
 from Products.GSGroup.groupInfo import groupInfo_to_anchor
@@ -34,19 +34,15 @@ GAIN = '1'
 LOSE = '2'
 
 
+@implementer(IFactory)
 class StatusAuditEventFactory(object):
-    """A Factory for member status events.
-    """
-    implements(IFactory)
-
+    """A Factory for member status events."""
     title = 'GroupServer Group Status Audit Event Factory'
-    description = 'Creates a GroupServer event auditor for group status '\
-        'changes'
+    description = 'Creates a GroupServer event auditor for group status changes'
 
     def __call__(self, context, event_id, code, date, userInfo, instanceUserInfo, siteInfo,
                  groupInfo, instanceDatum='', supplementaryDatum='', subsystem=''):
-        """Create an event
-        """
+        """Create an event"""
         assert subsystem == SUBSYSTEM, 'Subsystems do not match'
 
         if (code == GAIN):
@@ -66,16 +62,12 @@ class StatusAuditEventFactory(object):
         return implementedBy(BasicAuditEvent)
 
 
+@implementer(IAuditEvent)
 class GainStatusEvent(BasicAuditEvent):
-    ''' An audit-trail event representing a group member gaining a
-        particular status within the group
-    '''
-    implements(IAuditEvent)
-
+    'An audit-trail event representing a group member gaining aparticular status within the group'
     def __init__(self, context, id, d, userInfo, instanceUserInfo, siteInfo, groupInfo,
                  instanceDatum):
-        """ Create a gain-status event
-        """
+        """ Create a gain-status event"""
         super(GainStatusEvent, self).__init__(context, id, GAIN, d, userInfo, instanceUserInfo,
                                               siteInfo, groupInfo, instanceDatum, None, SUBSYSTEM)
 
@@ -101,16 +93,12 @@ class GainStatusEvent(BasicAuditEvent):
         return retval
 
 
+@implementer(IAuditEvent)
 class LoseStatusEvent(BasicAuditEvent):
-    ''' An audit-trail event representing a group member losing a
-        particular status within a group
-    '''
-    implements(IAuditEvent)
-
+    'An audit-trail event representing a group member losing aparticular status within a group'
     def __init__(self, context, id, d, userInfo, instanceUserInfo, siteInfo, groupInfo,
                  instanceDatum):
-        """ Create a lose-status event
-        """
+        """ Create a lose-status event"""
         super(LoseStatusEvent, self).__init__(context, id, LOSE, d, userInfo, instanceUserInfo,
                                               siteInfo, groupInfo, instanceDatum, None, SUBSYSTEM)
 
@@ -151,8 +139,7 @@ class LoseStatusEvent(BasicAuditEvent):
 
 
 class StatusAuditor(object):
-    """An auditor for group status.
-    """
+    """An auditor for group status."""
     def __init__(self, context, instanceUserInfo):
         """Create a status auditor.
         """
