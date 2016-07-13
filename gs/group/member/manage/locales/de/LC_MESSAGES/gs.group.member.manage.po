@@ -1,11 +1,12 @@
 # 
 # Translators:
+# Stephan G. Blendinger <stephanblendinger@me.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: gs.group.member.manage\n"
 "POT-Creation-Date: 2016-02-05 18:53+0000\n"
-"PO-Revision-Date: 2016-02-05 19:00+0000\n"
-"Last-Translator: Michael JasonSmith <mpj17@onlinegroups.net>\n"
+"PO-Revision-Date: 2016-07-11 12:48+0000\n"
+"Last-Translator: Stephan G. Blendinger <stephanblendinger@me.com>\n"
 "Language-Team: German (http://www.transifex.com/groupserver/gs-group-member-manage/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,32 +21,32 @@ msgstr ""
 #. Default: "Make ${userName} a Group Administrator"
 #: ./statusformfields.py:78
 msgid "action-group-admin-make"
-msgstr ""
+msgstr "Ernenne ${userName} zum Gruppen-Administrator"
 
 #. Default: "Remove the Group Administrator privileges from ${userName}"
 #: ./statusformfields.py:86
 msgid "action-group-admin-revoke"
-msgstr ""
+msgstr "Entziehe ${userName} die Gruppen-Administratoren-Rechte"
 
 #. Default: "Start moderating messages from ${userName}"
 #: ./statusformfields.py:136
 msgid "action-moderated-make"
-msgstr ""
+msgstr "Nachrichten von ${userName} moderieren"
 
 #. Default: "Stop moderating messages from ${userName}"
 #: ./statusformfields.py:142
 msgid "action-moderated-revoke"
-msgstr ""
+msgstr "Moderation der Nachrichten von ${userName} beenden"
 
 #. Default: "Make ${userName} a Moderator for this group"
 #: ./statusformfields.py:119
 msgid "action-moderator-make"
-msgstr ""
+msgstr "Ernenne ${userName} zum Moderator für diese Gruppe"
 
 #. Default: "Revoke Moderator status from ${userName}"
 #: ./statusformfields.py:125
 msgid "action-moderator-revoke"
-msgstr ""
+msgstr "Den Moderatoren Status für ${userName} aufheben."
 
 #. Default: "Make ${userName} a posting member"
 #: ./statusformfields.py:156
@@ -65,7 +66,7 @@ msgstr ""
 #. Default: "Remove ${userName} from the group"
 #: ./statusformfields.py:180
 msgid "action-remove"
-msgstr ""
+msgstr "${userName} aus der Gruppe entfernen"
 
 #. Default: "Withdraw the invitation sent to ${userName}"
 #: ./statusformfields.py:191
@@ -75,7 +76,7 @@ msgstr ""
 #. Default: "Email delivery failed (${date})"
 #: ./bounceinfo.py:64
 msgid "bounce-delivery-failed"
-msgstr ""
+msgstr "E-Mail Zustellung fehlgeschlagen (${date})"
 
 #. Default: "Sorry, but unfortunately no details are available for
 #. ${emailAddress}."
@@ -255,7 +256,7 @@ msgstr ""
 #. Default: "Manage members"
 #: ./browser/templates/manage_members.pt:80 ./form.py:27
 msgid "manage-members"
-msgstr ""
+msgstr "Mitglieder verwalten"
 
 #. Default: "Manage members: ${groupName}: ${siteName}"
 #: ./browser/templates/manage_members.pt:13
@@ -285,7 +286,7 @@ msgstr "Nächster"
 #. Default: "(Page ${n} of ${m})"
 #: ./browser/templates/manage_members.pt:167
 msgid "manage-pager-page"
-msgstr ""
+msgstr "(Page ${n} von ${m})"
 
 #. Default: "Prev"
 #: ./browser/templates/manage_members.pt:178
@@ -360,7 +361,7 @@ msgstr ""
 #. Default: "Log"
 #: ./browser/templates/manage_members.pt:88
 msgid "manage-view-log-button"
-msgstr ""
+msgstr "Protokoll"
 
 #. Default: "<b>Resend</b> Invitation…"
 #: ./browser/templates/statusActionsContentProvider.pt:33
