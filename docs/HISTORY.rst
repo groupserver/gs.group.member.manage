@@ -1,6 +1,16 @@
 Changelog
 =========
 
+2.9.2 (2016-07-12)
+------------------
+
+* [DE] Updating the German localisation, thanks to
+  `Stephan G. Blendinger`_
+* [FR] Updating the French localisation
+
+.. _Stephan G. Blendinger:
+   https://www.transifex.com/user/profile/stephanblendinger/
+
 2.9.1 (2016-02-18)
 ------------------
 
